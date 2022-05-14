@@ -1,5 +1,5 @@
 package com.footprint.common.exception;
 
-public abstract class BaseException {
+public abstract class BaseException extends RuntimeException{
 	public abstract BaseExceptionType getExceptionType();
 }
