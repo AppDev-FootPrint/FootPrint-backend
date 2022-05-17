@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import lombok.AccessLevel;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
@@ -57,7 +58,6 @@ public class MainTravel {
 	@Column(name = "is_completed", nullable = false)
 	private boolean isCompleted;
 
-
 	@OneToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "image_id")
 	private Image image;
@@ -65,7 +65,6 @@ public class MainTravel {
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "member_id")
 	private Member writer;
-
 
 	@OneToMany(mappedBy = "mainTravel", orphanRemoval = true, cascade = CascadeType.ALL)
 	private List<Comment> comments = new ArrayList<>();
@@ -79,4 +78,21 @@ public class MainTravel {
 	@OneToMany(mappedBy = "mainTravel", orphanRemoval = true, cascade = CascadeType.ALL)
 	private List<Heart> hearts = new ArrayList<>();
 
+	@Builder
+	public MainTravel(String title, LocalDate startDate, LocalDate endDate, Boolean isVisible, Boolean isCompleted) {
+		this.title = title;
+		this.startDate = startDate;
+		this.endDate = endDate;
+		this.isVisible = isVisible;
+		this.isCompleted = isCompleted;
+		this.likeNum = 0;
+	}
+
+	public void update(String title, LocalDate startDate, LocalDate endDate, Boolean isVisible, Boolean isCompleted) {
+		this.title = title;
+		this.startDate = startDate;
+		this.endDate = endDate;
+		this.isVisible = isVisible;
+		this.isCompleted = isCompleted;
+	}
 }
