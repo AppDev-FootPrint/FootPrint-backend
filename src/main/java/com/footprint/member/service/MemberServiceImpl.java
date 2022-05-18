@@ -66,7 +66,7 @@ public class MemberServiceImpl implements MemberService{
 										.orElseThrow(() -> new UsernameNotFoundException("회원을 찾을 수 없습니다."));
 
 		return User.builder()
-			.username(username)
+			.username(member.getId().toString())
 			.password(member.getPassword())
 			.authorities(new ArrayList<>()) //TODO 어드민 등의 관리자 계정이 따로 필요하다면 수정
 			.build();
