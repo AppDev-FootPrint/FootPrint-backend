@@ -48,7 +48,6 @@ public class JwtAuthenticationFilter implements Filter {
 
 	private void executeAuthentication(HttpServletRequest request) {
 		jwtService.extractToken(request)
-			      .map(JwtToken::new)
 			      .filter(jwtService::isValid)
 			      .map(jwtService::extractMemberId)
 			      .flatMap(memberRepository::findById)

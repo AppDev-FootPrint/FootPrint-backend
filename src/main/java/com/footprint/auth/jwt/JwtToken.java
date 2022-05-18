@@ -12,7 +12,7 @@ public record JwtToken(String content) {
 	public static final String MEMBER_ID_CLAIM = "memberId";
 
 	public static JwtToken from(String content) {
-		return new JwtToken(content);
+		return (content == null) ? null : new JwtToken(content);
 	}
 
 	public boolean isValid(Algorithm algorithm) {

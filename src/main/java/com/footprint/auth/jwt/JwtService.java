@@ -15,7 +15,7 @@ public interface JwtService {
 
 	void sendToken(HttpServletResponse response, JwtToken token);
 
-	Optional<String> extractToken(HttpServletRequest request);
+	Optional<JwtToken> extractToken(HttpServletRequest request);
 
 	boolean isValid(JwtToken token);
 }

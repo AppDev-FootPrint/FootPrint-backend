@@ -7,7 +7,6 @@ import static java.util.Optional.*;
 import static java.util.concurrent.TimeUnit.*;
 
 import java.util.Date;
-import java.util.Objects;
 import java.util.Optional;
 import java.util.concurrent.TimeUnit;
 
@@ -78,8 +77,8 @@ public class JwtServiceImpl implements JwtService{
 	 * 요청으로부터 포함된 JWT 가 있다면 추출하여 반환
 	 */
 	@Override
-	public Optional<String> extractToken(HttpServletRequest request) {
-		return ofNullable(request.getHeader(BEARER_HEADER));
+	public Optional<JwtToken> extractToken(HttpServletRequest request) {
+		return ofNullable(JwtToken.from(request.getHeader(BEARER_HEADER)));
 	}
 
 	/**
