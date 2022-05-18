@@ -1,5 +1,8 @@
 package com.footprint.auth.jwt;
 
+import com.auth0.jwt.JWT;
+import com.auth0.jwt.algorithms.Algorithm;
+
 /**
  * Created by ShinD on 2022/05/18.
  */
@@ -12,4 +15,12 @@ public record JwtToken(String content) {
 		return new JwtToken(content);
 	}
 
+	public boolean isValid(Algorithm algorithm) {
+		try {
+			JWT.require(algorithm).build().verify(this.content);
+			return true;
+		}catch (Exception e){
+			return false;
+		}
+	}
 }

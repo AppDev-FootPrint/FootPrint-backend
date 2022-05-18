@@ -17,5 +17,5 @@ public interface JwtService {
 
 	Optional<String> extractToken(HttpServletRequest request);
 
-	boolean isValid(String jwt);
+	boolean isValid(JwtToken token);
 }

@@ -86,12 +86,7 @@ public class JwtServiceImpl implements JwtService{
 	 * JWT 가 유효한지 검사
 	 */
 	@Override
-	public boolean isValid(String jwt) {
-		try {
-			JWT.require(algorithm).build().verify(jwt);
-			return true;
-		}catch (Exception e){
-			return false;
-		}
+	public boolean isValid(JwtToken token) {
+		return token.isValid(algorithm);
 	}
 }
