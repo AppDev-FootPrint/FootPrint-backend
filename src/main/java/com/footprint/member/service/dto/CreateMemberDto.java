@@ -15,13 +15,13 @@ public class CreateMemberDto {
 
 	private String username;
 	private String password;
-	private String nickName;
+	private String nickname;
 
 	@Builder
-	public CreateMemberDto(String username, String password, String nickName) {
+	public CreateMemberDto(String username, String password, String nickname) {
 		this.username = username;
 		this.password = password;
-		this.nickName = nickName;
+		this.nickname = nickname;
 	}
 
 	public void encodePassword(PasswordEncoder passwordEncoder) {
@@ -29,6 +29,6 @@ public class CreateMemberDto {
 	}
 
 	public Member toEntity() {
-		return Member.builder().username(username).password(password).nickname(nickName).build();
+		return Member.builder().username(username).password(password).nickname(nickname).build();
 	}
 }
