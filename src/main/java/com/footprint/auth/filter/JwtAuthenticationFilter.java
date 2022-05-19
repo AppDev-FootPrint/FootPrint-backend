@@ -32,9 +32,6 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {//TODO Filter
 	private final JwtService jwtService;
 	private final MemberRepository memberRepository;
 
-	private final List<String> NO_CHECK_URL = Arrays.asList("/login", "/signUp");
-
-
 	@Override
 	protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
 
