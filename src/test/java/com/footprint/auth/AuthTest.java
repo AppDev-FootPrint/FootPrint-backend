@@ -35,19 +35,24 @@ import com.footprint.member.service.dto.CreateMemberDto;
 public class AuthTest {
 
 	@Autowired
-	MockMvc mockMvc;
+	private MockMvc mockMvc;
 
 	@Autowired
-	MemberService memberService;
+	private MemberService memberService;
 
 	@Autowired
-	JwtService jwtService;
+	private JwtService jwtService;
 
 	@Autowired
-	EntityManager em;
+	private EntityManager em;
 
-	ObjectMapper objectMapper = new ObjectMapper();
-	static final String LOGIN_URL = "/login";
+	private ObjectMapper objectMapper = new ObjectMapper();
+
+	private static final String LOGIN_URL = "/login";
+
+	private static final String WRONG_USERNAME = "wrong-username";
+	private static final String WRONG_PASSWORD = "wrong-password";
+	private static final String INVALID_TOKEN = "invalid-token";
 
 
 
@@ -94,7 +99,7 @@ public class AuthTest {
 	public void failLoginByWrongUsername() throws Exception {
 		//given
 		Map<String, String> authMap = signUp();
-		authMap.put("username", "1");
+		authMap.put("username", WRONG_USERNAME);
 		objectMapper.writeValueAsString(authMap);
 
 		//when
@@ -114,7 +119,7 @@ public class AuthTest {
 	public void failLoginByWrongPassword() throws Exception {
 		//given
 		Map<String, String> authMap = signUp();
-		authMap.put("password", "1");
+		authMap.put("password", WRONG_PASSWORD);
 		objectMapper.writeValueAsString(authMap);
 
 		//when
@@ -160,7 +165,7 @@ public class AuthTest {
 
 		mockMvc.perform(
 				get("/any")
-					.header(JwtServiceImpl.BEARER_HEADER, accessToken.content()+"123")
+					.header(JwtServiceImpl.BEARER_HEADER, INVALID_TOKEN)
 			)
 			.andExpect(status().isForbidden());
 	}
