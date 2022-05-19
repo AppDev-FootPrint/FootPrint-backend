@@ -8,6 +8,7 @@ class FootprintApplicationTests {
 
 	@Test
 	void contextLoads() {
+
 	}
 
 }

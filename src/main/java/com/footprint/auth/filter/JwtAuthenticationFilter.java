@@ -17,7 +17,6 @@ import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
 
 import com.footprint.auth.jwt.JwtService;
-import com.footprint.auth.jwt.JwtToken;
 import com.footprint.member.domain.Member;
 import com.footprint.member.repository.MemberRepository;
 
