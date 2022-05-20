@@ -7,7 +7,7 @@ public record MainTravelDto(
 	String title,
 	String startDate,
 	String endDate,
-	Boolean isVisited,
+	Boolean isVisible,
 	Integer likeNum
 ) {
 	public static MainTravelDto from(MainTravel mainTravel) {
