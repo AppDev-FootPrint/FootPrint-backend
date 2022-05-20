@@ -8,6 +8,7 @@ public record MainTravelResponse(
 	String startDate,
 	String endDate,
 	Boolean isVisible,
+	Boolean isCompleted,
 	Integer likeNum
 ) {
 	public static MainTravelResponse from(MainTravelDto mainTravelDto) {
@@ -17,6 +18,7 @@ public record MainTravelResponse(
 			mainTravelDto.startDate(),
 			mainTravelDto.endDate(),
 			mainTravelDto.isVisible(),
+			mainTravelDto.isCompleted(),
 			mainTravelDto.likeNum());
 	}
 }
