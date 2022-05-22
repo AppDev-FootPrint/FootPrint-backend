@@ -26,14 +26,14 @@ import lombok.RequiredArgsConstructor;
 public class MainTravelController {
 	private final MainTravelService mainTravelService;
 
-	@GetMapping("/main-travels/{travelId}")
-	public ResponseEntity<MainTravelResponse> getMainTravel(@PathVariable Long travelId) {
-		MainTravelDto mainTravelDto = mainTravelService.getMainTravel(travelId);
+	@GetMapping("/main-travels/{mainTravelId}")
+	public ResponseEntity<MainTravelResponse> getMainTravel(@PathVariable Long mainTravelId) {
+		MainTravelDto mainTravelDto = mainTravelService.getMainTravel(mainTravelId);
 		return ResponseEntity.ok(MainTravelResponse.from(mainTravelDto));
 	}
 
 	@PatchMapping("/main-travels/{mainTravelId}")
-	public ResponseEntity<Long> saveMainTravel(@PathVariable Long mainTravelId,
+	public ResponseEntity<Long> updateMainTravel(@PathVariable Long mainTravelId,
 		@RequestBody MainTravelRequest updateRequest) {
 		Long updateMainTravelId = mainTravelService.updateMainTravel(updateRequest.toUpdateDto(mainTravelId));
 		return ResponseEntity.ok(updateMainTravelId);
