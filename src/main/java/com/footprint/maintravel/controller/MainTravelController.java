@@ -53,6 +53,6 @@ public class MainTravelController {
 	@DeleteMapping("/main-travels/{mainTravelId}")
 	public ResponseEntity<Void> deleteMainTravel(@PathVariable Long mainTravelId) {
 		mainTravelService.deleteMainTravel(mainTravelId);
-		return ResponseEntity.noContent().build();
+		return ResponseEntity.ok().build();
 	}
 }
