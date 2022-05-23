@@ -26,16 +26,16 @@ import lombok.RequiredArgsConstructor;
 public class MainTravelController {
 	private final MainTravelService mainTravelService;
 
-	@GetMapping("/main-travels/{mainTravelId}")
-	public ResponseEntity<MainTravelResponse> getMainTravel(@PathVariable Long mainTravelId) {
-		MainTravelDto mainTravelDto = mainTravelService.getMainTravel(mainTravelId);
+	@GetMapping("/main-travels/{id}")
+	public ResponseEntity<MainTravelResponse> getMainTravel(@PathVariable Long id) {
+		MainTravelDto mainTravelDto = mainTravelService.getMainTravel(id);
 		return ResponseEntity.ok(MainTravelResponse.from(mainTravelDto));
 	}
 
-	@PatchMapping("/main-travels/{mainTravelId}")
-	public ResponseEntity<Long> updateMainTravel(@PathVariable Long mainTravelId,
+	@PatchMapping("/main-travels/{id}")
+	public ResponseEntity<Long> updateMainTravel(@PathVariable Long id,
 		@RequestBody MainTravelRequest updateRequest) {
-		Long updateMainTravelId = mainTravelService.updateMainTravel(updateRequest.toUpdateDto(mainTravelId));
+		Long updateMainTravelId = mainTravelService.updateMainTravel(updateRequest.toUpdateDto(id));
 		return ResponseEntity.ok(updateMainTravelId);
 	}
 
@@ -50,9 +50,9 @@ public class MainTravelController {
 		return ResponseEntity.created(location).body(saveMainTravelId);
 	}
 
-	@DeleteMapping("/main-travels/{mainTravelId}")
-	public ResponseEntity<Void> deleteMainTravel(@PathVariable Long mainTravelId) {
-		mainTravelService.deleteMainTravel(mainTravelId);
+	@DeleteMapping("/main-travels/{id}")
+	public ResponseEntity<Void> deleteMainTravel(@PathVariable Long id) {
+		mainTravelService.deleteMainTravel(id);
 		return ResponseEntity.ok().build();
 	}
 }
