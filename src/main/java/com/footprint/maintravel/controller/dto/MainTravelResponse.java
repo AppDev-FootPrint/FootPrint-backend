@@ -7,6 +7,7 @@ public record MainTravelResponse(
 	String title,
 	String startDate,
 	String endDate,
+	String createdAt,
 	Boolean isVisible,
 	Boolean isCompleted,
 	Integer likeNum
@@ -17,6 +18,7 @@ public record MainTravelResponse(
 			mainTravelDto.title(),
 			mainTravelDto.startDate(),
 			mainTravelDto.endDate(),
+			mainTravelDto.createdAt(),
 			mainTravelDto.isVisible(),
 			mainTravelDto.isCompleted(),
 			mainTravelDto.likeNum());
