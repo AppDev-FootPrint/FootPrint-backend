@@ -30,13 +30,7 @@ public class MainTravelServiceImpl implements MainTravelService {
 
 	@Override
 	public Long saveMainTravel(MainTravelSaveDto saveDto) {
-		MainTravel save = mainTravelRepository.save(MainTravel.builder()
-			.title(saveDto.title())
-			.startDate(saveDto.startDate())
-			.endDate(saveDto.endDate())
-			.isCompleted(saveDto.isCompleted())
-			.isVisible(saveDto.isVisible())
-			.build());
+		MainTravel save = mainTravelRepository.save(saveDto.toEntity());
 		return save.getId();
 	}
 
