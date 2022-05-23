@@ -1,14 +1,12 @@
 package com.footprint.maintravel.service;
 
-import java.util.Optional;
+import static com.footprint.maintravel.exception.MainTravelExceptionType.*;
 
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.footprint.maintravel.controller.dto.MainTravelResponse;
 import com.footprint.maintravel.domain.MainTravel;
 import com.footprint.maintravel.exception.MainTravelException;
-import com.footprint.maintravel.exception.MainTravelExceptionType;
 import com.footprint.maintravel.repository.MainTravelRepository;
 import com.footprint.maintravel.service.dto.MainTravelDto;
 import com.footprint.maintravel.service.dto.MainTravelSaveDto;
@@ -26,7 +24,7 @@ public class MainTravelServiceImpl implements MainTravelService {
 	@Transactional(readOnly = true)
 	public MainTravelDto getMainTravel(Long travelId) {
 		MainTravel mainTravel = mainTravelRepository.findById(travelId)
-			.orElseThrow(() -> new MainTravelException(MainTravelExceptionType.NOT_FOUND));
+			.orElseThrow(() -> new MainTravelException(NOT_FOUND));
 		return MainTravelDto.from(mainTravel);
 	}
 
@@ -45,7 +43,7 @@ public class MainTravelServiceImpl implements MainTravelService {
 	@Override
 	public Long updateMainTravel(MainTravelUpdateDto updateDto) {
 		MainTravel mainTravel = mainTravelRepository.findById(updateDto.id())
-			.orElseThrow(() -> new MainTravelException(MainTravelExceptionType.NOT_FOUND));
+			.orElseThrow(() -> new MainTravelException(NOT_FOUND));
 		mainTravel.update(updateDto.title(), updateDto.startDate(), updateDto.endDate(), updateDto.isVisible(),
 			updateDto.isCompleted());
 		return mainTravel.getId();
@@ -53,7 +51,8 @@ public class MainTravelServiceImpl implements MainTravelService {
 
 	@Override
 	public void deleteMainTravel(Long mainTravelId) {
-		MainTravel mainTravel = mainTravelRepository.findById(mainTravelId).orElseThrow();
+		MainTravel mainTravel = mainTravelRepository.findById(mainTravelId)
+			.orElseThrow(() -> new MainTravelException(NOT_FOUND));
 		mainTravelRepository.delete(mainTravel);
 	}
 }
