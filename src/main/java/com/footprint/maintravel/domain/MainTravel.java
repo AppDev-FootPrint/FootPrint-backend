@@ -23,6 +23,7 @@ import javax.persistence.Table;
 import javax.persistence.Id;
 
 import com.footprint.comment.domain.Comment;
+import com.footprint.common.BaseTimeEntity;
 import com.footprint.detailedtravel.domain.DetailTravel;
 import com.footprint.heart.domain.Heart;
 import com.footprint.image.domain.Image;
@@ -33,7 +34,7 @@ import com.footprint.scrap.domain.Scrap;
 @Table(name = "main_travel")
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Entity
-public class MainTravel {
+public class MainTravel extends BaseTimeEntity {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Column(name = "main_travel_id")
