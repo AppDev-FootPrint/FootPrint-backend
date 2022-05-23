@@ -80,7 +80,7 @@ class MainTravelControllerTest {
 		given(mainTravelService.updateMainTravel(any())).willReturn(MAIN_TRAVEL_ID);
 
 		//when
-		MvcResult result = mockMvc.perform(patch("/api/main-travels/{mainTravelId}", MAIN_TRAVEL_ID)
+		MvcResult result = mockMvc.perform(put("/api/main-travels/{mainTravelId}", MAIN_TRAVEL_ID)
 				.content(objectMapper.writeValueAsString(getMainTravelRequest()))
 				.contentType(MediaType.APPLICATION_JSON).accept(MediaType.APPLICATION_JSON))
 			.andExpect(status().isOk())
@@ -95,7 +95,7 @@ class MainTravelControllerTest {
 	void deleteMainTravelSuccessTest() throws Exception {
 		MvcResult result = mockMvc.perform(delete("/api/main-travels/{mainTravelId}", MAIN_TRAVEL_ID)
 				.contentType(MediaType.APPLICATION_JSON).accept(MediaType.APPLICATION_JSON))
-			.andExpect(status().isNoContent())
+			.andExpect(status().isOk())
 			.andReturn();
 	}
 }

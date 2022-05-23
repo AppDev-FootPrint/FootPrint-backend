@@ -8,6 +8,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -32,7 +33,7 @@ public class MainTravelController {
 		return ResponseEntity.ok(MainTravelResponse.from(mainTravelDto));
 	}
 
-	@PatchMapping("/main-travels/{id}")
+	@PutMapping("/main-travels/{id}")
 	public ResponseEntity<Long> updateMainTravel(@PathVariable Long id,
 		@RequestBody MainTravelRequest updateRequest) {
 		Long updateMainTravelId = mainTravelService.updateMainTravel(updateRequest.toUpdateDto(id));
