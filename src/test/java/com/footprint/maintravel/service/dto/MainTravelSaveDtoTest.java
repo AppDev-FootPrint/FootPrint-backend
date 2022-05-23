@@ -3,6 +3,8 @@ package com.footprint.maintravel.service.dto;
 import static com.footprint.maintravel.fixture.MainTravelFixture.*;
 import static org.junit.jupiter.api.Assertions.*;
 
+import java.time.LocalDateTime;
+
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 

@@ -15,6 +15,7 @@ class MainTravelResponseTest {
 		"\"title\":\"title\"," +
 		"\"startDate\":\"2022-03-15\"," +
 		"\"endDate\":\"2022-03-17\"," +
+		"\"createdAt\":\"2022-03-18T10:10\"," +
 		"\"isVisible\":true," +
 		"\"isCompleted\":true," +
 		"\"likeNum\":0" +
