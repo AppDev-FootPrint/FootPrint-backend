@@ -1,4 +1,4 @@
-package com.footprint.member.controller;
+package com.footprint.member.controller.dto;
 
 import com.footprint.member.service.dto.CreateMemberDto;
 

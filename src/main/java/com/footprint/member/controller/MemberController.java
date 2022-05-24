@@ -6,6 +6,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.footprint.member.controller.dto.SignUpRequest;
 import com.footprint.member.service.MemberService;
 
 import lombok.RequiredArgsConstructor;
