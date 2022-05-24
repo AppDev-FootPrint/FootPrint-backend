@@ -8,9 +8,12 @@ import java.util.List;
 import com.footprint.detailtravel.domain.Address;
 import com.footprint.detailtravel.domain.DetailTravel;
 
+import lombok.Getter;
+
 /**
  * Created by ShinD on 2022/05/24.
  */
+@Getter
 public class DetailTravelDto {
 
 	private Long detailTravelId;
