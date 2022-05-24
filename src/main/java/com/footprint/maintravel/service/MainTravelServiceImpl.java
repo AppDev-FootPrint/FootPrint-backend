@@ -36,6 +36,7 @@ public class MainTravelServiceImpl implements MainTravelService {
 
 	@Override
 	public Long updateMainTravel(MainTravelUpdateDto updateDto) {
+		//TODO 등록한 사람과 요청한 사람이 다르면 예외 발생
 		MainTravel mainTravel = mainTravelRepository.findById(updateDto.id())
 			.orElseThrow(() -> new MainTravelException(NOT_FOUND));
 		mainTravel.update(updateDto.title(), updateDto.startDate(), updateDto.endDate(), updateDto.isVisible(),
@@ -45,6 +46,7 @@ public class MainTravelServiceImpl implements MainTravelService {
 
 	@Override
 	public void deleteMainTravel(Long mainTravelId) {
+		//TODO 등록한 사람과 요청한 사람이 다르면 예외 발생
 		MainTravel mainTravel = mainTravelRepository.findById(mainTravelId)
 			.orElseThrow(() -> new MainTravelException(NOT_FOUND));
 		mainTravelRepository.delete(mainTravel);
