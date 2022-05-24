@@ -18,11 +18,13 @@ import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
+import com.footprint.common.BaseTimeEntity;
 import com.footprint.image.domain.Image;
 import com.footprint.maintravel.domain.MainTravel;
 import com.footprint.price.domain.Price;
 
 import lombok.AccessLevel;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
@@ -30,7 +32,7 @@ import lombok.NoArgsConstructor;
 @Table(name = "detail_travel")
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Entity
-public class DetailTravel {
+public class DetailTravel extends BaseTimeEntity {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Column(name = "detail_travel_id")
@@ -64,4 +66,27 @@ public class DetailTravel {
 	private List<Image> images = new ArrayList<>();
 
 
+	@Builder
+	public DetailTravel(String title, String review, String tip, LocalDate visitedDate, Address address) {
+		this.title = title;
+		this.review = review;
+		this.tip = tip;
+		this.visitedDate = visitedDate;
+		this.address = address;
+	}
+
+	public void setMainTravel(MainTravel mainTravel) {
+		this.mainTravel = mainTravel;
+	}
+
+
+
+	//TODO price 랑 dto 추가
+	public void update(String title, String review, String tip, LocalDate visitedDate, Address address) {
+		this.title = title;
+		this.review = review;
+		this.tip = tip;
+		this.visitedDate = visitedDate;
+		this.address = address;
+	}
 }
