@@ -10,7 +10,7 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
-import com.footprint.detailedtravel.domain.DetailTravel;
+import com.footprint.detailtravel.domain.DetailTravel;
 
 import lombok.AccessLevel;
 import lombok.Getter;

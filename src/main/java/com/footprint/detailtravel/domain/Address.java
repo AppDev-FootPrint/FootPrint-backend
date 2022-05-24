@@ -1,4 +1,4 @@
-package com.footprint.detailedtravel.domain;
+package com.footprint.detailtravel.domain;
 
 import javax.persistence.Column;
 import javax.persistence.Embeddable;

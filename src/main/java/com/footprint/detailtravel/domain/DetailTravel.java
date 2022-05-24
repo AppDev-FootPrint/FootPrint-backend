@@ -1,4 +1,4 @@
-package com.footprint.detailedtravel.domain;
+package com.footprint.detailtravel.domain;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
