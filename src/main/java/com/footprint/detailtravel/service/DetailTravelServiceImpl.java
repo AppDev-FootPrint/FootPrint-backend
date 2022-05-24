@@ -66,6 +66,7 @@ public class DetailTravelServiceImpl implements DetailTravelService{
 
 
 	@Override
+	@Transactional(readOnly = true)
 	public DetailTravelDto getById(Long detailTravelId) {
 
 		//TODO 성능문제 발생, DetailTravelId를 통해 Price 와 Image 쿼리 따로 작성하여 받아오기
@@ -81,6 +82,7 @@ public class DetailTravelServiceImpl implements DetailTravelService{
 
 
 	@Override
+	@Transactional(readOnly = true)
 	public DetailTravelListDto getAllByMainTravelId(Long mainTravelId) {
 		return DetailTravelListDto.from(detailTravelRepository.findAllByMainTravelId(mainTravelId));
 	}

@@ -4,13 +4,12 @@ import static com.footprint.member.exception.MemberExceptionType.*;
 
 import java.util.ArrayList;
 
-import javax.transaction.Transactional;
-
 import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.footprint.member.domain.Member;
 import com.footprint.member.exception.MemberException;
@@ -61,6 +60,7 @@ public class MemberServiceImpl implements MemberService{
 
 
 	@Override
+	@Transactional(readOnly = true)
 	public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
 		Member member = memberRepository.findByUsername(username)
 										.orElseThrow(() -> new UsernameNotFoundException("회원을 찾을 수 없습니다."));
