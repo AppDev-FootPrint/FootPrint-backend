@@ -3,6 +3,7 @@ package com.footprint.detailtravel.domain;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
@@ -88,5 +89,23 @@ public class DetailTravel extends BaseTimeEntity {
 		this.tip = tip;
 		this.visitedDate = visitedDate;
 		this.address = address;
+	}
+
+
+
+
+	@Override
+	public boolean equals(Object o) {
+		if (this == o)
+			return true;
+		if (o == null || getClass() != o.getClass())
+			return false;
+		DetailTravel that = (DetailTravel)o;
+		return Objects.equals(id, that.id);
+	}
+
+	@Override
+	public int hashCode() {
+		return Objects.hash(id);
 	}
 }
