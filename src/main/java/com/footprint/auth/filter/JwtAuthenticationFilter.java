@@ -2,8 +2,6 @@ package com.footprint.auth.filter;
 
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
 
 import javax.servlet.FilterChain;
 import javax.servlet.ServletException;
@@ -40,9 +38,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {//TODO Filter
 		 */
 		executeAuthentication((HttpServletRequest)request);
 
-		if(SecurityContextHolder.getContext().getAuthentication() == null) {
-			filterChain.doFilter(request, response);
-		}
+		filterChain.doFilter(request, response);
 	}
 
 	private void executeAuthentication(HttpServletRequest request) {
@@ -53,9 +49,6 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {//TODO Filter
 			      .ifPresent(this::saveSecurityContextHolder);
 	}
 
-
-
-
 	private void saveSecurityContextHolder(Member member) {
 		SecurityContext context = SecurityContextHolder.createEmptyContext();
 		UserDetails userDetails = User.builder()
@@ -63,7 +56,8 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {//TODO Filter
 			.password(member.getPassword())//이거 안해주면 오류남!
 			.authorities(new ArrayList<>()).build();
 
-		context.setAuthentication(new UsernamePasswordAuthenticationToken(userDetails, null));
+		context.setAuthentication(
+			new UsernamePasswordAuthenticationToken(userDetails, null, userDetails.getAuthorities()));
 		SecurityContextHolder.setContext(context);
 	}
 }
