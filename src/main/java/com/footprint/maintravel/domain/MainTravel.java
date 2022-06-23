@@ -68,6 +68,7 @@ public class MainTravel extends BaseTimeEntity {
 	@JoinColumn(name = "member_id")
 	private Member writer;
 
+
 	@OneToMany(mappedBy = "mainTravel", orphanRemoval = true, cascade = CascadeType.ALL)
 	private List<Comment> comments = new ArrayList<>();
 
@@ -90,11 +91,29 @@ public class MainTravel extends BaseTimeEntity {
 		this.likeNum = 0;
 	}
 
-	public void update(String title, LocalDate startDate, LocalDate endDate, Boolean isVisible, Boolean isCompleted) {
+	public void update(String title, LocalDate startDate, LocalDate endDate, Boolean isVisible, Boolean isCompleted, List<DetailTravel> detailTravelList) {
 		this.title = title;
 		this.startDate = startDate;
 		this.endDate = endDate;
 		this.isVisible = isVisible;
 		this.isCompleted = isCompleted;
+
+		this.detailTravels.clear();
+		this.detailTravels.addAll(detailTravelList);
+	}
+
+
+
+
+
+	public void setWriter(Member writer) {
+		this.writer = writer;
+	}
+
+
+
+	public void setDetailTravels(List<DetailTravel> detailTravels) {
+		this.detailTravels.clear();//혹시 들어있을 수 있으므로 한번 비워주기
+		this.detailTravels.addAll(detailTravels);
 	}
 }

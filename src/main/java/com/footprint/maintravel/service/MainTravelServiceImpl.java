@@ -2,15 +2,26 @@ package com.footprint.maintravel.service;
 
 import static com.footprint.maintravel.exception.MainTravelExceptionType.*;
 
+import java.util.List;
+
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.footprint.detailtravel.domain.DetailTravel;
+import com.footprint.detailtravel.repository.DetailTravelRepository;
+import com.footprint.detailtravel.service.dto.info.SimpleDetailTravelListDto;
 import com.footprint.maintravel.domain.MainTravel;
 import com.footprint.maintravel.exception.MainTravelException;
+import com.footprint.maintravel.exception.MainTravelExceptionType;
 import com.footprint.maintravel.repository.MainTravelRepository;
-import com.footprint.maintravel.service.dto.MainTravelDto;
-import com.footprint.maintravel.service.dto.MainTravelSaveDto;
-import com.footprint.maintravel.service.dto.MainTravelUpdateDto;
+import com.footprint.maintravel.service.dto.info.MainTravelDto;
+import com.footprint.maintravel.service.dto.save.DetailTravelSaveDto;
+import com.footprint.maintravel.service.dto.save.MainTravelSaveDto;
+import com.footprint.maintravel.service.dto.update.MainTravelUpdateDto;
+import com.footprint.member.domain.Member;
+import com.footprint.member.exception.MemberException;
+import com.footprint.member.exception.MemberExceptionType;
+import com.footprint.member.repository.MemberRepository;
 
 import lombok.RequiredArgsConstructor;
 
@@ -18,37 +29,95 @@ import lombok.RequiredArgsConstructor;
 @Transactional
 @RequiredArgsConstructor
 public class MainTravelServiceImpl implements MainTravelService {
+
 	private final MainTravelRepository mainTravelRepository;
+	private final DetailTravelRepository detailTravelRepository;
+	private final MemberRepository memberRepository;
+
 
 	@Override
 	@Transactional(readOnly = true)
 	public MainTravelDto getMainTravel(Long travelId) {
-		MainTravel mainTravel = mainTravelRepository.findById(travelId)
-			.orElseThrow(() -> new MainTravelException(NOT_FOUND));
-		return MainTravelDto.from(mainTravel);
+
+		MainTravel mainTravel = mainTravelRepository.findWithWriterById(travelId)
+													.orElseThrow(() -> new MainTravelException(NOT_FOUND));
+
+		List<DetailTravel> detailTravelList = detailTravelRepository.findAllByMainTravelId(travelId);
+		//TODO 쿼리 얼마나 나가는지 측정하기
+
+
+		return MainTravelDto.from(mainTravel, SimpleDetailTravelListDto.from(detailTravelList));
 	}
 
+
+
+
+
+	/**
+	 * Main Travel 을 저장하면 자연스레 Detail Travel에 대한 정보도 들어옴, 따라서 모두 저장
+	 */
 	@Override
-	public Long saveMainTravel(MainTravelSaveDto saveDto) {
-		MainTravel save = mainTravelRepository.save(saveDto.toEntity());
-		return save.getId();
+	public Long saveMainTravel(Long memberId, MainTravelSaveDto saveDto) {
+		Member member = memberRepository.findById(memberId)
+			.orElseThrow(() -> new MemberException(MemberExceptionType.NOT_FOUND));
+
+
+		MainTravel mainTravel = saveDto.toEntity();
+
+		mainTravel.setWriter(member);
+
+		return mainTravelRepository.save(mainTravel).getId();
 	}
 
+
+
+
+
+
+	/**
+	 * Main Travel 을 수정하면 자연스레 Detail Travel에 대한 정보도 수정, 따라서 모두 수정
+	 */
 	@Override
-	public Long updateMainTravel(MainTravelUpdateDto updateDto) {
-		//TODO 등록한 사람과 요청한 사람이 다르면 예외 발생
+	public Long updateMainTravel(Long memberId, MainTravelUpdateDto updateDto) {
+
 		MainTravel mainTravel = mainTravelRepository.findById(updateDto.id())
-			.orElseThrow(() -> new MainTravelException(NOT_FOUND));
-		mainTravel.update(updateDto.title(), updateDto.startDate(), updateDto.endDate(), updateDto.isVisible(),
-			updateDto.isCompleted());
+													.orElseThrow(() -> new MainTravelException(NOT_FOUND));
+
+		checkAuthority(memberId, mainTravel.getWriter().getId());
+
+		mainTravel.update(updateDto.title(),
+						  updateDto.startDate(),
+						  updateDto.endDate(),
+						  updateDto.isVisible(),
+						  updateDto.isCompleted(),
+						  updateDto.detailTravelSaveDtoList().stream().map(DetailTravelSaveDto::toEntity).toList());
+
+
 		return mainTravel.getId();
 	}
 
+
+	/**
+	 * Main Travel 을 삭제하면 자연스레 Detail Travel에 대한 정보도 삭제, 즉 모두 삭제
+	 */
 	@Override
-	public void deleteMainTravel(Long mainTravelId) {
-		//TODO 등록한 사람과 요청한 사람이 다르면 예외 발생
+	public void deleteMainTravel(Long memberId, Long mainTravelId) {
 		MainTravel mainTravel = mainTravelRepository.findById(mainTravelId)
-			.orElseThrow(() -> new MainTravelException(NOT_FOUND));
+													.orElseThrow(() -> new MainTravelException(NOT_FOUND));
+
+		checkAuthority(memberId, mainTravel.getWriter().getId());
+
+
 		mainTravelRepository.delete(mainTravel);
+	}
+
+
+
+
+
+
+	private void checkAuthority(Long requesterId, Long ownerId) {
+		if(!requesterId.equals(ownerId))
+			throw new MainTravelException(MainTravelExceptionType.NO_AUTHORITY);
 	}
 }
