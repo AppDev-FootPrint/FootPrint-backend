@@ -1,3 +1,4 @@
+/*
 package com.footprint.maintravel.fixture;
 
 import java.time.LocalDate;
@@ -5,11 +6,11 @@ import java.time.LocalDateTime;
 
 import org.springframework.test.util.ReflectionTestUtils;
 
-import com.footprint.maintravel.controller.dto.MainTravelRequest;
+import com.footprint.maintravel.controller.dto.CreateMainTravelRequest;
 import com.footprint.maintravel.controller.dto.MainTravelResponse;
 import com.footprint.maintravel.domain.MainTravel;
 import com.footprint.maintravel.service.dto.MainTravelDto;
-import com.footprint.maintravel.service.dto.MainTravelSaveDto;
+import com.footprint.maintravel.service.dto.save.MainTravelSaveDto;
 import com.footprint.maintravel.service.dto.MainTravelUpdateDto;
 
 public class MainTravelFixture {
@@ -38,8 +39,8 @@ public class MainTravelFixture {
 		return mainTravel;
 	}
 
-	public static MainTravelRequest getMainTravelRequest() {
-		return new MainTravelRequest(IS_COMPLETED, TITLE, START_DATE_STRING, END_DATE_STRING, IS_VISIBLE);
+	public static CreateMainTravelRequest getMainTravelRequest() {
+		return new CreateMainTravelRequest(IS_COMPLETED, TITLE, START_DATE_STRING, END_DATE_STRING, IS_VISIBLE);
 	}
 
 	public static MainTravelResponse getMainTravelResponse() {
@@ -64,3 +65,4 @@ public class MainTravelFixture {
 		return getMainTravelRequest().toUpdateDto(mainTravelId);
 	}
 }
+*/

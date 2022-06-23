@@ -1,3 +1,4 @@
+/*
 package com.footprint.detailtravel.service;
 
 import static com.footprint.detailtravel.fixture.DetailTravelFixture.TITLE;
@@ -27,9 +28,11 @@ import com.footprint.detailtravel.service.dto.DetailTravelListDto;
 import com.footprint.maintravel.repository.MainTravelRepository;
 import com.footprint.member.repository.MemberRepository;
 
+*/
 /**
  * Created by ShinD on 2022/05/25.
- */
+ *//*
+
 @ExtendWith(MockitoExtension.class)
 class DetailTravelServiceImplTest {
 
@@ -305,4 +308,4 @@ class DetailTravelServiceImplTest {
 
 	}
 
-}
+}*/

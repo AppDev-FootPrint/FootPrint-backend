@@ -1,3 +1,4 @@
+/*
 package com.footprint.detailtravel.fixture;
 
 import static com.footprint.maintravel.fixture.MainTravelFixture.*;
@@ -16,9 +17,11 @@ import com.footprint.detailtravel.service.dto.UpdateDetailTravelDto;
 import com.footprint.maintravel.domain.MainTravel;
 import com.footprint.member.domain.Member;
 
+*/
 /**
  * Created by ShinD on 2022/05/25.
- */
+ *//*
+
 public class DetailTravelFixture {
 
 	public static final Long DETAIL_TRAVEL_ID = 1L;
@@ -91,3 +94,4 @@ public class DetailTravelFixture {
 
 
 }
+*/
