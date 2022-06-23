@@ -23,8 +23,8 @@ import com.footprint.detailtravel.domain.DetailTravel;
 import com.footprint.detailtravel.exception.DetailTravelException;
 import com.footprint.detailtravel.exception.DetailTravelExceptionType;
 import com.footprint.detailtravel.repository.DetailTravelRepository;
-import com.footprint.detailtravel.service.dto.DetailTravelDto;
-import com.footprint.detailtravel.service.dto.DetailTravelListDto;
+import com.footprint.detailtravel.service.dto.info.DetailTravelDto;
+import com.footprint.detailtravel.service.dto.info.DetailTravelListDto;
 import com.footprint.maintravel.repository.MainTravelRepository;
 import com.footprint.member.repository.MemberRepository;
 

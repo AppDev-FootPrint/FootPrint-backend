@@ -9,9 +9,9 @@ import org.springframework.test.util.ReflectionTestUtils;
 import com.footprint.maintravel.controller.dto.CreateMainTravelRequest;
 import com.footprint.maintravel.controller.dto.MainTravelResponse;
 import com.footprint.maintravel.domain.MainTravel;
-import com.footprint.maintravel.service.dto.MainTravelDto;
+import com.footprint.maintravel.service.dto.info.MainTravelDto;
 import com.footprint.maintravel.service.dto.save.MainTravelSaveDto;
-import com.footprint.maintravel.service.dto.MainTravelUpdateDto;
+import com.footprint.maintravel.service.dto.update.MainTravelUpdateDto;
 
 public class MainTravelFixture {
 	public static final Long MAIN_TRAVEL_ID = 1L;

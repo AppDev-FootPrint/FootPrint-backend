@@ -9,7 +9,7 @@ import org.junit.jupiter.api.Test;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.footprint.maintravel.service.dto.save.MainTravelSaveDto;
-import com.footprint.maintravel.service.dto.MainTravelUpdateDto;
+import com.footprint.maintravel.service.dto.update.MainTravelUpdateDto;
 
 class MainTravelRequestTest {
 	private final ObjectMapper objectMapper = new ObjectMapper();

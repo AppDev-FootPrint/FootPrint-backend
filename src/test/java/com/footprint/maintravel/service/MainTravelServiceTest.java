@@ -18,7 +18,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.footprint.maintravel.domain.MainTravel;
 import com.footprint.maintravel.exception.MainTravelException;
 import com.footprint.maintravel.repository.MainTravelRepository;
-import com.footprint.maintravel.service.dto.MainTravelDto;
+import com.footprint.maintravel.service.dto.info.MainTravelDto;
 
 @ExtendWith(MockitoExtension.class)
 class MainTravelServiceTest {
