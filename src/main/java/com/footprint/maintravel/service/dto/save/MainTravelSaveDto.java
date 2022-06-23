@@ -27,14 +27,7 @@ public record MainTravelSaveDto(
 		mainTravel.setDetailTravels(detailTravelSaveDtoList.stream().map(DetailTravelSaveDto::toEntity).toList());
 
 
-
-		return MainTravel.builder()
-			.title(title())
-			.startDate(startDate())
-			.endDate(endDate())
-			.isCompleted(isCompleted())
-			.isVisible(isVisible())
-			.build();
+		return mainTravel;
 	}
 
 

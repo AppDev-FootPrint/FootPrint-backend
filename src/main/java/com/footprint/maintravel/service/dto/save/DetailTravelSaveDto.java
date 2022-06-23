@@ -16,6 +16,15 @@ public record DetailTravelSaveDto(String title,
 
 
 	public DetailTravel toEntity() {
-		return null;
+		DetailTravel detailTravel = DetailTravel.builder()
+			.title(title())
+			.review(review())
+			.tip(tip())
+			.visitedDate(visitedDate())
+			.address(address())
+			.build();
+		detailTravel.getPrices().addAll(priceSaveDtoList().stream().map(PriceSaveDto::toEntity).toList());
+		detailTravel.getImages().addAll(imageSaveDtoList().stream().map(ImageSaveDto::toEntity).toList());
+		return detailTravel;
 	}
 }
