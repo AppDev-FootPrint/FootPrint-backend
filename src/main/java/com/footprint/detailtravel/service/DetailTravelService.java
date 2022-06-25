@@ -11,5 +11,5 @@ public interface DetailTravelService{
 	 * Main Travel 에 속한 Detail Travel 조회 기능
 	 */
 
-	DetailTravelDto getById(Long detailTravelId);
+	DetailTravelDto getById(Long memberId, Long detailTravelId);
 }
