@@ -5,6 +5,8 @@ import static java.time.LocalDate.*;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
 
+import com.footprint.detailtravel.controller.dto.request.CreateDetailTravelRequest;
+import com.footprint.detailtravel.controller.dto.request.CreateImageRequest;
 import com.footprint.maintravel.service.dto.save.MainTravelSaveDto;
 
 

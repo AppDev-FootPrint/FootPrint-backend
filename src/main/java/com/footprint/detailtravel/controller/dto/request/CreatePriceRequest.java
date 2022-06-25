@@ -1,6 +1,6 @@
-package com.footprint.maintravel.controller.dto.request.create;
+package com.footprint.detailtravel.controller.dto.request;
 
-import com.footprint.maintravel.service.dto.save.PriceSaveDto;
+import com.footprint.detailtravel.service.dto.create.PriceSaveDto;
 
 /**
  * Created by ShinD on 2022/06/23.
