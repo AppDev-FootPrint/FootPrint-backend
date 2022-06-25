@@ -9,13 +9,13 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.footprint.detailtravel.domain.DetailTravel;
 import com.footprint.detailtravel.repository.DetailTravelRepository;
+import com.footprint.detailtravel.service.dto.create.DetailTravelSaveDto;
 import com.footprint.detailtravel.service.dto.info.SimpleDetailTravelListDto;
 import com.footprint.maintravel.domain.MainTravel;
 import com.footprint.maintravel.exception.MainTravelException;
 import com.footprint.maintravel.exception.MainTravelExceptionType;
 import com.footprint.maintravel.repository.MainTravelRepository;
-import com.footprint.maintravel.service.dto.info.MainTravelDto;
-import com.footprint.maintravel.service.dto.save.DetailTravelSaveDto;
+import com.footprint.maintravel.service.dto.info.MainTravelInfoDto;
 import com.footprint.maintravel.service.dto.save.MainTravelSaveDto;
 import com.footprint.maintravel.service.dto.update.MainTravelUpdateDto;
 import com.footprint.member.domain.Member;
@@ -37,16 +37,23 @@ public class MainTravelServiceImpl implements MainTravelService {
 
 	@Override
 	@Transactional(readOnly = true)
-	public MainTravelDto getMainTravel(Long travelId) {
+	public MainTravelInfoDto getMainTravel(Long memberId, Long travelId) {
 
 		MainTravel mainTravel = mainTravelRepository.findWithWriterById(travelId)
 													.orElseThrow(() -> new MainTravelException(NOT_FOUND));
+
+
+		//== 미완성이거나 private 게시물인 경우에는 작성자가 아니면 조회 불가 ==//
+		if( !mainTravel.isVisible() || !mainTravel.isCompleted() ) {
+			checkAuthority(memberId, mainTravel.getWriter().getId());
+			//TODO 권한 없을때 NULL을 반환할 지, 권한이 없다는 예외 메세지를 출력할 지 고민
+		}
 
 		List<DetailTravel> detailTravelList = detailTravelRepository.findAllByMainTravelId(travelId);
 		//TODO 쿼리 얼마나 나가는지 측정하기
 
 
-		return MainTravelDto.from(mainTravel, SimpleDetailTravelListDto.from(detailTravelList));
+		return MainTravelInfoDto.from(mainTravel, SimpleDetailTravelListDto.from(detailTravelList));
 	}
 
 
