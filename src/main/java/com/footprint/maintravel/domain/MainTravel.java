@@ -52,7 +52,7 @@ public class MainTravel extends BaseTimeEntity {
 
 	//TODO enum?
 	@Column(name = "is_visible")
-	private Boolean isVisible;
+	private boolean isVisible;
 
 	@Column(name = "like_num")
 	private Integer likeNum;
