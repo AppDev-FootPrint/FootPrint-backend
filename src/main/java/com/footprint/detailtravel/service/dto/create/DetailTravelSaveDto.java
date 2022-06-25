@@ -1,4 +1,4 @@
-package com.footprint.maintravel.service.dto.save;
+package com.footprint.detailtravel.service.dto.create;
 
 import java.time.LocalDate;
 import java.util.List;
