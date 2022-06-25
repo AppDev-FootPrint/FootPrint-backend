@@ -98,8 +98,7 @@ public class MainTravel extends BaseTimeEntity {
 		this.isVisible = isVisible;
 		this.isCompleted = isCompleted;
 
-		this.detailTravels.clear();
-		this.detailTravels.addAll(detailTravelList);
+		setDetailTravels(detailTravelList);
 	}
 
 
@@ -114,6 +113,7 @@ public class MainTravel extends BaseTimeEntity {
 
 	public void setDetailTravels(List<DetailTravel> detailTravels) {
 		this.detailTravels.clear();//혹시 들어있을 수 있으므로 한번 비워주기
+		detailTravels.forEach(dt -> dt.setMainTravel(this));
 		this.detailTravels.addAll(detailTravels);
 	}
 }
