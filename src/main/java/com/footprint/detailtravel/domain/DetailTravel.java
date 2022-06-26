@@ -110,4 +110,19 @@ public class DetailTravel extends BaseTimeEntity {
 	public int hashCode() {
 		return Objects.hash(id);
 	}
+
+
+
+	public void setPrices(List<Price> prices) {
+		prices.forEach(i -> i.setDetailTravel(this));
+		this.prices.clear();
+		this.prices.addAll(prices);
+	}
+
+	public void setImages(List<Image> image) {
+		image.forEach(i -> i.setDetailTravel(this));
+		this.images.clear();
+		this.images.addAll(image);
+	}
+
 }

@@ -5,6 +5,7 @@ import java.util.List;
 
 import com.footprint.detailtravel.domain.Address;
 import com.footprint.detailtravel.domain.DetailTravel;
+import com.footprint.image.domain.Image;
 
 public record DetailTravelSaveDto(String title,
 								  String review,
@@ -12,7 +13,7 @@ public record DetailTravelSaveDto(String title,
 								  LocalDate visitedDate,
 								  Address address,
 								  List<PriceSaveDto> priceSaveDtoList,
-								  List<ImageSaveDto> imageSaveDtoList) {
+								  List<String> imagePathList) {
 
 
 	public DetailTravel toEntity() {
@@ -23,8 +24,11 @@ public record DetailTravelSaveDto(String title,
 			.visitedDate(visitedDate())
 			.address(address())
 			.build();
-		detailTravel.getPrices().addAll(priceSaveDtoList().stream().map(PriceSaveDto::toEntity).toList());
-		detailTravel.getImages().addAll(imageSaveDtoList().stream().map(ImageSaveDto::toEntity).toList());
+
+
+		detailTravel.setPrices(priceSaveDtoList().stream().map(PriceSaveDto::toEntity).toList());
+		detailTravel.setImages(imagePathList().stream().map(Image::from).toList());
+
 		return detailTravel;
 	}
 }

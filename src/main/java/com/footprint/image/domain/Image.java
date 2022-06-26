@@ -33,4 +33,15 @@ public class Image {
 	@JoinColumn(name = "detail_travel_id")
 	private DetailTravel detailTravel;
 
+	public static Image from(String mainImagePath) {
+		return new Image(mainImagePath);
+	}
+
+	public void setDetailTravel(DetailTravel detailTravel) {
+		this.detailTravel = detailTravel;
+	}
+
+	public Image(String path) {
+		this.path = path;
+	}
 }

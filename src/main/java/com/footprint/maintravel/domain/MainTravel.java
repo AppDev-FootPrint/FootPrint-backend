@@ -60,7 +60,7 @@ public class MainTravel extends BaseTimeEntity {
 	@Column(name = "is_completed", nullable = false)
 	private boolean isCompleted;
 
-	@OneToOne(fetch = FetchType.LAZY)
+	@OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
 	@JoinColumn(name = "image_id")
 	private Image image;
 
@@ -123,5 +123,10 @@ public class MainTravel extends BaseTimeEntity {
 		return (this.image == null)
 			? null
 			: this.image.getPath();
+	}
+
+	public void setImage(String mainImagePath) {
+		Image image = Image.from(mainImagePath);
+		this.image = image;
 	}
 }

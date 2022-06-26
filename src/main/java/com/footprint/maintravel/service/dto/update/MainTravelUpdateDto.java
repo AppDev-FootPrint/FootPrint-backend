@@ -13,7 +13,7 @@ public record MainTravelUpdateDto(
 	LocalDate endDate,
 	Boolean isVisible,
 	Boolean isCompleted,
-	ImageSaveDto imageSaveDto,
+	String mainImagePath,
 	List<DetailTravelSaveDto> detailTravelSaveDtoList) {
 
 }

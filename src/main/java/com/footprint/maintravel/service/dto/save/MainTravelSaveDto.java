@@ -13,7 +13,7 @@ public record MainTravelSaveDto(
 	LocalDate endDate,
 	Boolean isVisible,
 	Boolean isCompleted,
-	ImageSaveDto imageSaveDto,
+	String mainImagePath,
 	List<DetailTravelSaveDto> detailTravelSaveDtoList) {
 
 
@@ -26,6 +26,7 @@ public record MainTravelSaveDto(
 			.isVisible(isVisible())
 			.build();
 
+		mainTravel.setImage(mainImagePath);
 		mainTravel.setDetailTravels(detailTravelSaveDtoList.stream().map(DetailTravelSaveDto::toEntity).toList());
 
 

@@ -4,6 +4,7 @@ import static java.time.LocalDate.*;
 
 import java.time.format.DateTimeFormatter;
 import java.util.List;
+import java.util.Optional;
 
 import com.footprint.detailtravel.controller.dto.request.CreateDetailTravelRequest;
 import com.footprint.detailtravel.controller.dto.request.CreateImageRequest;
@@ -16,7 +17,7 @@ public record CreateMainTravelRequest(String title,
 									  String endDate,
 									  Boolean isVisible,
 									  Boolean isCompleted,
-									  CreateImageRequest mainImage,
+									  String mainImagePath,
 									  List<CreateDetailTravelRequest> createDetailTravelRequest) {
 
 	public MainTravelSaveDto toServiceDto() {
@@ -26,7 +27,7 @@ public record CreateMainTravelRequest(String title,
 			parse(endDate(), DateTimeFormatter.ISO_LOCAL_DATE),
 			isVisible(),
 			isCompleted(),
-			mainImage().toServiceDto(),
+			mainImagePath(),
 			createDetailTravelRequest().stream().map(CreateDetailTravelRequest::toServiceDto).toList());
 	}
 }

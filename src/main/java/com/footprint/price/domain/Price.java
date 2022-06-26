@@ -36,4 +36,9 @@ public class Price {
 	@JoinColumn(name = "detail_travel_id")
 	private DetailTravel detailTravel;
 
+	public void setDetailTravel(DetailTravel detailTravel) {
+		this.detailTravel = detailTravel;
+	}
+
+
 }

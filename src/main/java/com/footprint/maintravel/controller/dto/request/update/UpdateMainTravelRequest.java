@@ -14,7 +14,7 @@ public record UpdateMainTravelRequest(String title,
 									  String endDate,
 									  Boolean isVisible,
 									  Boolean isCompleted,
-									  CreateImageRequest mainImage,
+									  String mainImagePath,
 									  List<CreateDetailTravelRequest> createDetailTravelRequest) {
 
 	public MainTravelUpdateDto toServiceDto(Long mainTravelId) {
@@ -25,7 +25,7 @@ public record UpdateMainTravelRequest(String title,
 			parse(endDate(), DateTimeFormatter.ISO_LOCAL_DATE),
 			isVisible(),
 			isCompleted(),
-			mainImage().toServiceDto(),
+			mainImagePath,
 			createDetailTravelRequest().stream().map(CreateDetailTravelRequest::toServiceDto).toList());
 	}
 
