@@ -1,5 +1,7 @@
 package com.footprint.detailtravel.domain;
 
+import java.util.Objects;
+
 import javax.persistence.Column;
 import javax.persistence.Embeddable;
 
@@ -30,5 +32,21 @@ public class Address {
 		this.roadAddress = roadAddress;
 		this.mapX = mapX;
 		this.mapY = mapY;
+	}
+
+	@Override
+	public boolean equals(Object o) {
+		if (this == o)
+			return true;
+		if (o == null || getClass() != o.getClass())
+			return false;
+		Address address1 = (Address)o;
+		return mapX == address1.mapX && mapY == address1.mapY && Objects.equals(address, address1.address)
+			&& Objects.equals(roadAddress, address1.roadAddress);
+	}
+
+	@Override
+	public int hashCode() {
+		return Objects.hash(address, roadAddress, mapX, mapY);
 	}
 }
