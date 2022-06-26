@@ -112,6 +112,7 @@ class MainTravelServiceTest {
 
 		 assertThat(mainTravel.getTitle()).isEqualTo(mainTravelSaveDto.title());
 		 assertThat(mainTravel.getWriter().getId()).isEqualTo(getLoginMemberId());
+		 assertThat(mainTravel.getImagePath()).isEqualTo(mainTravelSaveDto.mainImagePath());
 		 assertThat(mainTravel.getDetailTravels().size()).isEqualTo(mainTravelSaveDto.detailTravelSaveDtoList().size());
 
 
@@ -145,7 +146,7 @@ class MainTravelServiceTest {
 
 		assertThat(mainTravel.getTitle()).isEqualTo(mainTravelUpdateDto.title());
 		assertThat(mainTravel.getTitle()).isNotEqualTo(mainTravelSaveDto.title());
-
+		assertThat(mainTravel.getImagePath()).isEqualTo(mainTravelSaveDto.mainImagePath());
 		assertThat(mainTravel.getDetailTravels().size()).isEqualTo(mainTravelUpdateDto.detailTravelSaveDtoList().size());
 		assertThat(mainTravel.getDetailTravels().size()).isNotEqualTo(mainTravelSaveDto.detailTravelSaveDtoList().size());
 
@@ -186,7 +187,8 @@ class MainTravelServiceTest {
 
 		assertThat(mainTravel.getTitle()).isNotEqualTo(mainTravelUpdateDto.title());
 		assertThat(mainTravel.getTitle()).isEqualTo(mainTravelSaveDto.title());
-
+		assertThat(mainTravel.getImagePath()).isNotEqualTo(mainTravelUpdateDto.mainImagePath());
+		assertThat(mainTravel.getImagePath()).isEqualTo(mainTravelSaveDto.mainImagePath());
 		assertThat(mainTravel.getDetailTravels().size()).isNotEqualTo(mainTravelUpdateDto.detailTravelSaveDtoList().size());
 		assertThat(mainTravel.getDetailTravels().size()).isEqualTo(mainTravelSaveDto.detailTravelSaveDtoList().size());
 
@@ -305,7 +307,7 @@ class MainTravelServiceTest {
 		assertThat(mainTravelInfo.isVisible()).isEqualTo(mainTravelSaveDto.isVisible());
 		assertThat(mainTravelInfo.isCompleted()).isEqualTo(mainTravelSaveDto.isCompleted());
 
-		assertThat(mainTravelInfo.mainImagePath()).isNull();
+		assertThat(mainTravelInfo.mainImagePath()).isEqualTo(mainTravelSaveDto.mainImagePath());
 		assertThat(mainTravelInfo.likeNum()).isEqualTo(0);
 
 		assertThat(mainTravelInfo.simpleDetailTravelListDto().total()).isEqualTo(mainTravelSaveDto.detailTravelSaveDtoList().size());
@@ -360,7 +362,7 @@ class MainTravelServiceTest {
 		assertThat(mainTravelInfo.isVisible()).isEqualTo(mainTravelSaveDto.isVisible());
 		assertThat(mainTravelInfo.isCompleted()).isEqualTo(mainTravelSaveDto.isCompleted());
 
-		assertThat(mainTravelInfo.mainImagePath()).isNull();
+		assertThat(mainTravelInfo.mainImagePath()).isEqualTo(mainTravelSaveDto.mainImagePath());
 		assertThat(mainTravelInfo.likeNum()).isEqualTo(0);
 
 		assertThat(mainTravelInfo.simpleDetailTravelListDto().total()).isEqualTo(mainTravelSaveDto.detailTravelSaveDtoList().size());
@@ -411,7 +413,7 @@ class MainTravelServiceTest {
 		assertThat(mainTravelInfo.isVisible()).isEqualTo(mainTravelSaveDto.isVisible());
 		assertThat(mainTravelInfo.isCompleted()).isEqualTo(mainTravelSaveDto.isCompleted());
 
-		assertThat(mainTravelInfo.mainImagePath()).isNull();
+		assertThat(mainTravelInfo.mainImagePath()).isEqualTo(mainTravelSaveDto.mainImagePath());
 		assertThat(mainTravelInfo.likeNum()).isEqualTo(0);
 
 		assertThat(mainTravelInfo.simpleDetailTravelListDto().total()).isEqualTo(mainTravelSaveDto.detailTravelSaveDtoList().size());
@@ -461,7 +463,7 @@ class MainTravelServiceTest {
 		assertThat(mainTravelInfo.isVisible()).isEqualTo(mainTravelSaveDto.isVisible());
 		assertThat(mainTravelInfo.isCompleted()).isEqualTo(mainTravelSaveDto.isCompleted());
 
-		assertThat(mainTravelInfo.mainImagePath()).isNull();
+		assertThat(mainTravelInfo.mainImagePath()).isEqualTo(mainTravelSaveDto.mainImagePath());
 		assertThat(mainTravelInfo.likeNum()).isEqualTo(0);
 
 		assertThat(mainTravelInfo.simpleDetailTravelListDto().total()).isEqualTo(mainTravelSaveDto.detailTravelSaveDtoList().size());
@@ -510,7 +512,7 @@ class MainTravelServiceTest {
 		assertThat(mainTravelInfo.isVisible()).isEqualTo(mainTravelSaveDto.isVisible());
 		assertThat(mainTravelInfo.isCompleted()).isEqualTo(mainTravelSaveDto.isCompleted());
 
-		assertThat(mainTravelInfo.mainImagePath()).isNull();
+		assertThat(mainTravelInfo.mainImagePath()).isEqualTo(mainTravelSaveDto.mainImagePath());
 		assertThat(mainTravelInfo.likeNum()).isEqualTo(0);
 
 		assertThat(mainTravelInfo.simpleDetailTravelListDto().total()).isEqualTo(mainTravelSaveDto.detailTravelSaveDtoList().size());

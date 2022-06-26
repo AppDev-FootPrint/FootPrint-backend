@@ -40,7 +40,7 @@ public class DetailTravelFixture {
 	private static final String CREATED_AT_STRING = CREATED_AT.toString();
 
 	private static final List<PriceSaveDto> PRICE_SAVE_DTO_LIST = new ArrayList<>();
-	private static final List<ImageSaveDto> IMAGE_SAVE_DTO_LIST = new ArrayList<>();
+	private static final List<String> IMAGE_SAVE_DTO_LIST = new ArrayList<>();
 
 
 

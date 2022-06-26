@@ -20,6 +20,9 @@ public class MainTravelFixture {
 	private static final String TITLE = "title";
 	private static final String UPDATE_TITLE = "update-title";
 
+	private static final String IMAGE_PATH = "https://ttl-blog.tistory.com/";
+	private static final String UPDATE_IMAGE_PATH = "https://ttl-blog.tistory.com/474?category=910686";
+
 	private static final String START_DATE_STRING = "2022-06-15";
 	private static final LocalDate START_DATE = parse(START_DATE_STRING);
 
@@ -54,7 +57,7 @@ public class MainTravelFixture {
 			END_DATE,
 			TRUE_VISIBLE,
 			TRUE_COMPLETE,
-			new ImageSaveDto(),
+			IMAGE_PATH,
 			rangeClosed(0, 9).mapToObj(i -> detailTravelSaveDto(mainTravelCount)).toList()
 		);
 	}
@@ -69,7 +72,7 @@ public class MainTravelFixture {
 			UPDATE_END_DATE,
 			FALSE_VISIBLE,
 			FALSE_COMPLETE,
-			new ImageSaveDto(),
+			UPDATE_IMAGE_PATH,
 			rangeClosed(0, 11).mapToObj(i -> updateDetailTravelSaveDto(mainTravelCount)).toList()
 			);
 	}
@@ -83,7 +86,7 @@ public class MainTravelFixture {
 			END_DATE,
 			TRUE_VISIBLE,
 			TRUE_COMPLETE,
-			new ImageSaveDto(),
+			IMAGE_PATH,
 			rangeClosed(0, 9).mapToObj(i -> detailTravelSaveDto(mainTravelCount)).toList()
 		);
 	}
@@ -96,7 +99,7 @@ public class MainTravelFixture {
 			END_DATE,
 			FALSE_VISIBLE,
 			TRUE_COMPLETE,
-			new ImageSaveDto(),
+			IMAGE_PATH,
 			rangeClosed(0, 9).mapToObj(i -> detailTravelSaveDto(mainTravelCount)).toList()
 		);
 	}
@@ -108,7 +111,7 @@ public class MainTravelFixture {
 			END_DATE,
 			TRUE_VISIBLE,
 			FALSE_COMPLETE,
-			new ImageSaveDto(),
+			IMAGE_PATH,
 			rangeClosed(0, 9).mapToObj(i -> detailTravelSaveDto(mainTravelCount)).toList()
 		);
 	}
@@ -120,7 +123,7 @@ public class MainTravelFixture {
 			END_DATE,
 			FALSE_VISIBLE,
 			FALSE_COMPLETE,
-			new ImageSaveDto(),
+			IMAGE_PATH,
 			rangeClosed(0, 9).mapToObj(i -> detailTravelSaveDto(mainTravelCount)).toList()
 		);
 	}
