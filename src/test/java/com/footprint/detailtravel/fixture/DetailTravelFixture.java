@@ -1,97 +1,96 @@
-/*
 package com.footprint.detailtravel.fixture;
 
-import static com.footprint.maintravel.fixture.MainTravelFixture.*;
+import static java.time.LocalDate.*;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.stream.IntStream;
-
-import org.springframework.test.util.ReflectionTestUtils;
 
 import com.footprint.detailtravel.domain.Address;
-import com.footprint.detailtravel.domain.DetailTravel;
-import com.footprint.detailtravel.service.dto.UpdateDetailTravelDto;
-import com.footprint.maintravel.domain.MainTravel;
-import com.footprint.member.domain.Member;
+import com.footprint.detailtravel.service.dto.create.DetailTravelSaveDto;
+import com.footprint.detailtravel.service.dto.create.ImageSaveDto;
+import com.footprint.detailtravel.service.dto.create.PriceSaveDto;
 
-*/
 /**
- * Created by ShinD on 2022/05/25.
- *//*
-
+ * Created by ShinD on 2022/06/26.
+ */
 public class DetailTravelFixture {
+	private static int detailTravelCount = 1;
 
-	public static final Long DETAIL_TRAVEL_ID = 1L;
-	public static final String TITLE = "title";
-	public static final String UPDATE_TITLE = "update_title";
-	public static final String REVIEW = "review";
-	public static final String UPDATE_REVIEW = "update_review";
-	public static final String TIP = "tip";
-	public static final String UPDATE_TIP = "update_tip";
-	public static final LocalDate VISITED_DATE = LocalDate.of(2022, 10, 4);
-	public static final LocalDate UPDATE_VISITED_DATE = LocalDate.of(2021, 8, 3);
+	private static final String TITLE = "title";
+	private static final String UPDATE_TITLE = "update-title";
 
+	private static final String REVIEW = "review";
+	private static final String UPDATE_REVIEW = "update-review";
 
-	public static final String ADDRESS = "address";
-	public static final String UPDATE_ADDRESS = "update_address";
-	public static final String ROAD_ADDRESS = "address";
-	public static final String UPDATE_ROAD_ADDRESS = "update_address";
-	public static final int MAP_X = 120;
-	public static final int UPDATE_MAP_X = 2120;
-	public static final int MAP_Y = 122;
-	public static final int UPDATE_MAP_Y = 2122;
+	private static final String TIP = "tip";
+	private static final String UPDATE_TIP = "update-tip";
 
-	public static final Address ADDRESS_OBJ = Address.builder().address(ADDRESS).roadAddress(ROAD_ADDRESS).mapX(MAP_X).mapY(MAP_Y).build();
-	public static final Address UPDATE_ADDRESS_OBJ = Address.builder().address(UPDATE_ADDRESS).roadAddress(UPDATE_ROAD_ADDRESS).mapX(UPDATE_MAP_X).mapY(UPDATE_MAP_Y).build();
-	public static final LocalDateTime CREATED_AT = LocalDateTime.of(2022, 3, 18, 10, 10);
+	private static final String VISITED_DATE_STRING = "2022-06-15";
+	private static final LocalDate VISITED_DATE = parse(VISITED_DATE_STRING);
 
-	public static final Long MAIN_TRAVEL_WRITER_ID = 1L;
-	public static final Long NO_AUTHORITY_MEMBER_ID = MAIN_TRAVEL_WRITER_ID + 1;
+	private static final String UPDATE_VISITED_DATE_STRING = "2022-06-15";
+	private static final LocalDate UPDATE_VISITED_DATE = parse(UPDATE_VISITED_DATE_STRING);
+
+	private static final Address ADDRESS = Address.builder().roadAddress("roadAddress").mapX(1).mapY(2).address("address").build();
+	private static final Address UPDATE_ADDRESS = Address.builder().roadAddress("(update)roadAddress").mapX(21).mapY(22).address("(update)address").build();
+
+	private static final LocalDateTime CREATED_AT = LocalDateTime.now();
+	private static final String CREATED_AT_STRING = CREATED_AT.toString();
+
+	private static final List<PriceSaveDto> PRICE_SAVE_DTO_LIST = new ArrayList<>();
+	private static final List<ImageSaveDto> IMAGE_SAVE_DTO_LIST = new ArrayList<>();
 
 
-	public static DetailTravel getDetailTravelFixture() {
-		DetailTravel detailTravel = DetailTravel.builder()
-			.title(TITLE)
-			.review(REVIEW)
-			.tip(TIP)
-			.visitedDate(VISITED_DATE)
-			.address(ADDRESS_OBJ)
-			.build();
-		ReflectionTestUtils.setField(detailTravel, "createdAt", CREATED_AT);
 
-
-		Member member = new Member("username", "password", "nickname");
-		ReflectionTestUtils.setField(member, "id", MAIN_TRAVEL_WRITER_ID);
-
-		MainTravel mainTravel = getMainTravel();
-		ReflectionTestUtils.setField(mainTravel, "id", MAIN_TRAVEL_ID);
-
-		ReflectionTestUtils.setField(mainTravel, "writer", member);
-
-
-		detailTravel.setMainTravel(mainTravel);
-
-		return detailTravel;
+	public static DetailTravelSaveDto detailTravelSaveDto(int mtCnt) {
+		detailTravelCount++;
+		return new DetailTravelSaveDto(
+			title(mtCnt),
+			review(mtCnt),
+			tip(mtCnt),
+			VISITED_DATE,
+			ADDRESS,
+			PRICE_SAVE_DTO_LIST,
+			IMAGE_SAVE_DTO_LIST
+		);
 	}
-	public static List<DetailTravel> getDetailTravelFixtureList(int size) {
-		List<DetailTravel> detailTravelList = new ArrayList<>();
-		for (int i = 0; i < size; i++) {
-			DetailTravel detailTravelFixture = getDetailTravelFixture();
-			ReflectionTestUtils.setField(detailTravelFixture, "id", DETAIL_TRAVEL_ID+i);
-			detailTravelList.add(detailTravelFixture);
-		}
-		return detailTravelList;
+
+	public static DetailTravelSaveDto updateDetailTravelSaveDto(int mainTravelCount) {
+		return new DetailTravelSaveDto(
+			updateTitle(mainTravelCount),
+			updateReview(mainTravelCount),
+			updateTip(mainTravelCount),
+			UPDATE_VISITED_DATE,
+			UPDATE_ADDRESS,
+			PRICE_SAVE_DTO_LIST,
+			IMAGE_SAVE_DTO_LIST
+		);
 	}
 
 
-
-	public static UpdateDetailTravelDto getUpdateDetailTravelDto() {
-		return new UpdateDetailTravelDto(DETAIL_TRAVEL_ID, MAIN_TRAVEL_ID, UPDATE_TITLE, UPDATE_REVIEW, UPDATE_TIP, UPDATE_VISITED_DATE, UPDATE_ADDRESS_OBJ);
+	private static String tip(int mainTravelCount) {
+		return "[tip] %s (%d - %d)".formatted(TIP, mainTravelCount, detailTravelCount);
 	}
 
+	private static String review(int mainTravelCount) {
+		return "[review] %s (%d - %d)".formatted(REVIEW, mainTravelCount, detailTravelCount);
+	}
 
+	private static String title(int mainTravelCount) {
+		return "[title] : %s (%d - %d)".formatted(TITLE, mainTravelCount,detailTravelCount);
+	}
+
+	private static String updateTitle(int mainTravelCount) {
+		return "[title](update) %s (%d - %d)".formatted(UPDATE_TITLE, mainTravelCount,detailTravelCount);
+	}
+
+	private static String updateReview(int mainTravelCount) {
+		return "[review](update) %s (%d - %d)".formatted(UPDATE_REVIEW, mainTravelCount,detailTravelCount);
+	}
+
+	private static String updateTip(int mainTravelCount) {
+		return "[tip](update) %s (%d - %d)".formatted(UPDATE_TIP, mainTravelCount,detailTravelCount);
+	}
 }
-*/

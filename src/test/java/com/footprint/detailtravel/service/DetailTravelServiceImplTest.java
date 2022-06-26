@@ -1,311 +1,309 @@
-/*
 package com.footprint.detailtravel.service;
 
-import static com.footprint.detailtravel.fixture.DetailTravelFixture.TITLE;
-import static com.footprint.detailtravel.fixture.DetailTravelFixture.UPDATE_TITLE;
-import static com.footprint.detailtravel.fixture.DetailTravelFixture.*;
+import static com.footprint.auth.service.SecurityUtils.*;
+import static com.footprint.detailtravel.exception.DetailTravelExceptionType.*;
 import static com.footprint.maintravel.fixture.MainTravelFixture.*;
+import static com.footprint.member.fixture.MemberFixture.*;
+import static com.footprint.util.MappingTestUtil.*;
+import static org.assertj.core.api.Assertions.*;
 import static org.junit.jupiter.api.Assertions.*;
-import static org.mockito.BDDMockito.*;
 
+import java.time.LocalDateTime;
 import java.util.ArrayList;
-import java.util.Optional;
-import java.util.stream.IntStream;
+import java.util.List;
 
+import javax.persistence.EntityManager;
+
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.InjectMocks;
-import org.mockito.junit.jupiter.MockitoExtension;
-import org.springframework.test.util.ReflectionTestUtils;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.context.SecurityContext;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.User;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.footprint.detailtravel.domain.DetailTravel;
 import com.footprint.detailtravel.exception.DetailTravelException;
-import com.footprint.detailtravel.exception.DetailTravelExceptionType;
 import com.footprint.detailtravel.repository.DetailTravelRepository;
+import com.footprint.detailtravel.service.dto.create.DetailTravelSaveDto;
 import com.footprint.detailtravel.service.dto.info.DetailTravelDto;
-import com.footprint.detailtravel.service.dto.info.DetailTravelListDto;
-import com.footprint.maintravel.repository.MainTravelRepository;
+import com.footprint.maintravel.service.MainTravelService;
+import com.footprint.maintravel.service.dto.save.MainTravelSaveDto;
+import com.footprint.member.domain.Member;
 import com.footprint.member.repository.MemberRepository;
 
-*/
 /**
- * Created by ShinD on 2022/05/25.
- *//*
-
-@ExtendWith(MockitoExtension.class)
+ * Created by ShinD on 2022/06/26.
+ */
+@SpringBootTest
+@Transactional
 class DetailTravelServiceImplTest {
 
 
-	private final DetailTravelRepository detailTravelRepository = mock(DetailTravelRepository.class);
-	private final MainTravelRepository mainTravelRepository = mock(MainTravelRepository.class);
-	private final MemberRepository memberRepository = mock(MemberRepository.class);
+	@Autowired
+	DetailTravelService detailTravelService;
 
-	@InjectMocks
-	private DetailTravelService detailTravelService = new DetailTravelServiceImpl(detailTravelRepository, mainTravelRepository, memberRepository);
-
-
-	@Test
-	@DisplayName("Detail Travel 수정 성공")
-	void successUpdateDetailTravel() throws Exception {
-		//given
-		DetailTravel detailTravel = getDetailTravelFixture();
-		ReflectionTestUtils.setField(detailTravel, "id", DETAIL_TRAVEL_ID);
-		given(detailTravelRepository.findById(DETAIL_TRAVEL_ID)).willReturn(Optional.ofNullable(detailTravel));
+	@Autowired
+	DetailTravelRepository detailTravelRepository;
 
 
-		//when
-		detailTravelService.update(MAIN_TRAVEL_WRITER_ID, getUpdateDetailTravelDto());
+	@Autowired
+	MainTravelService mainTravelService;
+
+	@Autowired
+	MemberRepository memberRepository;
+
+	@Autowired
+	EntityManager em;
 
 
-		//then
-		assertEquals(DETAIL_TRAVEL_ID, detailTravel.getId());
-		assertEquals(MAIN_TRAVEL_ID, detailTravel.getMainTravel().getId());
-		assertEquals(MAIN_TRAVEL_WRITER_ID, detailTravel.getMainTravel().getWriter().getId());
 
-		assertEquals(UPDATE_TITLE, detailTravel.getTitle());
-		assertEquals(UPDATE_REVIEW, detailTravel.getReview());
-		assertEquals(UPDATE_TIP, detailTravel.getTip());
-		assertEquals(UPDATE_VISITED_DATE, detailTravel.getVisitedDate());
 
-		assertEquals(UPDATE_ADDRESS, detailTravel.getAddress().getAddress());
-		assertEquals(UPDATE_ROAD_ADDRESS, detailTravel.getAddress().getRoadAddress());
-		assertEquals(UPDATE_MAP_X, detailTravel.getAddress().getMapX());
-		assertEquals(UPDATE_MAP_Y, detailTravel.getAddress().getMapY());
+	private void clear(){
+		em.flush();
+		em.clear();
 	}
 
-	@Test
-	@DisplayName("Detail Travel 수정 실패 - (원인 : 없는 Detail Travel)")
-	void failUpdateDetailTravelCauseNoDetailTravel() throws Exception {
-		//given
-		DetailTravel detailTravel = getDetailTravelFixture();
-		ReflectionTestUtils.setField(detailTravel, "id", DETAIL_TRAVEL_ID);
-		given(detailTravelRepository.findById(DETAIL_TRAVEL_ID)).willReturn(Optional.ofNullable(null));
 
+	private void saveSecurityContextHolder(Member member) {
+		SecurityContext context = SecurityContextHolder.createEmptyContext();
+		UserDetails userDetails = User.builder()
+			.username(member.getId().toString())
+			.password(member.getPassword())
+			.authorities(new ArrayList<>()).build();
 
-		//when
-		DetailTravelExceptionType exceptionType = (DetailTravelExceptionType) assertThrows(DetailTravelException.class,
-			() -> detailTravelService.update(MAIN_TRAVEL_WRITER_ID, getUpdateDetailTravelDto())).getExceptionType();
-
-
-		//then
-		assertEquals(DetailTravelExceptionType.NOT_FOUND, exceptionType);
-		assertEquals(DETAIL_TRAVEL_ID, detailTravel.getId());
-		assertEquals(MAIN_TRAVEL_ID, detailTravel.getMainTravel().getId());
-		assertEquals(MAIN_TRAVEL_WRITER_ID, detailTravel.getMainTravel().getWriter().getId());
-
-		assertEquals(TITLE, detailTravel.getTitle());
-		assertNotEquals(UPDATE_TITLE, detailTravel.getTitle());
-		assertEquals(REVIEW, detailTravel.getReview());
-		assertEquals(TIP, detailTravel.getTip());
-		assertEquals(VISITED_DATE, detailTravel.getVisitedDate());
-
-		assertEquals(ADDRESS, detailTravel.getAddress().getAddress());
-		assertEquals(ROAD_ADDRESS, detailTravel.getAddress().getRoadAddress());
-		assertEquals(MAP_X, detailTravel.getAddress().getMapX());
-		assertEquals(MAP_Y, detailTravel.getAddress().getMapY());
+		context.setAuthentication(new UsernamePasswordAuthenticationToken(userDetails, null));
+		SecurityContextHolder.setContext(context);
 	}
 
-	@Test
-	@DisplayName("Detail Travel 수정 실패 - (원인 : 권한 없는 유저)")
-	void failUpdateDetailTravelCauseMemberNoAuthority() throws Exception {
-		//given
-		DetailTravel detailTravel = getDetailTravelFixture();
-		ReflectionTestUtils.setField(detailTravel, "id", DETAIL_TRAVEL_ID);
-		given(detailTravelRepository.findById(DETAIL_TRAVEL_ID)).willReturn(Optional.ofNullable(detailTravel));
+
+	private long getOtherMemberId() {
+		return getLoginMemberId() + 999;
+	}
 
 
-		//when
-		DetailTravelExceptionType exceptionType = (DetailTravelExceptionType) assertThrows(DetailTravelException.class,
-			() -> detailTravelService.update(NO_AUTHORITY_MEMBER_ID, getUpdateDetailTravelDto())).getExceptionType();
 
-
-		//then
-		assertEquals(DetailTravelExceptionType.NO_AUTHORITY, exceptionType);
-		assertEquals(DETAIL_TRAVEL_ID, detailTravel.getId());
-		assertEquals(MAIN_TRAVEL_ID, detailTravel.getMainTravel().getId());
-		assertEquals(MAIN_TRAVEL_WRITER_ID, detailTravel.getMainTravel().getWriter().getId());
-
-		assertEquals(TITLE, detailTravel.getTitle());
-		assertNotEquals(UPDATE_TITLE, detailTravel.getTitle());
-		assertEquals(REVIEW, detailTravel.getReview());
-		assertEquals(TIP, detailTravel.getTip());
-		assertEquals(VISITED_DATE, detailTravel.getVisitedDate());
-
-		assertEquals(ADDRESS, detailTravel.getAddress().getAddress());
-		assertEquals(ROAD_ADDRESS, detailTravel.getAddress().getRoadAddress());
-		assertEquals(MAP_X, detailTravel.getAddress().getMapX());
-		assertEquals(MAP_Y, detailTravel.getAddress().getMapY());
+	@BeforeEach
+	private void setUp() {
+		Member member = memberRepository.save(defaultMember());
+		saveSecurityContextHolder(member);
+		clear();
 	}
 
 
 	@Test
-	@DisplayName("Detail Travel 삭제 성공")
-	void successDeleteDetailTravel() throws Exception {
+	@DisplayName("Detail Travel 조회 (성공) [public 게시물, 완성, 주인의 조회 요쳥]")
+	public void successGetDetailTravelWherePublicAndCompleteAndRequestByOwner() throws Exception {
 		//given
-		DetailTravel detailTravel = getDetailTravelFixture();
-		given(detailTravelRepository.findById(DETAIL_TRAVEL_ID)).willReturn(Optional.ofNullable(detailTravel));
+		MainTravelSaveDto mainTravelSaveDto = publicCompleteMainTravelSaveDto();
+		DetailTravelSaveDto detailTravelSaveDto = mainTravelSaveDto.detailTravelSaveDtoList().get(0);
+		Long mainTravelId = mainTravelService.saveMainTravel(getLoginMemberId(),mainTravelSaveDto);
+		List<Long> detailTravelIdSet = mappingToList(detailTravelRepository.findAllByMainTravelId(mainTravelId), DetailTravel::getId);
+		Long detailTravelId = detailTravelIdSet.get(0);
+		clear();
 
 
 		//when
-		detailTravelService.delete(MAIN_TRAVEL_WRITER_ID, DETAIL_TRAVEL_ID);
+		DetailTravelDto detailTravelDto = detailTravelService.getById(getLoginMemberId(), detailTravelId);
 
 		//then
-		verify(detailTravelRepository, times(1)).delete(detailTravel);
-	}
+		assertThat(detailTravelDto.detailTravelId()).isEqualTo(detailTravelId);
+		assertThat(detailTravelDto.title()).isEqualTo(detailTravelSaveDto.title());
+		assertThat(detailTravelDto.review()).isEqualTo(detailTravelSaveDto.review());
+		assertThat(detailTravelDto.tip()).isEqualTo(detailTravelSaveDto.tip());
+		assertThat(detailTravelDto.visitedDate()).isEqualTo(detailTravelSaveDto.visitedDate());
+		assertThat(detailTravelDto.address()).isEqualTo(detailTravelSaveDto.address());
+		assertThat(detailTravelDto.createdAt()).isBefore(LocalDateTime.now().plusSeconds(2));
+		assertThat(detailTravelDto.priceDtoList().size()).isEqualTo(detailTravelSaveDto.priceSaveDtoList().size());
+		assertThat(detailTravelDto.imageDtoList().size()).isEqualTo(detailTravelSaveDto.imageSaveDtoList().size());
 
 
-	@Test
-	@DisplayName("Detail Travel 삭제 실패 - (원인 : 없는 Detail Travel)")
-	void failDeleteDetailTravelCauseNoDetailTravel() throws Exception {
-		//given
-		DetailTravel detailTravel = getDetailTravelFixture();
-		ReflectionTestUtils.setField(detailTravel, "id", DETAIL_TRAVEL_ID);
-		given(detailTravelRepository.findById(DETAIL_TRAVEL_ID)).willReturn(Optional.ofNullable(null));
-
-
-		//when
-		DetailTravelExceptionType exceptionType = (DetailTravelExceptionType) assertThrows(DetailTravelException.class,
-			() -> detailTravelService.delete(MAIN_TRAVEL_WRITER_ID, DETAIL_TRAVEL_ID)).getExceptionType();
-
-
-		//then
-		verify(detailTravelRepository, times(0)).delete(detailTravel);
-
-	}
-
-	@Test
-	@DisplayName("Detail Travel 수정 실패 - (원인 : 권한 없는 유저)")
-	void failDeleteDetailTravelCauseMemberNoAuthority() throws Exception {
-		//given
-		DetailTravel detailTravel = getDetailTravelFixture();
-		ReflectionTestUtils.setField(detailTravel, "id", DETAIL_TRAVEL_ID);
-		given(detailTravelRepository.findById(DETAIL_TRAVEL_ID)).willReturn(Optional.ofNullable(detailTravel));
-
-
-		//when
-		DetailTravelExceptionType exceptionType = (DetailTravelExceptionType) assertThrows(DetailTravelException.class,
-			() -> detailTravelService.delete(NO_AUTHORITY_MEMBER_ID, DETAIL_TRAVEL_ID)).getExceptionType();
-
-
-		//then
-		verify(detailTravelRepository, times(0)).delete(detailTravel);
-		assertEquals(DetailTravelExceptionType.NO_AUTHORITY, exceptionType);
-		assertEquals(DETAIL_TRAVEL_ID, detailTravel.getId());
-		assertEquals(MAIN_TRAVEL_ID, detailTravel.getMainTravel().getId());
-		assertEquals(MAIN_TRAVEL_WRITER_ID, detailTravel.getMainTravel().getWriter().getId());
-
-		assertEquals(TITLE, detailTravel.getTitle());
-		assertNotEquals(UPDATE_TITLE, detailTravel.getTitle());
-		assertEquals(REVIEW, detailTravel.getReview());
-		assertEquals(TIP, detailTravel.getTip());
-		assertEquals(VISITED_DATE, detailTravel.getVisitedDate());
-
-		assertEquals(ADDRESS, detailTravel.getAddress().getAddress());
-		assertEquals(ROAD_ADDRESS, detailTravel.getAddress().getRoadAddress());
-		assertEquals(MAP_X, detailTravel.getAddress().getMapX());
-		assertEquals(MAP_Y, detailTravel.getAddress().getMapY());
 	}
 
 
 
 	@Test
-	@DisplayName("Detail Travel 조회 성공")
-	void successGetDetailTravel() throws Exception {
+	@DisplayName("Main Travel 조회 (성공) [private 게시물, 완성, 주인의 조회 요쳥]")
+	public void successGetDetailTravelWherePrivateAndCompleteAndRequestByOwner() throws Exception {
+
 		//given
-		DetailTravel detailTravel = getDetailTravelFixture();
-		ReflectionTestUtils.setField(detailTravel, "id", DETAIL_TRAVEL_ID);
-		given(detailTravelRepository.findById(DETAIL_TRAVEL_ID)).willReturn(Optional.ofNullable(detailTravel));
+		MainTravelSaveDto mainTravelSaveDto = privateCompleteMainTravelSaveDto();
+		DetailTravelSaveDto detailTravelSaveDto = mainTravelSaveDto.detailTravelSaveDtoList().get(0);
+		Long mainTravelId = mainTravelService.saveMainTravel(getLoginMemberId(),mainTravelSaveDto);
+		List<Long> detailTravelIdSet = mappingToList(detailTravelRepository.findAllByMainTravelId(mainTravelId), DetailTravel::getId);
+		Long detailTravelId = detailTravelIdSet.get(0);
+		clear();
 
 
 		//when
-		DetailTravelDto detailTravelDto = detailTravelService.getById(DETAIL_TRAVEL_ID);
+		DetailTravelDto detailTravelDto = detailTravelService.getById(getLoginMemberId(), detailTravelId);
 
 		//then
-		assertEquals(DETAIL_TRAVEL_ID, detailTravelDto.getDetailTravelId());
-		assertEquals(TITLE, detailTravelDto.getTitle());
-		assertEquals(REVIEW, detailTravelDto.getReview());
-		assertEquals(TIP, detailTravelDto.getTip());
-		assertEquals(VISITED_DATE, detailTravelDto.getVisitedDate());
-		assertEquals(ADDRESS, detailTravelDto.getAddress().getAddress());
-		assertEquals(ROAD_ADDRESS, detailTravelDto.getAddress().getRoadAddress());
-		assertEquals(MAP_X, detailTravelDto.getAddress().getMapX());
-		assertEquals(MAP_Y, detailTravelDto.getAddress().getMapY());
+		assertThat(detailTravelDto.detailTravelId()).isEqualTo(detailTravelId);
+		assertThat(detailTravelDto.title()).isEqualTo(detailTravelSaveDto.title());
+		assertThat(detailTravelDto.review()).isEqualTo(detailTravelSaveDto.review());
+		assertThat(detailTravelDto.tip()).isEqualTo(detailTravelSaveDto.tip());
+		assertThat(detailTravelDto.visitedDate()).isEqualTo(detailTravelSaveDto.visitedDate());
+		assertThat(detailTravelDto.address()).isEqualTo(detailTravelSaveDto.address());
+		assertThat(detailTravelDto.createdAt()).isBefore(LocalDateTime.now().plusSeconds(2));
+		assertThat(detailTravelDto.priceDtoList().size()).isEqualTo(detailTravelSaveDto.priceSaveDtoList().size());
+		assertThat(detailTravelDto.imageDtoList().size()).isEqualTo(detailTravelSaveDto.imageSaveDtoList().size());
 	}
 
 	@Test
-	@DisplayName("Detail Travel 조회 실패 - (원인 : 없는 Detail Travel)")
-	void failGetDetailTravelCauseNoDetailTravel() throws Exception {
+	@DisplayName("Main Travel 조회 (성공) [public 게시물, 미완성, 주인의 조회 요쳥]")
+	public void successGetDetailTravelWherePublicAndUnCompleteAndRequestByOwner() throws Exception {
+
 		//given
-		DetailTravel detailTravel = getDetailTravelFixture();
-		given(detailTravelRepository.findById(DETAIL_TRAVEL_ID)).willReturn(Optional.ofNullable(null));
+		MainTravelSaveDto mainTravelSaveDto = publicUnCompleteMainTravelSaveDto();
+		DetailTravelSaveDto detailTravelSaveDto = mainTravelSaveDto.detailTravelSaveDtoList().get(0);
+		Long mainTravelId = mainTravelService.saveMainTravel(getLoginMemberId(),mainTravelSaveDto);
+		List<Long> detailTravelIdSet = mappingToList(detailTravelRepository.findAllByMainTravelId(mainTravelId), DetailTravel::getId);
+		Long detailTravelId = detailTravelIdSet.get(0);
+		clear();
+
+
+		//when
+		DetailTravelDto detailTravelDto = detailTravelService.getById(getLoginMemberId(), detailTravelId);
+
+		//then
+		assertThat(detailTravelDto.detailTravelId()).isEqualTo(detailTravelId);
+		assertThat(detailTravelDto.title()).isEqualTo(detailTravelSaveDto.title());
+		assertThat(detailTravelDto.review()).isEqualTo(detailTravelSaveDto.review());
+		assertThat(detailTravelDto.tip()).isEqualTo(detailTravelSaveDto.tip());
+		assertThat(detailTravelDto.visitedDate()).isEqualTo(detailTravelSaveDto.visitedDate());
+		assertThat(detailTravelDto.address()).isEqualTo(detailTravelSaveDto.address());
+		assertThat(detailTravelDto.createdAt()).isBefore(LocalDateTime.now().plusSeconds(2));
+		assertThat(detailTravelDto.priceDtoList().size()).isEqualTo(detailTravelSaveDto.priceSaveDtoList().size());
+		assertThat(detailTravelDto.imageDtoList().size()).isEqualTo(detailTravelSaveDto.imageSaveDtoList().size());
+	}
+	@Test
+	@DisplayName("Main Travel 조회 (성공) [private 게시물, 미완성, 주인의 조회 요쳥]")
+	public void successGetDetailTravelWherePrivateAndUnCompleteAndRequestByOwner() throws Exception {
+
+		//given
+		MainTravelSaveDto mainTravelSaveDto = privateUnCompleteMainTravelSaveDto();
+		DetailTravelSaveDto detailTravelSaveDto = mainTravelSaveDto.detailTravelSaveDtoList().get(0);
+		Long mainTravelId = mainTravelService.saveMainTravel(getLoginMemberId(),mainTravelSaveDto);
+		List<Long> detailTravelIdSet = mappingToList(detailTravelRepository.findAllByMainTravelId(mainTravelId), DetailTravel::getId);
+		Long detailTravelId = detailTravelIdSet.get(0);
+		clear();
+
+
+		//when
+		DetailTravelDto detailTravelDto = detailTravelService.getById(getLoginMemberId(), detailTravelId);
+
+		//then
+		assertThat(detailTravelDto.detailTravelId()).isEqualTo(detailTravelId);
+		assertThat(detailTravelDto.title()).isEqualTo(detailTravelSaveDto.title());
+		assertThat(detailTravelDto.review()).isEqualTo(detailTravelSaveDto.review());
+		assertThat(detailTravelDto.tip()).isEqualTo(detailTravelSaveDto.tip());
+		assertThat(detailTravelDto.visitedDate()).isEqualTo(detailTravelSaveDto.visitedDate());
+		assertThat(detailTravelDto.address()).isEqualTo(detailTravelSaveDto.address());
+		assertThat(detailTravelDto.createdAt()).isBefore(LocalDateTime.now().plusSeconds(2));
+		assertThat(detailTravelDto.priceDtoList().size()).isEqualTo(detailTravelSaveDto.priceSaveDtoList().size());
+		assertThat(detailTravelDto.imageDtoList().size()).isEqualTo(detailTravelSaveDto.imageSaveDtoList().size());
+	}
+
+	@Test
+	@DisplayName("Main Travel 조회 (성공) [public 게시물, 완성, 다른 사람의 조회 요쳥]")
+	public void successGetDetailTravelWherePublicAndCompleteAndRequestByOther() throws Exception {
+		MainTravelSaveDto mainTravelSaveDto = publicCompleteMainTravelSaveDto();
+		DetailTravelSaveDto detailTravelSaveDto = mainTravelSaveDto.detailTravelSaveDtoList().get(0);
+		Long mainTravelId = mainTravelService.saveMainTravel(getLoginMemberId(),mainTravelSaveDto);
+		List<Long> detailTravelIdSet = mappingToList(detailTravelRepository.findAllByMainTravelId(mainTravelId), DetailTravel::getId);
+		Long detailTravelId = detailTravelIdSet.get(0);
+		clear();
+
+
+		//when
+		DetailTravelDto detailTravelDto = detailTravelService.getById(getLoginMemberId(), detailTravelId);
+
+		//then
+		assertThat(detailTravelDto.detailTravelId()).isEqualTo(detailTravelId);
+		assertThat(detailTravelDto.title()).isEqualTo(detailTravelSaveDto.title());
+		assertThat(detailTravelDto.review()).isEqualTo(detailTravelSaveDto.review());
+		assertThat(detailTravelDto.tip()).isEqualTo(detailTravelSaveDto.tip());
+		assertThat(detailTravelDto.visitedDate()).isEqualTo(detailTravelSaveDto.visitedDate());
+		assertThat(detailTravelDto.address()).isEqualTo(detailTravelSaveDto.address());
+		assertThat(detailTravelDto.createdAt()).isBefore(LocalDateTime.now().plusSeconds(2));
+		assertThat(detailTravelDto.priceDtoList().size()).isEqualTo(detailTravelSaveDto.priceSaveDtoList().size());
+		assertThat(detailTravelDto.imageDtoList().size()).isEqualTo(detailTravelSaveDto.imageSaveDtoList().size());
+	}
+
+
+	@Test
+	@DisplayName("Main Travel 조회 (실패) [private 게시물, 완성, 다른 사람의 조회 요쳥]")
+	public void failGetDetailTravelWherePrivateAndCompleteAndRequestByOther() throws Exception {
+
+		//given
+		MainTravelSaveDto mainTravelSaveDto = privateCompleteMainTravelSaveDto();
+		DetailTravelSaveDto detailTravelSaveDto = mainTravelSaveDto.detailTravelSaveDtoList().get(0);
+		Long mainTravelId = mainTravelService.saveMainTravel(getLoginMemberId(),mainTravelSaveDto);
+		List<Long> detailTravelIdSet = mappingToList(detailTravelRepository.findAllByMainTravelId(mainTravelId), DetailTravel::getId);
+		Long detailTravelId = detailTravelIdSet.get(0);
+		clear();
 
 
 		//when, then
-		DetailTravelExceptionType exceptionType = (DetailTravelExceptionType)assertThrows(DetailTravelException.class,
-			() -> detailTravelService.getById(DETAIL_TRAVEL_ID)).getExceptionType();
+		assertThat(assertThrows(DetailTravelException.class, () -> detailTravelService.getById(getOtherMemberId(), detailTravelId)).getExceptionType())
+			.isEqualTo(NO_AUTHORITY);
 
-		assertEquals(DetailTravelExceptionType.NOT_FOUND ,exceptionType);
-
-	}
-
-	@Test
-	@DisplayName("Main Travel에 속한 Detail Travel 조회 (여러개 있는 케이스)")
-	void successGetAllDetailTravelInMainTravel() throws Exception {
-		//given
-		final int SIZE = 5;
-		given(detailTravelRepository.findAllByMainTravelId(MAIN_TRAVEL_ID)).willReturn(getDetailTravelFixtureList(SIZE));
-
-
-		//when
-		DetailTravelListDto detailTravelListDto = detailTravelService.getAllByMainTravelId(MAIN_TRAVEL_ID);
-
-		//then
-		assertEquals(SIZE, detailTravelListDto.total());
-		IntStream.range(0, SIZE).forEach(i ->{
-			DetailTravelDto detailTravelDto = detailTravelListDto.detailTravelDtoList().get(i);
-			assertEquals(TITLE, detailTravelDto.getTitle());
-			assertEquals(REVIEW, detailTravelDto.getReview());
-			assertEquals(TIP, detailTravelDto.getTip());
-			assertEquals(VISITED_DATE, detailTravelDto.getVisitedDate());
-			assertEquals(ADDRESS, detailTravelDto.getAddress().getAddress());
-			assertEquals(ROAD_ADDRESS, detailTravelDto.getAddress().getRoadAddress());
-			assertEquals(MAP_X, detailTravelDto.getAddress().getMapX());
-			assertEquals(MAP_Y, detailTravelDto.getAddress().getMapY());
-		});
 	}
 
 
 	@Test
-	@DisplayName("Main Travel에 속한 Detail Travel 조회 (0 개인 케이스)")
-	void successGetAllDetailTravelInMainTravel_Case_Zero() throws Exception {
+	@DisplayName("Main Travel 조회 (실패) [public 게시물, 미완성, 다른 사람의 조회 요쳥]")
+	public void failGetDetailTravelWherePublicAndUnCompleteAndRequestByOther() throws Exception {
 		//given
-		final int SIZE = 0;
-		given(detailTravelRepository.findAllByMainTravelId(MAIN_TRAVEL_ID)).willReturn(getDetailTravelFixtureList(SIZE));
+		MainTravelSaveDto mainTravelSaveDto = publicUnCompleteMainTravelSaveDto();
+		DetailTravelSaveDto detailTravelSaveDto = mainTravelSaveDto.detailTravelSaveDtoList().get(0);
+		Long mainTravelId = mainTravelService.saveMainTravel(getLoginMemberId(),mainTravelSaveDto);
+		List<Long> detailTravelIdSet = mappingToList(detailTravelRepository.findAllByMainTravelId(mainTravelId), DetailTravel::getId);
+		Long detailTravelId = detailTravelIdSet.get(0);
+		clear();
 
 
-		//when
-		DetailTravelListDto detailTravelListDto = detailTravelService.getAllByMainTravelId(MAIN_TRAVEL_ID);
-
-		//then
-		assertEquals(SIZE, detailTravelListDto.total());
-		assertTrue(detailTravelListDto.detailTravelDtoList().isEmpty());
+		//when, then
+		assertThat(assertThrows(
+			DetailTravelException.class, () -> detailTravelService.getById(getOtherMemberId(), detailTravelId)).getExceptionType())
+			.isEqualTo(NO_AUTHORITY);
 	}
 
 	@Test
-	@DisplayName("Main Travel에 속한 Detail Travel 조회시 결과가 0 (원인 : Main Travel이 존재하지 않음)")
-	void failGetAllDetailTravelInMainTravelCauseNoMainTravel() throws Exception {
+	@DisplayName("Main Travel 조회 (실패) [private 게시물, 미완성, 다른 사람의 조회 요쳥]")
+	public void failGetDetailTravelWherePrivateAndUnCompleteAndRequestByOther() throws Exception {
+
 		//given
-		given(detailTravelRepository.findAllByMainTravelId(MAIN_TRAVEL_ID)).willReturn(new ArrayList<>());
+		MainTravelSaveDto mainTravelSaveDto = privateUnCompleteMainTravelSaveDto();
+		DetailTravelSaveDto detailTravelSaveDto = mainTravelSaveDto.detailTravelSaveDtoList().get(0);
+		Long mainTravelId = mainTravelService.saveMainTravel(getLoginMemberId(),mainTravelSaveDto);
+		List<Long> detailTravelIdSet = mappingToList(detailTravelRepository.findAllByMainTravelId(mainTravelId), DetailTravel::getId);
+		Long detailTravelId = detailTravelIdSet.get(0);
+		clear();
 
 
-		//when
-		DetailTravelListDto detailTravelListDto = detailTravelService.getAllByMainTravelId(MAIN_TRAVEL_ID);
+		//when, then
+		assertThat(assertThrows(DetailTravelException.class, () -> detailTravelService.getById(getOtherMemberId(), detailTravelId)).getExceptionType())
+			.isEqualTo(NO_AUTHORITY);
+	}
 
-		//then
-		assertEquals(0, detailTravelListDto.total());
-		assertTrue(detailTravelListDto.detailTravelDtoList().isEmpty());
+
+	@Test
+	@DisplayName("Main Travel 조회 (실패 - 없는 게시물)")
+	public void failGetMainTravelCauseNotExist() throws Exception {
+		//given
+		Long nullId = 9999999L;
+
+		//when, then
+		assertThat(assertThrows(DetailTravelException.class, () -> detailTravelService.getById(getLoginMemberId(), nullId)).getExceptionType())
+			.isEqualTo(NOT_FOUND);
 
 	}
 
-}*/
+	
+}

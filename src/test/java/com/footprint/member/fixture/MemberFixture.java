@@ -1,9 +1,6 @@
 package com.footprint.member.fixture;
 
-import org.springframework.security.crypto.factory.PasswordEncoderFactories;
-import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.security.crypto.scrypt.SCryptPasswordEncoder;
-
+import com.footprint.member.domain.Member;
 import com.footprint.member.service.dto.CreateMemberDto;
 
 /**
@@ -18,4 +15,11 @@ public class MemberFixture {
 		return new CreateMemberDto(USERNAME, PASSWORD, NICKNAME);
 	}
 
+	public static Member defaultMember() {
+		return Member.builder().username(USERNAME).nickname(NICKNAME).password(PASSWORD).build();
+	}
+
+	public static Member memberWithUsername(String username) {
+		return Member.builder().username(username).nickname(username).password(PASSWORD).build();
+	}
 }
