@@ -50,7 +50,6 @@ public class MainTravel extends BaseTimeEntity {
 	@Column(name = "end_date")
 	private LocalDate endDate;
 
-	//TODO enum?
 	@Column(name = "is_visible")
 	private boolean isVisible;
 
