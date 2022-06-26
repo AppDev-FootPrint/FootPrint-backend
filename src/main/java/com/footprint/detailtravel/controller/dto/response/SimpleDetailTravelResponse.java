@@ -12,18 +12,18 @@ import com.footprint.detailtravel.service.dto.info.SimpleDetailTravelDto;
 public record SimpleDetailTravelResponse(Long detailTravelId,
 										 String title,
 										 String review,
-										 LocalDate visitedDate,
+										 String visitedDate,
 										 Address address,
-										 LocalDateTime createdAt) {
+										 String createdAt) {
 
 	public static SimpleDetailTravelResponse from(SimpleDetailTravelDto simpleDetailTravelDto) {
 		return new SimpleDetailTravelResponse(
 			simpleDetailTravelDto.detailTravelId(),
 			simpleDetailTravelDto.title(),
 			simpleDetailTravelDto.review(),
-			simpleDetailTravelDto.visitedDate(),
+			simpleDetailTravelDto.visitedDate().toString(),
 			simpleDetailTravelDto.address(),
-			simpleDetailTravelDto.createdAt()
+			simpleDetailTravelDto.createdAt().toString()
 		);
 	}
 }
