@@ -22,7 +22,7 @@ import lombok.NoArgsConstructor;
 @Entity
 public class Image {
 	@Id
-	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	@GeneratedValue(strategy = GenerationType.IDENTITY)//TODO 삽입 시 성능 최적화를 위해서는 GenerationType이 IDENTITY이면 안됨
 	@Column(name = "image_id")
 	private Long id;
 

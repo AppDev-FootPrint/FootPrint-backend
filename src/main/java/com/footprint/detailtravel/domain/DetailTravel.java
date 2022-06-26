@@ -35,7 +35,7 @@ import lombok.NoArgsConstructor;
 @Entity
 public class DetailTravel extends BaseTimeEntity {
 	@Id
-	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	@GeneratedValue(strategy = GenerationType.IDENTITY)//삽입 시 성능 최적화를 위해서는 GenerationType이 IDENTITY이면 안됨
 	@Column(name = "detail_travel_id")
 	private Long id;
 
@@ -60,9 +60,11 @@ public class DetailTravel extends BaseTimeEntity {
 	private Address address;
 
 
+	//TODO 배치쿼리 적용하려면 수정이 필요할 것 같음
 	@OneToMany(mappedBy = "detailTravel", orphanRemoval = true, cascade = CascadeType.ALL)
 	private List<Price> prices = new ArrayList<>();
 
+	//TODO 배치쿼리 적용하려면 수정이 필요할 것 같음
 	@OneToMany(mappedBy = "detailTravel", orphanRemoval = true, cascade = CascadeType.ALL)
 	private List<Image> images = new ArrayList<>();
 

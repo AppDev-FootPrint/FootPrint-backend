@@ -25,7 +25,7 @@ import lombok.NoArgsConstructor;
 @Entity
 @AttributeOverride(name = "createdAt", column = @Column(name = "scraped_date"))
 public class Scrap extends BaseTimeEntity {
-	@Id @GeneratedValue(strategy = GenerationType.IDENTITY)
+	@Id @GeneratedValue(strategy = GenerationType.IDENTITY)//TODO 삽입 시 성능 최적화를 위해서는 GenerationType이 IDENTITY이면 안됨
 	@Column(name = "scrap_id")
 	private Long id;
 

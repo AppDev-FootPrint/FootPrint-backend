@@ -68,16 +68,18 @@ public class MainTravel extends BaseTimeEntity {
 	@JoinColumn(name = "member_id")
 	private Member writer;
 
-
+	//TODO 배치쿼리 적용하려면 수정이 필요할 것 같음
 	@OneToMany(mappedBy = "mainTravel", orphanRemoval = true, cascade = CascadeType.ALL)
 	private List<Comment> comments = new ArrayList<>();
 
 	@OneToMany(mappedBy = "mainTravel", orphanRemoval = false, cascade = CascadeType.PERSIST)
 	private List<DetailTravel> detailTravels = new ArrayList<>();
 
+	//TODO 배치쿼리 적용하려면 수정이 필요할 것 같음
 	@OneToMany(mappedBy = "mainTravel", orphanRemoval = true, cascade = CascadeType.ALL)
 	private List<Scrap> scraps = new ArrayList<>();
 
+	//TODO 배치쿼리 적용하려면 수정이 필요할 것 같음
 	@OneToMany(mappedBy = "mainTravel", orphanRemoval = true, cascade = CascadeType.ALL)
 	private List<Heart> hearts = new ArrayList<>();
 
