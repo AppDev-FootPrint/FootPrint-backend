@@ -1,5 +1,6 @@
 package com.footprint.member.service;
 
+import static com.footprint.member.fixture.MemberFixture.*;
 import static org.assertj.core.api.Assertions.*;
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -37,11 +38,7 @@ class MemberServiceTest {
 	@DisplayName("회원가입 - 성공")
 	public void successSignUp() throws Exception {
 	    //given
-		String username = "username";
-		String password = "password";
-		String nickName = "nickName";
-
-		CreateMemberDto createMemberDto = new CreateMemberDto(username, password, nickName);
+		CreateMemberDto createMemberDto = createMemberDto();
 
 		//when
 		memberService.create(createMemberDto);
@@ -51,13 +48,13 @@ class MemberServiceTest {
 
 	    //then
 		Member findMember = em.createQuery("SELECT m FROM Member m WHERE m.username = :username", Member.class)
-			.setParameter("username", username)
+			.setParameter("username", USERNAME)
 			.getSingleResult();
 
 		assertThat(findMember).isNotNull();
 		assertThat(findMember.getId()).isNotNull();
-		assertThat(findMember.getNickname()).isEqualTo(nickName);
-		assertThat(passwordEncoder.matches(password, findMember.getPassword())).isTrue();
+		assertThat(findMember.getNickname()).isEqualTo(NICKNAME);
+		assertThat(passwordEncoder.matches(PASSWORD, findMember.getPassword())).isTrue();
 		assertThat(findMember.getPassword()).startsWith("{bcrypt}");
 
 	}
@@ -67,12 +64,8 @@ class MemberServiceTest {
 	@DisplayName("회원가입 - 실패 (원인 : 아이디 중복)")
 	public void failSignUpSinceDuplicatedUsername() throws Exception {
 		//given
-		String username = "username";
-		String password = "password";
-		String nickName = "nickName";
-
-		CreateMemberDto createMemberDto = new CreateMemberDto(username, password, nickName);
-		memberService.create(createMemberDto);
+		CreateMemberDto createMemberDto = createMemberDto();
+		memberService.create(createMemberDto());
 		em.flush();
 		em.clear();
 
