@@ -118,4 +118,10 @@ public class MainTravel extends BaseTimeEntity {
 		detailTravels.forEach(dt -> dt.setMainTravel(this));
 		this.detailTravels.addAll(detailTravels);
 	}
+
+	public String getImagePath() {
+		return (this.image == null)
+			? null
+			: this.image.getPath();
+	}
 }

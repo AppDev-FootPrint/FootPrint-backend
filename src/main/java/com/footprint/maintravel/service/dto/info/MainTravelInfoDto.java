@@ -27,7 +27,7 @@ public record MainTravelInfoDto(
 		 	 mainTravel.getCreatedAt().toString(),
 		 	 mainTravel.isVisible(),
 		 	 mainTravel.isCompleted(),
-			 mainTravel.getImage().getPath(),
+			 mainTravel.getImagePath(),
 			 mainTravel.getLikeNum(),
 			 simpleDetailTravelListDto
 		 );
