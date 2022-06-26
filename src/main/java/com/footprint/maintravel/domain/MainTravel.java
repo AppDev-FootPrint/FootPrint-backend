@@ -72,7 +72,7 @@ public class MainTravel extends BaseTimeEntity {
 	@OneToMany(mappedBy = "mainTravel", orphanRemoval = true, cascade = CascadeType.ALL)
 	private List<Comment> comments = new ArrayList<>();
 
-	@OneToMany(mappedBy = "mainTravel", orphanRemoval = true, cascade = CascadeType.ALL)
+	@OneToMany(mappedBy = "mainTravel", orphanRemoval = false, cascade = CascadeType.PERSIST)
 	private List<DetailTravel> detailTravels = new ArrayList<>();
 
 	@OneToMany(mappedBy = "mainTravel", orphanRemoval = true, cascade = CascadeType.ALL)
@@ -112,7 +112,7 @@ public class MainTravel extends BaseTimeEntity {
 
 
 	public void setDetailTravels(List<DetailTravel> detailTravels) {
-		this.detailTravels.clear();//혹시 들어있을 수 있으므로 한번 비워주기
+		this.detailTravels.clear();
 		detailTravels.forEach(dt -> dt.setMainTravel(this));
 		this.detailTravels.addAll(detailTravels);
 	}

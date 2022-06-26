@@ -92,6 +92,9 @@ public class MainTravelServiceImpl implements MainTravelService {
 
 		checkAuthority(memberId, mainTravel.getWriter().getId());
 
+
+		detailTravelRepository.deleteAllByIdInBatch(mainTravel.getDetailTravels().stream().map(DetailTravel::getId).toList());
+
 		mainTravel.update(updateDto.title(),
 						  updateDto.startDate(),
 						  updateDto.endDate(),
@@ -114,6 +117,7 @@ public class MainTravelServiceImpl implements MainTravelService {
 
 		checkAuthority(memberId, mainTravel.getWriter().getId());
 
+		detailTravelRepository.deleteAllByIdInBatch(mainTravel.getDetailTravels().stream().map(DetailTravel::getId).toList());
 
 		mainTravelRepository.delete(mainTravel);
 	}
