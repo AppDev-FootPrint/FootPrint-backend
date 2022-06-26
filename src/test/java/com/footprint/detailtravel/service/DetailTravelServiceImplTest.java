@@ -31,6 +31,9 @@ import com.footprint.detailtravel.exception.DetailTravelException;
 import com.footprint.detailtravel.repository.DetailTravelRepository;
 import com.footprint.detailtravel.service.dto.create.DetailTravelSaveDto;
 import com.footprint.detailtravel.service.dto.info.DetailTravelDto;
+import com.footprint.maintravel.exception.MainTravelException;
+import com.footprint.maintravel.exception.MainTravelExceptionType;
+import com.footprint.maintravel.repository.MainTravelRepository;
 import com.footprint.maintravel.service.MainTravelService;
 import com.footprint.maintravel.service.dto.save.MainTravelSaveDto;
 import com.footprint.member.domain.Member;
@@ -53,6 +56,9 @@ class DetailTravelServiceImplTest {
 
 	@Autowired
 	MainTravelService mainTravelService;
+
+	@Autowired
+	MainTravelRepository mainTravelRepository;
 
 	@Autowired
 	MemberRepository memberRepository;
@@ -102,7 +108,7 @@ class DetailTravelServiceImplTest {
 		MainTravelSaveDto mainTravelSaveDto = publicCompleteMainTravelSaveDto();
 		DetailTravelSaveDto detailTravelSaveDto = mainTravelSaveDto.detailTravelSaveDtoList().get(0);
 		Long mainTravelId = mainTravelService.saveMainTravel(getLoginMemberId(),mainTravelSaveDto);
-		List<Long> detailTravelIdSet = mappingToList(detailTravelRepository.findAllByMainTravelId(mainTravelId), DetailTravel::getId);
+		List<Long> detailTravelIdSet = mappingToList(getDetailTravels(mainTravelId), DetailTravel::getId);
 		Long detailTravelId = detailTravelIdSet.get(0);
 		clear();
 
@@ -124,7 +130,11 @@ class DetailTravelServiceImplTest {
 
 	}
 
-
+	private List<DetailTravel> getDetailTravels(Long mainTravelId) {
+		return mainTravelRepository.findById(mainTravelId)
+			.orElseThrow(() -> new MainTravelException(MainTravelExceptionType.NOT_FOUND))
+			.getDetailTravels();
+	}
 
 	@Test
 	@DisplayName("Main Travel 조회 (성공) [private 게시물, 완성, 주인의 조회 요쳥]")
@@ -134,7 +144,7 @@ class DetailTravelServiceImplTest {
 		MainTravelSaveDto mainTravelSaveDto = privateCompleteMainTravelSaveDto();
 		DetailTravelSaveDto detailTravelSaveDto = mainTravelSaveDto.detailTravelSaveDtoList().get(0);
 		Long mainTravelId = mainTravelService.saveMainTravel(getLoginMemberId(),mainTravelSaveDto);
-		List<Long> detailTravelIdSet = mappingToList(detailTravelRepository.findAllByMainTravelId(mainTravelId), DetailTravel::getId);
+		List<Long> detailTravelIdSet = mappingToList(getDetailTravels(mainTravelId), DetailTravel::getId);
 		Long detailTravelId = detailTravelIdSet.get(0);
 		clear();
 
@@ -162,7 +172,7 @@ class DetailTravelServiceImplTest {
 		MainTravelSaveDto mainTravelSaveDto = publicUnCompleteMainTravelSaveDto();
 		DetailTravelSaveDto detailTravelSaveDto = mainTravelSaveDto.detailTravelSaveDtoList().get(0);
 		Long mainTravelId = mainTravelService.saveMainTravel(getLoginMemberId(),mainTravelSaveDto);
-		List<Long> detailTravelIdSet = mappingToList(detailTravelRepository.findAllByMainTravelId(mainTravelId), DetailTravel::getId);
+		List<Long> detailTravelIdSet = mappingToList(getDetailTravels(mainTravelId), DetailTravel::getId);
 		Long detailTravelId = detailTravelIdSet.get(0);
 		clear();
 
@@ -189,7 +199,7 @@ class DetailTravelServiceImplTest {
 		MainTravelSaveDto mainTravelSaveDto = privateUnCompleteMainTravelSaveDto();
 		DetailTravelSaveDto detailTravelSaveDto = mainTravelSaveDto.detailTravelSaveDtoList().get(0);
 		Long mainTravelId = mainTravelService.saveMainTravel(getLoginMemberId(),mainTravelSaveDto);
-		List<Long> detailTravelIdSet = mappingToList(detailTravelRepository.findAllByMainTravelId(mainTravelId), DetailTravel::getId);
+		List<Long> detailTravelIdSet = mappingToList(getDetailTravels(mainTravelId), DetailTravel::getId);
 		Long detailTravelId = detailTravelIdSet.get(0);
 		clear();
 
@@ -215,7 +225,7 @@ class DetailTravelServiceImplTest {
 		MainTravelSaveDto mainTravelSaveDto = publicCompleteMainTravelSaveDto();
 		DetailTravelSaveDto detailTravelSaveDto = mainTravelSaveDto.detailTravelSaveDtoList().get(0);
 		Long mainTravelId = mainTravelService.saveMainTravel(getLoginMemberId(),mainTravelSaveDto);
-		List<Long> detailTravelIdSet = mappingToList(detailTravelRepository.findAllByMainTravelId(mainTravelId), DetailTravel::getId);
+		List<Long> detailTravelIdSet = mappingToList(getDetailTravels(mainTravelId), DetailTravel::getId);
 		Long detailTravelId = detailTravelIdSet.get(0);
 		clear();
 
@@ -244,7 +254,7 @@ class DetailTravelServiceImplTest {
 		MainTravelSaveDto mainTravelSaveDto = privateCompleteMainTravelSaveDto();
 		DetailTravelSaveDto detailTravelSaveDto = mainTravelSaveDto.detailTravelSaveDtoList().get(0);
 		Long mainTravelId = mainTravelService.saveMainTravel(getLoginMemberId(),mainTravelSaveDto);
-		List<Long> detailTravelIdSet = mappingToList(detailTravelRepository.findAllByMainTravelId(mainTravelId), DetailTravel::getId);
+		List<Long> detailTravelIdSet = mappingToList(getDetailTravels(mainTravelId), DetailTravel::getId);
 		Long detailTravelId = detailTravelIdSet.get(0);
 		clear();
 
@@ -263,7 +273,7 @@ class DetailTravelServiceImplTest {
 		MainTravelSaveDto mainTravelSaveDto = publicUnCompleteMainTravelSaveDto();
 		DetailTravelSaveDto detailTravelSaveDto = mainTravelSaveDto.detailTravelSaveDtoList().get(0);
 		Long mainTravelId = mainTravelService.saveMainTravel(getLoginMemberId(),mainTravelSaveDto);
-		List<Long> detailTravelIdSet = mappingToList(detailTravelRepository.findAllByMainTravelId(mainTravelId), DetailTravel::getId);
+		List<Long> detailTravelIdSet = mappingToList(getDetailTravels(mainTravelId), DetailTravel::getId);
 		Long detailTravelId = detailTravelIdSet.get(0);
 		clear();
 
@@ -282,7 +292,7 @@ class DetailTravelServiceImplTest {
 		MainTravelSaveDto mainTravelSaveDto = privateUnCompleteMainTravelSaveDto();
 		DetailTravelSaveDto detailTravelSaveDto = mainTravelSaveDto.detailTravelSaveDtoList().get(0);
 		Long mainTravelId = mainTravelService.saveMainTravel(getLoginMemberId(),mainTravelSaveDto);
-		List<Long> detailTravelIdSet = mappingToList(detailTravelRepository.findAllByMainTravelId(mainTravelId), DetailTravel::getId);
+		List<Long> detailTravelIdSet = mappingToList(getDetailTravels(mainTravelId), DetailTravel::getId);
 		Long detailTravelId = detailTravelIdSet.get(0);
 		clear();
 

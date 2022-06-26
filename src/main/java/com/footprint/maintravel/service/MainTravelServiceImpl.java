@@ -39,7 +39,7 @@ public class MainTravelServiceImpl implements MainTravelService {
 	@Transactional(readOnly = true)
 	public MainTravelInfoDto getMainTravel(Long memberId, Long travelId) {
 
-		MainTravel mainTravel = mainTravelRepository.findWithWriterById(travelId)
+		MainTravel mainTravel = mainTravelRepository.findWithWriterAndImageById(travelId)
 													.orElseThrow(() -> new MainTravelException(NOT_FOUND));
 
 
@@ -49,11 +49,9 @@ public class MainTravelServiceImpl implements MainTravelService {
 			//TODO 권한 없을때 NULL을 반환할 지, 권한이 없다는 예외 메세지를 출력할 지 고민
 		}
 
-		List<DetailTravel> detailTravelList = detailTravelRepository.findAllByMainTravelId(travelId);
-		//TODO 쿼리 얼마나 나가는지 측정하기
 
 
-		return MainTravelInfoDto.from(mainTravel, SimpleDetailTravelListDto.from(detailTravelList));
+		return MainTravelInfoDto.from(mainTravel, SimpleDetailTravelListDto.from(mainTravel.getDetailTravels()));
 	}
 
 

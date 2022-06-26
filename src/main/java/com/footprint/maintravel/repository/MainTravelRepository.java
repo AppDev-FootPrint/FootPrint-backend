@@ -10,6 +10,6 @@ import com.footprint.maintravel.domain.MainTravel;
 
 public interface MainTravelRepository extends JpaRepository<MainTravel, Long> {
 
-	@EntityGraph(attributePaths = {"writer"})
-	Optional<MainTravel> findWithWriterById(Long travelId);
+	@EntityGraph(attributePaths = {"writer", "image"})
+	Optional<MainTravel> findWithWriterAndImageById(Long travelId);
 }
