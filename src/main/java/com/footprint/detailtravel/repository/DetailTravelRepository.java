@@ -16,6 +16,6 @@ public interface DetailTravelRepository extends JpaRepository<DetailTravel, Long
 
 	List<DetailTravel> findAllByMainTravelId(Long mainTravelId);
 
-	@Query("select dt from DetailTravel dt join fetch dt.mainTravel mt join fetch mt.writer where dt.id =: id")
+	@Query("select dt from DetailTravel dt join fetch dt.mainTravel mt join fetch mt.writer where dt.id = :id")
 	Optional<DetailTravel> findWithMainTravelAndWriterById(@Param("id") Long id);
 }
