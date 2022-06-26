@@ -2,12 +2,22 @@
 package com.footprint.maintravel.fixture;
 
 import static com.footprint.detailtravel.fixture.DetailTravelFixture.*;
+import static com.footprint.member.fixture.MemberFixture.*;
 import static java.time.LocalDate.*;
+import static java.time.format.DateTimeFormatter.*;
 import static java.util.stream.IntStream.*;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.util.stream.IntStream;
 
-import com.footprint.detailtravel.service.dto.create.ImageSaveDto;
+import org.springframework.test.util.ReflectionTestUtils;
+
+import com.footprint.maintravel.controller.dto.request.create.CreateMainTravelRequest;
+import com.footprint.maintravel.controller.dto.request.update.UpdateMainTravelRequest;
+import com.footprint.maintravel.controller.dto.response.MainTravelInfoResponse;
+import com.footprint.maintravel.domain.MainTravel;
+import com.footprint.maintravel.service.dto.info.MainTravelInfoDto;
 import com.footprint.maintravel.service.dto.save.MainTravelSaveDto;
 import com.footprint.maintravel.service.dto.update.MainTravelUpdateDto;
 
@@ -16,6 +26,7 @@ public class MainTravelFixture {
 
 	//동시성 문제??
 	private static int mainTravelCount = 0;
+	private static final Long ID = 1L;
 
 	private static final String TITLE = "title";
 	private static final String UPDATE_TITLE = "update-title";
@@ -39,6 +50,16 @@ public class MainTravelFixture {
 	private static final boolean FALSE_VISIBLE = false;
 	private static final boolean TRUE_COMPLETE = true;
 	private static final boolean FALSE_COMPLETE = false;
+
+
+	private static final String CREATED_AT_STRING = "2022-06-22T00:00:00";
+	private static final LocalDateTime CREATED_AT = LocalDateTime.parse(CREATED_AT_STRING, ISO_LOCAL_DATE_TIME);
+
+	private static final int LIKE_NUM = 0;
+
+
+
+
 
 
 
@@ -128,6 +149,67 @@ public class MainTravelFixture {
 		);
 	}
 
+	public static CreateMainTravelRequest createMainTravelRequest() {
+		return new CreateMainTravelRequest(TITLE, START_DATE_STRING, END_DATE_STRING, TRUE_VISIBLE, TRUE_COMPLETE, IMAGE_PATH, rangeClosed(0, 9).mapToObj(i -> createDetailTravelRequest(mainTravelCount)).toList());
+	}
+
+	public static UpdateMainTravelRequest updateMainTravelRequest() {
+		return new UpdateMainTravelRequest(TITLE, START_DATE_STRING, END_DATE_STRING, TRUE_VISIBLE, TRUE_COMPLETE, IMAGE_PATH, rangeClosed(0, 9).mapToObj(i -> createDetailTravelRequest(mainTravelCount)).toList());
+	}
+
+
+
+	public static MainTravel mainTravelHasId() {
+		MainTravel mainTravel = MainTravel.builder()
+			.title(TITLE)
+			.startDate(START_DATE)
+			.endDate(END_DATE)
+			.isVisible(TRUE_VISIBLE)
+			.isCompleted(TRUE_COMPLETE)
+			.build();
+
+		ReflectionTestUtils.setField(mainTravel, "createdAt", CREATED_AT);
+		ReflectionTestUtils.setField(mainTravel, "id", ID);
+		mainTravel.setDetailTravels(IntStream.rangeClosed(0,2).mapToObj(i -> detailTravelHasId()).toList());
+		mainTravel.setDetailTravels(IntStream.rangeClosed(0,2).mapToObj(i -> detailTravelHasId()).toList());
+		mainTravel.setImage(IMAGE_PATH);
+		mainTravel.setWriter(memberHasId());
+		return mainTravel;
+	}
+
+
+	public static MainTravelInfoDto mainTravelInfoDto() {
+		return new MainTravelInfoDto(
+			ID,
+			memberInfoDto(),
+			TITLE,
+			START_DATE_STRING,
+			END_DATE_STRING,
+			CREATED_AT_STRING,
+			TRUE_VISIBLE,
+			TRUE_COMPLETE,
+			IMAGE_PATH,
+			LIKE_NUM,
+			simpleDetailTravelListDto(3)
+		);
+	}
+
+
+	public static MainTravelInfoResponse mainTravelInfoResponse() {
+		return new MainTravelInfoResponse(
+			ID,
+			memberInfoResponse(),
+			TITLE,
+			START_DATE_STRING,
+			END_DATE_STRING,
+			CREATED_AT_STRING,
+			TRUE_VISIBLE,
+			TRUE_COMPLETE,
+			IMAGE_PATH,
+			LIKE_NUM,
+			simpleDetailTravelListResponse(3)
+		);
+	}
 
 
 }
