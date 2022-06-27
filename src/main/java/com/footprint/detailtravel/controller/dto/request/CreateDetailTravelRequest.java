@@ -18,7 +18,7 @@ public record CreateDetailTravelRequest(String title,
 										String visitedDate,
 										Address address,
 										List<CreatePriceRequest> createPriceRequestList,
-										List<String> imagePathList) {
+										List<CreateImageRequest> createImageRequestList) {
 
 	public DetailTravelSaveDto toServiceDto() {
 		return new DetailTravelSaveDto(
@@ -28,6 +28,7 @@ public record CreateDetailTravelRequest(String title,
 			parse(visitedDate(), DateTimeFormatter.ISO_LOCAL_DATE),
 			address(),
 			createPriceRequestList().stream().map(CreatePriceRequest::toServiceDto).toList(),
-			imagePathList());
+			createImageRequestList().stream().map(CreateImageRequest::toServiceDto).toList()
+			);
 	}
 }

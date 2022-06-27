@@ -13,7 +13,7 @@ public record DetailTravelSaveDto(String title,
 								  LocalDate visitedDate,
 								  Address address,
 								  List<PriceSaveDto> priceSaveDtoList,
-								  List<String> imagePathList) {
+								  List<ImageSaveDto> imageSaveDtoList) {
 
 
 	public DetailTravel toEntity() {
@@ -27,7 +27,7 @@ public record DetailTravelSaveDto(String title,
 
 
 		detailTravel.setPrices(priceSaveDtoList().stream().map(PriceSaveDto::toEntity).toList());
-		detailTravel.setImages(imagePathList().stream().map(Image::from).toList());
+		detailTravel.setImages(imageSaveDtoList().stream().map(ImageSaveDto::toEntity).toList());
 
 		return detailTravel;
 	}
