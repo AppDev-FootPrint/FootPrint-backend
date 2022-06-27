@@ -24,6 +24,7 @@ import lombok.RequiredArgsConstructor;
 public class FollowController {
 	private final FollowService followService;
 
+	// TODO : followerId가 팔로우를 요청한 사람, followeeId가 팔로우 요청을 받는 사람
 	@PostMapping("/follows/{followerId}/to/{followeeId}")
 	public ResponseEntity<Long> follow(@PathVariable Long followerId, @PathVariable Long followeeId) {
 		Long followId = followService.follow(followerId, followeeId);
