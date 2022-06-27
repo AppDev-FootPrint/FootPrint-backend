@@ -1,5 +1,6 @@
 package com.footprint.maintravel.service.dto.info;
 
+import static com.footprint.maintravel.fixture.MainTravelFixture.*;
 import static org.assertj.core.api.Assertions.*;
 
 import org.junit.jupiter.api.DisplayName;
@@ -8,7 +9,6 @@ import org.junit.jupiter.api.Test;
 import com.footprint.detailtravel.fixture.DetailTravelFixture;
 import com.footprint.detailtravel.service.dto.info.SimpleDetailTravelListDto;
 import com.footprint.maintravel.domain.MainTravel;
-import com.footprint.maintravel.fixture.MainTravelFixture;
 import com.footprint.member.service.dto.MemberInfoDto;
 
 /**
@@ -20,8 +20,8 @@ class MainTravelInfoDtoTest {
 	@DisplayName("MainTravel -> MainTravelInfoDto 변환 테스트")
 	void fromTest() throws Exception {
 		// given, when
-		MainTravel mainTravel = MainTravelFixture.mainTravelHasId();
-		SimpleDetailTravelListDto simpleDetailTravelListDto = DetailTravelFixture.simpleDetailTravelListDto(3);
+		MainTravel mainTravel = mainTravelHasId();
+		SimpleDetailTravelListDto simpleDetailTravelListDto = DetailTravelFixture.simpleDetailTravelListDto(mainTravel.getId(), 3);
 		MainTravelInfoDto mainTravelInfoDto = MainTravelInfoDto.from(mainTravel, simpleDetailTravelListDto);
 
 		// then

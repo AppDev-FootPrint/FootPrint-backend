@@ -13,6 +13,7 @@ import java.util.stream.IntStream;
 
 import org.springframework.test.util.ReflectionTestUtils;
 
+import com.footprint.detailtravel.fixture.DetailTravelFixture;
 import com.footprint.maintravel.controller.dto.request.create.CreateMainTravelRequest;
 import com.footprint.maintravel.controller.dto.request.update.UpdateMainTravelRequest;
 import com.footprint.maintravel.controller.dto.response.MainTravelInfoResponse;
@@ -150,11 +151,26 @@ public class MainTravelFixture {
 	}
 
 	public static CreateMainTravelRequest createMainTravelRequest() {
-		return new CreateMainTravelRequest(TITLE, START_DATE_STRING, END_DATE_STRING, TRUE_VISIBLE, TRUE_COMPLETE, IMAGE_PATH, rangeClosed(0, 9).mapToObj(i -> createDetailTravelRequest(mainTravelCount)).toList());
+		return new CreateMainTravelRequest(
+			TITLE,
+			START_DATE_STRING,
+			END_DATE_STRING,
+			TRUE_VISIBLE,
+			TRUE_COMPLETE,
+			IMAGE_PATH,
+			rangeClosed(0, 9).mapToObj(DetailTravelFixture::createDetailTravelRequest).toList());
 	}
 
 	public static UpdateMainTravelRequest updateMainTravelRequest() {
-		return new UpdateMainTravelRequest(TITLE, START_DATE_STRING, END_DATE_STRING, TRUE_VISIBLE, TRUE_COMPLETE, IMAGE_PATH, rangeClosed(0, 9).mapToObj(i -> createDetailTravelRequest(mainTravelCount)).toList());
+		return new UpdateMainTravelRequest(
+			TITLE,
+			START_DATE_STRING,
+			END_DATE_STRING,
+			TRUE_VISIBLE,
+			TRUE_COMPLETE,
+			IMAGE_PATH,
+			rangeClosed(0, 9).mapToObj(DetailTravelFixture::createDetailTravelRequest).toList()
+		);
 	}
 
 
@@ -190,7 +206,7 @@ public class MainTravelFixture {
 			TRUE_COMPLETE,
 			IMAGE_PATH,
 			LIKE_NUM,
-			simpleDetailTravelListDto(3)
+			simpleDetailTravelListDto(ID, 3)
 		);
 	}
 
@@ -207,9 +223,13 @@ public class MainTravelFixture {
 			TRUE_COMPLETE,
 			IMAGE_PATH,
 			LIKE_NUM,
-			simpleDetailTravelListResponse(3)
+			simpleDetailTravelListResponse(ID, 3)
 		);
 	}
 
-
+	public static MainTravel mainTravelOnlyHasId() {
+		MainTravel mainTravel = MainTravel.builder().build();
+		ReflectionTestUtils.setField(mainTravel, "id", 1L);
+		return mainTravel;
+	}
 }

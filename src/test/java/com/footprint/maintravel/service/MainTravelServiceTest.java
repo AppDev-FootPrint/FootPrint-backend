@@ -276,6 +276,8 @@ class MainTravelServiceTest {
 
 
 
+
+	//TODO Price, Image 구현 후 조회 추가하기
 	@Test
 	@DisplayName("Main Travel 조회 (성공) [public 게시물, 완성, 주인의 조회 요쳥]")
 	public void successGetMainTravelWherePublicAndCompleteAndRequestByOwner() throws Exception {
@@ -322,8 +324,14 @@ class MainTravelServiceTest {
 
 		Set<Address> entityAddressSet = mappingToSet(mainTravelInfo.simpleDetailTravelListDto().detailTravelDtoList(),SimpleDetailTravelDto::address);
 
+
 		assertThat(entityAddressSet).containsAll(dtoAddressSet);
 		assertThat(entitySet).containsAll(dtoSet);
+
+
+		Set<Long> mainTravelIdSet = mappingToSet(mainTravelInfo.simpleDetailTravelListDto().detailTravelDtoList(),SimpleDetailTravelDto::mainTravelId);
+		assertThat(mainTravelIdSet.size()).isEqualTo(1);
+		assertThat(mainTravelIdSet).containsOnly(mainTravelId);
 
 	}
 
@@ -379,6 +387,10 @@ class MainTravelServiceTest {
 
 		assertThat(entityAddressSet).containsAll(dtoAddressSet);
 		assertThat(entitySet).containsAll(dtoSet);
+
+		Set<Long> mainTravelIdSet = mappingToSet(mainTravelInfo.simpleDetailTravelListDto().detailTravelDtoList(),SimpleDetailTravelDto::mainTravelId);
+		assertThat(mainTravelIdSet.size()).isEqualTo(1);
+		assertThat(mainTravelIdSet).containsOnly(mainTravelId);
 	}
 
 	@Test
@@ -430,7 +442,13 @@ class MainTravelServiceTest {
 
 		assertThat(entityAddressSet).containsAll(dtoAddressSet);
 		assertThat(entitySet).containsAll(dtoSet);
+
+		Set<Long> mainTravelIdSet = mappingToSet(mainTravelInfo.simpleDetailTravelListDto().detailTravelDtoList(),SimpleDetailTravelDto::mainTravelId);
+		assertThat(mainTravelIdSet.size()).isEqualTo(1);
+		assertThat(mainTravelIdSet).containsOnly(mainTravelId);
 	}
+
+
 	@Test
 	@DisplayName("Main Travel 조회 (성공) [private 게시물, 미완성, 주인의 조회 요쳥]")
 	public void successGetMainTravelWherePrivateAndUnCompleteAndRequestByOwner() throws Exception {
@@ -480,7 +498,13 @@ class MainTravelServiceTest {
 
 		assertThat(entityAddressSet).containsAll(dtoAddressSet);
 		assertThat(entitySet).containsAll(dtoSet);
+
+		Set<Long> mainTravelIdSet = mappingToSet(mainTravelInfo.simpleDetailTravelListDto().detailTravelDtoList(),SimpleDetailTravelDto::mainTravelId);
+		assertThat(mainTravelIdSet.size()).isEqualTo(1);
+		assertThat(mainTravelIdSet).containsOnly(mainTravelId);
 	}
+
+
 
 	@Test
 	@DisplayName("Main Travel 조회 (성공) [public 게시물, 완성, 다른 사람의 조회 요쳥]")
@@ -529,6 +553,10 @@ class MainTravelServiceTest {
 
 		assertThat(entityAddressSet).containsAll(dtoAddressSet);
 		assertThat(entitySet).containsAll(dtoSet);
+
+		Set<Long> mainTravelIdSet = mappingToSet(mainTravelInfo.simpleDetailTravelListDto().detailTravelDtoList(),SimpleDetailTravelDto::mainTravelId);
+		assertThat(mainTravelIdSet.size()).isEqualTo(1);
+		assertThat(mainTravelIdSet).containsOnly(mainTravelId);
 	}
 
 

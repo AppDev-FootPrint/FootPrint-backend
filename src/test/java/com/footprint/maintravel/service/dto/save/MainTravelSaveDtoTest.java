@@ -1,5 +1,7 @@
 package com.footprint.maintravel.service.dto.save;
 
+import static com.footprint.maintravel.fixture.MainTravelFixture.*;
+import static com.footprint.util.MappingTestUtil.*;
 import static org.assertj.core.api.Assertions.*;
 
 import org.junit.jupiter.api.DisplayName;
@@ -7,10 +9,9 @@ import org.junit.jupiter.api.Test;
 
 import com.footprint.detailtravel.domain.DetailTravel;
 import com.footprint.detailtravel.service.dto.create.DetailTravelSaveDto;
+import com.footprint.detailtravel.service.dto.create.ImageSaveDto;
 import com.footprint.detailtravel.service.dto.create.PriceSaveDto;
-import com.footprint.image.domain.Image;
 import com.footprint.maintravel.domain.MainTravel;
-import com.footprint.maintravel.fixture.MainTravelFixture;
 
 /**
  * Created by ShinD on 2022/06/26.
@@ -21,7 +22,7 @@ class MainTravelSaveDtoTest {
 	@DisplayName("MainTravelSaveDto -> MainTravel 변환 테스트")
 	void fromTest() throws Exception {
 		// given
-		MainTravelSaveDto mainTravelSaveDto = MainTravelFixture.mainTravelSaveDto();
+		MainTravelSaveDto mainTravelSaveDto = mainTravelSaveDto();
 
 		//when
 		MainTravel mainTravel = mainTravelSaveDto.toEntity();
@@ -49,7 +50,9 @@ class MainTravelSaveDtoTest {
 			assertThat(detailTravel.getVisitedDate()).isEqualTo(detailTravelSaveDto.visitedDate());
 			assertThat(detailTravel.getAddress()).isEqualTo(detailTravelSaveDto.address());
 			assertThat(detailTravel.getPrices()).containsAll(detailTravelSaveDto.priceSaveDtoList().stream().map(PriceSaveDto::toEntity).toList());
-			assertThat(detailTravel.getImages()).isEqualTo(detailTravelSaveDto.imagePathList().stream().map(Image::new).toList());
+
+			assertThat(detailTravel.getImages())
+				.isEqualTo(mappingToList(detailTravelSaveDto.imageSaveDtoList(), ImageSaveDto::toEntity));
 		}
 
 	}
