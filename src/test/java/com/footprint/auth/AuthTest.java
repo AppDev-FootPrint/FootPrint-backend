@@ -150,7 +150,7 @@ public class AuthTest {
 				get("/any")
 					.header(JwtServiceImpl.BEARER_HEADER, accessToken.content())
 			)
-			.andExpect(status().is2xxSuccessful());
+			.andExpect(status().isNotFound());
 	}
 
 	@Test
