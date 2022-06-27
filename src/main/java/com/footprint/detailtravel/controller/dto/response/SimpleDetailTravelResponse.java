@@ -10,6 +10,7 @@ import com.footprint.detailtravel.service.dto.info.SimpleDetailTravelDto;
  * Created by ShinD on 2022/06/25.
  */
 public record SimpleDetailTravelResponse(Long detailTravelId,
+										 Long mainTravelId,
 										 String title,
 										 String review,
 										 String visitedDate,
@@ -19,6 +20,7 @@ public record SimpleDetailTravelResponse(Long detailTravelId,
 	public static SimpleDetailTravelResponse from(SimpleDetailTravelDto simpleDetailTravelDto) {
 		return new SimpleDetailTravelResponse(
 			simpleDetailTravelDto.detailTravelId(),
+			simpleDetailTravelDto.mainTravelId(),
 			simpleDetailTravelDto.title(),
 			simpleDetailTravelDto.review(),
 			simpleDetailTravelDto.visitedDate().toString(),

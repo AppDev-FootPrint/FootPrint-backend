@@ -10,6 +10,7 @@ import com.footprint.detailtravel.domain.DetailTravel;
  * Created by ShinD on 2022/06/24.
  */
 public record SimpleDetailTravelDto(Long detailTravelId,
+									Long mainTravelId,
 									String title,
 									String review,
 									LocalDate visitedDate,
@@ -19,6 +20,7 @@ public record SimpleDetailTravelDto(Long detailTravelId,
 	public static SimpleDetailTravelDto from(DetailTravel detailTravel) {
 		return new SimpleDetailTravelDto(
 			detailTravel.getId(),
+			detailTravel.getMainTravel().getId(),
 			detailTravel.getTitle(),
 			detailTravel.getReview(),
 			detailTravel.getVisitedDate(),
