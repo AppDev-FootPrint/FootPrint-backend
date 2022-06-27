@@ -83,7 +83,7 @@ public class MainTravel extends BaseTimeEntity {
 	private List<Heart> hearts = new ArrayList<>();
 
 	@Builder
-	public MainTravel(String title, LocalDate startDate, LocalDate endDate, Boolean isVisible, Boolean isCompleted) {
+	public MainTravel(String title, LocalDate startDate, LocalDate endDate, boolean isVisible, boolean isCompleted) {
 		this.title = title;
 		this.startDate = startDate;
 		this.endDate = endDate;
@@ -92,7 +92,7 @@ public class MainTravel extends BaseTimeEntity {
 		this.likeNum = 0;
 	}
 
-	public void update(String title, LocalDate startDate, LocalDate endDate, Boolean isVisible, Boolean isCompleted, List<DetailTravel> detailTravelList) {
+	public void update(String title, LocalDate startDate, LocalDate endDate, boolean isVisible, boolean isCompleted, List<DetailTravel> detailTravelList) {
 		this.title = title;
 		this.startDate = startDate;
 		this.endDate = endDate;
