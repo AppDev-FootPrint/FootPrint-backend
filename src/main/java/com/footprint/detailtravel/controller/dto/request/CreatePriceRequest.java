@@ -5,9 +5,9 @@ import com.footprint.detailtravel.service.dto.create.PriceSaveDto;
 /**
  * Created by ShinD on 2022/06/23.
  */
-public record CreatePriceRequest(){
+public record CreatePriceRequest(String item, int price){
 	public PriceSaveDto toServiceDto() {
-		return null;
+		return new PriceSaveDto(item(), price());
 	}
 
 }

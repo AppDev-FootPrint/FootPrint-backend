@@ -5,6 +5,7 @@ import com.footprint.maintravel.domain.MainTravel;
 import com.footprint.member.service.dto.MemberInfoDto;
 
 public record MainTravelInfoDto(
+	//TODO Comment, Heart, Scrap 구현 후 추가하기
 	Long id,
 	MemberInfoDto writerInfo,
 	String title,

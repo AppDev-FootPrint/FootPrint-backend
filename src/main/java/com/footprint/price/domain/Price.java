@@ -40,5 +40,8 @@ public class Price {
 		this.detailTravel = detailTravel;
 	}
 
-
+	public Price(String item, int priceInfo) {
+		this.item = item;
+		this.priceInfo = priceInfo;
+	}
 }
