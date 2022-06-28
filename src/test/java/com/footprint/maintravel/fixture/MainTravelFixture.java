@@ -193,22 +193,6 @@ public class MainTravelFixture {
 	}
 
 
-	public static MainTravelInfoDto mainTravelInfoDto() {
-		return new MainTravelInfoDto(
-			MAIN_TRAVEL_ID,
-			memberInfoDto(),
-			TITLE,
-			START_DATE_STRING,
-			END_DATE_STRING,
-			CREATED_AT_STRING,
-			TRUE_VISIBLE,
-			TRUE_COMPLETE,
-			IMAGE_PATH,
-			LIKE_NUM,
-			simpleDetailTravelListDto(MAIN_TRAVEL_ID, 3)
-		);
-	}
-
 
 	public static MainTravelInfoResponse mainTravelInfoResponse() {
 		return new MainTravelInfoResponse(
@@ -230,5 +214,21 @@ public class MainTravelFixture {
 		MainTravel mainTravel = MainTravel.builder().build();
 		ReflectionTestUtils.setField(mainTravel, "id", 1L);
 		return mainTravel;
+	}
+
+	public static MainTravelInfoDto mainTravelInfoDto() {
+		return new MainTravelInfoDto(
+			MAIN_TRAVEL_ID,
+			memberInfoDto(),
+			TITLE,
+			START_DATE_STRING,
+			END_DATE_STRING,
+			CREATED_AT_STRING,
+			TRUE_VISIBLE,
+			TRUE_COMPLETE,
+			IMAGE_PATH,
+			LIKE_NUM,
+			simpleDetailTravelListDto(MAIN_TRAVEL_ID, 3)
+		);
 	}
 }
