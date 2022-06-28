@@ -25,9 +25,8 @@ import com.footprint.maintravel.service.dto.update.MainTravelUpdateDto;
 public class MainTravelFixture {
 
 
-	//동시성 문제??
 	private static int mainTravelCount = 0;
-	private static final Long ID = 1L;
+	public static final Long MAIN_TRAVEL_ID = 1L;
 
 	private static final String TITLE = "title";
 	private static final String UPDATE_TITLE = "update-title";
@@ -185,7 +184,7 @@ public class MainTravelFixture {
 			.build();
 
 		ReflectionTestUtils.setField(mainTravel, "createdAt", CREATED_AT);
-		ReflectionTestUtils.setField(mainTravel, "id", ID);
+		ReflectionTestUtils.setField(mainTravel, "id", MAIN_TRAVEL_ID);
 		mainTravel.setDetailTravels(IntStream.rangeClosed(0,2).mapToObj(i -> detailTravelHasId()).toList());
 		mainTravel.setDetailTravels(IntStream.rangeClosed(0,2).mapToObj(i -> detailTravelHasId()).toList());
 		mainTravel.setImage(IMAGE_PATH);
@@ -196,7 +195,7 @@ public class MainTravelFixture {
 
 	public static MainTravelInfoDto mainTravelInfoDto() {
 		return new MainTravelInfoDto(
-			ID,
+			MAIN_TRAVEL_ID,
 			memberInfoDto(),
 			TITLE,
 			START_DATE_STRING,
@@ -206,14 +205,14 @@ public class MainTravelFixture {
 			TRUE_COMPLETE,
 			IMAGE_PATH,
 			LIKE_NUM,
-			simpleDetailTravelListDto(ID, 3)
+			simpleDetailTravelListDto(MAIN_TRAVEL_ID, 3)
 		);
 	}
 
 
 	public static MainTravelInfoResponse mainTravelInfoResponse() {
 		return new MainTravelInfoResponse(
-			ID,
+			MAIN_TRAVEL_ID,
 			memberInfoResponse(),
 			TITLE,
 			START_DATE_STRING,
@@ -223,7 +222,7 @@ public class MainTravelFixture {
 			TRUE_COMPLETE,
 			IMAGE_PATH,
 			LIKE_NUM,
-			simpleDetailTravelListResponse(ID, 3)
+			simpleDetailTravelListResponse(MAIN_TRAVEL_ID, 3)
 		);
 	}
 

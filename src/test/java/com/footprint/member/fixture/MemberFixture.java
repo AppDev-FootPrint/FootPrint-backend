@@ -11,6 +11,7 @@ import com.footprint.member.service.dto.MemberInfoDto;
  * Created by ShinD on 2022/06/26.
  */
 public class MemberFixture {
+	public static final Long MEMBER_ID = 1L;
 	public static final String USERNAME = "username";
 	public static final String PASSWORD = "password";
 	public static final String NICKNAME = "nickname";
@@ -24,7 +25,7 @@ public class MemberFixture {
 	}
 	public static Member memberHasId() {
 		Member member = Member.builder().username(USERNAME).nickname(NICKNAME).password(PASSWORD).build();
-		ReflectionTestUtils.setField(member, "id", 1L);
+		ReflectionTestUtils.setField(member, "id", MEMBER_ID);
 		return member;
 	}
 
