@@ -1,6 +1,5 @@
 package com.footprint.maintravel.service;
 
-import static com.footprint.auth.service.SecurityUtils.*;
 import static com.footprint.maintravel.exception.MainTravelExceptionType.*;
 import static com.footprint.maintravel.fixture.MainTravelFixture.*;
 import static com.footprint.member.fixture.MemberFixture.*;
@@ -8,6 +7,7 @@ import static com.footprint.util.MappingTestUtil.*;
 import static java.time.LocalDate.*;
 import static org.assertj.core.api.Assertions.*;
 import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.BDDMockito.*;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
@@ -22,6 +22,7 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.context.SecurityContext;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -29,6 +30,7 @@ import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.footprint.auth.service.AuthService;
 import com.footprint.detailtravel.domain.Address;
 import com.footprint.detailtravel.domain.DetailTravel;
 import com.footprint.detailtravel.service.dto.create.DetailTravelSaveDto;
@@ -59,6 +61,9 @@ class MainTravelServiceTest {
 	@Autowired
 	MemberRepository memberRepository;
 
+	@MockBean
+	AuthService authService;
+	
 	@Autowired
 	EntityManager em;
 
@@ -69,28 +74,18 @@ class MainTravelServiceTest {
 		em.clear();
 	}
 
-
-	private void saveSecurityContextHolder(Member member) {
-		SecurityContext context = SecurityContextHolder.createEmptyContext();
-		UserDetails userDetails = User.builder()
-			.username(member.getId().toString())
-			.password(member.getPassword())
-			.authorities(new ArrayList<>()).build();
-
-		context.setAuthentication(new UsernamePasswordAuthenticationToken(userDetails, null));
-		SecurityContextHolder.setContext(context);
-	}
+	
 
 
 	private long getOtherMemberId() {
-		return getLoginMemberId() + 999;
+		return authService.getLoginMemberId() + 999;
 	}
 
 
 	@BeforeEach
 	private void setUp() {
 		Member member = memberRepository.save(defaultMember());
-		saveSecurityContextHolder(member);
+		given(authService.getLoginMemberId()).willReturn(member.getId());
 		clear();
 	}
 
@@ -103,7 +98,7 @@ class MainTravelServiceTest {
 		MainTravelSaveDto mainTravelSaveDto = mainTravelSaveDto();
 
 	    //when
-		Long mainTravelId = mainTravelService.saveMainTravel(getLoginMemberId(), mainTravelSaveDto);
+		Long mainTravelId = mainTravelService.saveMainTravel(authService.getLoginMemberId(), mainTravelSaveDto);
 		clear();
 
 	    //then
@@ -111,7 +106,7 @@ class MainTravelServiceTest {
 		 	.orElseThrow(() -> new MainTravelException(NOT_FOUND));
 
 		 assertThat(mainTravel.getTitle()).isEqualTo(mainTravelSaveDto.title());
-		 assertThat(mainTravel.getWriter().getId()).isEqualTo(getLoginMemberId());
+		 assertThat(mainTravel.getWriter().getId()).isEqualTo(authService.getLoginMemberId());
 		 assertThat(mainTravel.getImagePath()).isEqualTo(mainTravelSaveDto.mainImagePath());
 		 assertThat(mainTravel.getDetailTravels().size()).isEqualTo(mainTravelSaveDto.detailTravelSaveDtoList().size());
 
@@ -129,13 +124,13 @@ class MainTravelServiceTest {
 	public void successUpdateTravel() throws Exception {
 		//given
 		MainTravelSaveDto mainTravelSaveDto = mainTravelSaveDto();
-		Long mainTravelId = mainTravelService.saveMainTravel(getLoginMemberId(), mainTravelSaveDto);
+		Long mainTravelId = mainTravelService.saveMainTravel(authService.getLoginMemberId(), mainTravelSaveDto);
 		clear();
 
 		MainTravelUpdateDto mainTravelUpdateDto = mainTravelUpdateDto(mainTravelId);
 
 		//when
-		mainTravelService.updateMainTravel(getLoginMemberId(), mainTravelUpdateDto);
+		mainTravelService.updateMainTravel(authService.getLoginMemberId(), mainTravelUpdateDto);
 		clear();
 
 
@@ -150,7 +145,7 @@ class MainTravelServiceTest {
 		assertThat(mainTravel.getDetailTravels().size()).isEqualTo(mainTravelUpdateDto.detailTravelSaveDtoList().size());
 		assertThat(mainTravel.getDetailTravels().size()).isNotEqualTo(mainTravelSaveDto.detailTravelSaveDtoList().size());
 
-		assertThat(mainTravel.getWriter().getId()).isEqualTo(getLoginMemberId());
+		assertThat(mainTravel.getWriter().getId()).isEqualTo(authService.getLoginMemberId());
 
 
 		Set<String> saveDtoSet = mappingToSet(mainTravelSaveDto.detailTravelSaveDtoList(), DetailTravelSaveDto::title);
@@ -167,7 +162,7 @@ class MainTravelServiceTest {
 	public void failUpdateTravelCauseNoAuthority() throws Exception {
 		//given
 		MainTravelSaveDto mainTravelSaveDto = mainTravelSaveDto();
-		Long mainTravelId = mainTravelService.saveMainTravel(getLoginMemberId(), mainTravelSaveDto);
+		Long mainTravelId = mainTravelService.saveMainTravel(authService.getLoginMemberId(), mainTravelSaveDto);
 		clear();
 
 		MainTravelUpdateDto mainTravelUpdateDto = mainTravelUpdateDto(mainTravelId);
@@ -192,7 +187,7 @@ class MainTravelServiceTest {
 		assertThat(mainTravel.getDetailTravels().size()).isNotEqualTo(mainTravelUpdateDto.detailTravelSaveDtoList().size());
 		assertThat(mainTravel.getDetailTravels().size()).isEqualTo(mainTravelSaveDto.detailTravelSaveDtoList().size());
 
-		assertThat(mainTravel.getWriter().getId()).isEqualTo(getLoginMemberId());
+		assertThat(mainTravel.getWriter().getId()).isEqualTo(authService.getLoginMemberId());
 
 		Set<String> saveDtoSet = mappingToSet(mainTravelSaveDto.detailTravelSaveDtoList(), DetailTravelSaveDto::title);
 		Set<String> updateDtoSet = mappingToSet(mainTravelUpdateDto.detailTravelSaveDtoList(), DetailTravelSaveDto::title);
@@ -209,12 +204,12 @@ class MainTravelServiceTest {
 	public void successDeleteTravel() throws Exception {
 		//given
 		MainTravelSaveDto mainTravelSaveDto = mainTravelSaveDto();
-		Long mainTravelId = mainTravelService.saveMainTravel(getLoginMemberId(), mainTravelSaveDto);
+		Long mainTravelId = mainTravelService.saveMainTravel(authService.getLoginMemberId(), mainTravelSaveDto);
 		clear();
 
 
 		//when
-		mainTravelService.deleteMainTravel(getLoginMemberId(), mainTravelId);
+		mainTravelService.deleteMainTravel(authService.getLoginMemberId(), mainTravelId);
 		clear();
 
 
@@ -240,7 +235,7 @@ class MainTravelServiceTest {
 	public void failDeleteTravel() throws Exception {
 		//given
 		MainTravelSaveDto mainTravelSaveDto = mainTravelSaveDto();
-		Long mainTravelId = mainTravelService.saveMainTravel(getLoginMemberId(), mainTravelSaveDto);
+		Long mainTravelId = mainTravelService.saveMainTravel(authService.getLoginMemberId(), mainTravelSaveDto);
 		clear();
 
 
@@ -258,7 +253,7 @@ class MainTravelServiceTest {
 			.orElseThrow(() -> new MainTravelException(NOT_FOUND));
 
 		assertThat(mainTravel.getTitle()).isEqualTo(mainTravelSaveDto.title());
-		assertThat(mainTravel.getWriter().getId()).isEqualTo(getLoginMemberId());
+		assertThat(mainTravel.getWriter().getId()).isEqualTo(authService.getLoginMemberId());
 		assertThat(mainTravel.getDetailTravels().size()).isEqualTo(mainTravelSaveDto.detailTravelSaveDtoList().size());
 
 
@@ -283,18 +278,18 @@ class MainTravelServiceTest {
 	public void successGetMainTravelWherePublicAndCompleteAndRequestByOwner() throws Exception {
 	    //given
 		MainTravelSaveDto mainTravelSaveDto = publicCompleteMainTravelSaveDto();
-		Long mainTravelId = mainTravelService.saveMainTravel(getLoginMemberId(),mainTravelSaveDto);
+		Long mainTravelId = mainTravelService.saveMainTravel(authService.getLoginMemberId(),mainTravelSaveDto);
 		clear();
 
 
 	    //when
-		MainTravelInfoDto mainTravelInfo = mainTravelService.getMainTravel(getLoginMemberId(), mainTravelId);
+		MainTravelInfoDto mainTravelInfo = mainTravelService.getMainTravel(authService.getLoginMemberId(), mainTravelId);
 
 
 		//then
 		assertThat(mainTravelInfo.id()).isEqualTo(mainTravelId);
 
-		assertThat(mainTravelInfo.writerInfo().id()).isEqualTo(getLoginMemberId());
+		assertThat(mainTravelInfo.writerInfo().id()).isEqualTo(authService.getLoginMemberId());
 		assertThat(mainTravelInfo.writerInfo().username()).isEqualTo(USERNAME);
 		assertThat(mainTravelInfo.writerInfo().nickname()).isEqualTo(NICKNAME);
 
@@ -344,18 +339,18 @@ class MainTravelServiceTest {
 
 		//given
 		MainTravelSaveDto mainTravelSaveDto = privateCompleteMainTravelSaveDto();
-		Long mainTravelId = mainTravelService.saveMainTravel(getLoginMemberId(),mainTravelSaveDto);
+		Long mainTravelId = mainTravelService.saveMainTravel(authService.getLoginMemberId(),mainTravelSaveDto);
 		clear();
 
 
 		//when
-		MainTravelInfoDto mainTravelInfo = mainTravelService.getMainTravel(getLoginMemberId(), mainTravelId);
+		MainTravelInfoDto mainTravelInfo = mainTravelService.getMainTravel(authService.getLoginMemberId(), mainTravelId);
 
 
 		//then
 		assertThat(mainTravelInfo.id()).isEqualTo(mainTravelId);
 
-		assertThat(mainTravelInfo.writerInfo().id()).isEqualTo(getLoginMemberId());
+		assertThat(mainTravelInfo.writerInfo().id()).isEqualTo(authService.getLoginMemberId());
 		assertThat(mainTravelInfo.writerInfo().username()).isEqualTo(USERNAME);
 		assertThat(mainTravelInfo.writerInfo().nickname()).isEqualTo(NICKNAME);
 
@@ -399,18 +394,18 @@ class MainTravelServiceTest {
 
 		//given
 		MainTravelSaveDto mainTravelSaveDto = publicUnCompleteMainTravelSaveDto();
-		Long mainTravelId = mainTravelService.saveMainTravel(getLoginMemberId(),mainTravelSaveDto);
+		Long mainTravelId = mainTravelService.saveMainTravel(authService.getLoginMemberId(),mainTravelSaveDto);
 		clear();
 
 
 		//when
-		MainTravelInfoDto mainTravelInfo = mainTravelService.getMainTravel(getLoginMemberId(), mainTravelId);
+		MainTravelInfoDto mainTravelInfo = mainTravelService.getMainTravel(authService.getLoginMemberId(), mainTravelId);
 
 
 		//then
 		assertThat(mainTravelInfo.id()).isEqualTo(mainTravelId);
 
-		assertThat(mainTravelInfo.writerInfo().id()).isEqualTo(getLoginMemberId());
+		assertThat(mainTravelInfo.writerInfo().id()).isEqualTo(authService.getLoginMemberId());
 		assertThat(mainTravelInfo.writerInfo().username()).isEqualTo(USERNAME);
 		assertThat(mainTravelInfo.writerInfo().nickname()).isEqualTo(NICKNAME);
 
@@ -455,18 +450,18 @@ class MainTravelServiceTest {
 
 		//given
 		MainTravelSaveDto mainTravelSaveDto = privateUnCompleteMainTravelSaveDto();
-		Long mainTravelId = mainTravelService.saveMainTravel(getLoginMemberId(),mainTravelSaveDto);
+		Long mainTravelId = mainTravelService.saveMainTravel(authService.getLoginMemberId(),mainTravelSaveDto);
 		clear();
 
 
 		//when
-		MainTravelInfoDto mainTravelInfo = mainTravelService.getMainTravel(getLoginMemberId(), mainTravelId);
+		MainTravelInfoDto mainTravelInfo = mainTravelService.getMainTravel(authService.getLoginMemberId(), mainTravelId);
 
 
 		//then
 		assertThat(mainTravelInfo.id()).isEqualTo(mainTravelId);
 
-		assertThat(mainTravelInfo.writerInfo().id()).isEqualTo(getLoginMemberId());
+		assertThat(mainTravelInfo.writerInfo().id()).isEqualTo(authService.getLoginMemberId());
 		assertThat(mainTravelInfo.writerInfo().username()).isEqualTo(USERNAME);
 		assertThat(mainTravelInfo.writerInfo().nickname()).isEqualTo(NICKNAME);
 
@@ -510,7 +505,7 @@ class MainTravelServiceTest {
 	@DisplayName("Main Travel 조회 (성공) [public 게시물, 완성, 다른 사람의 조회 요쳥]")
 	public void successGetMainTravelWherePublicAndCompleteAndRequestByOther() throws Exception {
 		MainTravelSaveDto mainTravelSaveDto = publicCompleteMainTravelSaveDto();
-		Long mainTravelId = mainTravelService.saveMainTravel(getLoginMemberId(),mainTravelSaveDto);
+		Long mainTravelId = mainTravelService.saveMainTravel(authService.getLoginMemberId(),mainTravelSaveDto);
 		clear();
 
 
@@ -521,7 +516,7 @@ class MainTravelServiceTest {
 		//then
 		assertThat(mainTravelInfo.id()).isEqualTo(mainTravelId);
 
-		assertThat(mainTravelInfo.writerInfo().id()).isEqualTo(getLoginMemberId());
+		assertThat(mainTravelInfo.writerInfo().id()).isEqualTo(authService.getLoginMemberId());
 		assertThat(mainTravelInfo.writerInfo().username()).isEqualTo(USERNAME);
 		assertThat(mainTravelInfo.writerInfo().nickname()).isEqualTo(NICKNAME);
 
@@ -566,7 +561,7 @@ class MainTravelServiceTest {
 
 		//given
 		MainTravelSaveDto mainTravelSaveDto = privateCompleteMainTravelSaveDto();
-		Long mainTravelId = mainTravelService.saveMainTravel(getLoginMemberId(),mainTravelSaveDto);
+		Long mainTravelId = mainTravelService.saveMainTravel(authService.getLoginMemberId(),mainTravelSaveDto);
 		clear();
 
 
@@ -582,7 +577,7 @@ class MainTravelServiceTest {
 	public void failGetMainTravelWherePublicAndUnCompleteAndRequestByOther() throws Exception {
 		//given
 		MainTravelSaveDto mainTravelSaveDto = publicUnCompleteMainTravelSaveDto();
-		Long mainTravelId = mainTravelService.saveMainTravel(getLoginMemberId(),mainTravelSaveDto);
+		Long mainTravelId = mainTravelService.saveMainTravel(authService.getLoginMemberId(),mainTravelSaveDto);
 		clear();
 
 
@@ -597,7 +592,7 @@ class MainTravelServiceTest {
 
 		//given
 		MainTravelSaveDto mainTravelSaveDto = privateUnCompleteMainTravelSaveDto();
-		Long mainTravelId = mainTravelService.saveMainTravel(getLoginMemberId(),mainTravelSaveDto);
+		Long mainTravelId = mainTravelService.saveMainTravel(authService.getLoginMemberId(),mainTravelSaveDto);
 		clear();
 
 
@@ -614,7 +609,7 @@ class MainTravelServiceTest {
 		Long nullId = 9999999L;
 
 		//when, then
-		assertThat(assertThrows(MainTravelException.class, () -> mainTravelService.getMainTravel(getLoginMemberId(), nullId)).getExceptionType())
+		assertThat(assertThrows(MainTravelException.class, () -> mainTravelService.getMainTravel(authService.getLoginMemberId(), nullId)).getExceptionType())
 			.isEqualTo(MainTravelExceptionType.NOT_FOUND);
 
 	}

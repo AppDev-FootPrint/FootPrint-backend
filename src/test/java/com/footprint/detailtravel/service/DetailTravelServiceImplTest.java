@@ -1,12 +1,12 @@
 package com.footprint.detailtravel.service;
 
-import static com.footprint.auth.service.SecurityUtils.*;
 import static com.footprint.detailtravel.exception.DetailTravelExceptionType.*;
 import static com.footprint.maintravel.fixture.MainTravelFixture.*;
 import static com.footprint.member.fixture.MemberFixture.*;
 import static com.footprint.util.MappingTestUtil.*;
 import static org.assertj.core.api.Assertions.*;
 import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.BDDMockito.*;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
@@ -19,6 +19,7 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.context.SecurityContext;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -26,6 +27,7 @@ import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.footprint.auth.service.AuthService;
 import com.footprint.detailtravel.domain.DetailTravel;
 import com.footprint.detailtravel.exception.DetailTravelException;
 import com.footprint.detailtravel.repository.DetailTravelRepository;
@@ -60,9 +62,12 @@ class DetailTravelServiceImplTest {
 	@Autowired
 	MainTravelRepository mainTravelRepository;
 
+
 	@Autowired
 	MemberRepository memberRepository;
 
+	@MockBean
+	AuthService authService;
 	@Autowired
 	EntityManager em;
 
@@ -75,30 +80,19 @@ class DetailTravelServiceImplTest {
 	}
 
 
-	private void saveSecurityContextHolder(Member member) {
-		SecurityContext context = SecurityContextHolder.createEmptyContext();
-		UserDetails userDetails = User.builder()
-			.username(member.getId().toString())
-			.password(member.getPassword())
-			.authorities(new ArrayList<>()).build();
-
-		context.setAuthentication(new UsernamePasswordAuthenticationToken(userDetails, null));
-		SecurityContextHolder.setContext(context);
-	}
-
 
 	private long getOtherMemberId() {
-		return getLoginMemberId() + 999;
+		return authService.getLoginMemberId() + 999;
 	}
-
 
 
 	@BeforeEach
 	private void setUp() {
 		Member member = memberRepository.save(defaultMember());
-		saveSecurityContextHolder(member);
+		given(authService.getLoginMemberId()).willReturn(member.getId());
 		clear();
 	}
+
 
 
 	@Test
@@ -107,14 +101,14 @@ class DetailTravelServiceImplTest {
 		//given
 		MainTravelSaveDto mainTravelSaveDto = publicCompleteMainTravelSaveDto();
 		DetailTravelSaveDto detailTravelSaveDto = mainTravelSaveDto.detailTravelSaveDtoList().get(0);
-		Long mainTravelId = mainTravelService.saveMainTravel(getLoginMemberId(),mainTravelSaveDto);
+		Long mainTravelId = mainTravelService.saveMainTravel(authService.getLoginMemberId(),mainTravelSaveDto);
 		List<Long> detailTravelIdSet = mappingToList(getDetailTravels(mainTravelId), DetailTravel::getId);
 		Long detailTravelId = detailTravelIdSet.get(0);
 		clear();
 
 
 		//when
-		DetailTravelDto detailTravelDto = detailTravelService.getById(getLoginMemberId(), detailTravelId);
+		DetailTravelDto detailTravelDto = detailTravelService.getById(authService.getLoginMemberId(), detailTravelId);
 
 		//then
 		assertThat(detailTravelDto.detailTravelId()).isEqualTo(detailTravelId);
@@ -143,14 +137,14 @@ class DetailTravelServiceImplTest {
 		//given
 		MainTravelSaveDto mainTravelSaveDto = privateCompleteMainTravelSaveDto();
 		DetailTravelSaveDto detailTravelSaveDto = mainTravelSaveDto.detailTravelSaveDtoList().get(0);
-		Long mainTravelId = mainTravelService.saveMainTravel(getLoginMemberId(),mainTravelSaveDto);
+		Long mainTravelId = mainTravelService.saveMainTravel(authService.getLoginMemberId(),mainTravelSaveDto);
 		List<Long> detailTravelIdSet = mappingToList(getDetailTravels(mainTravelId), DetailTravel::getId);
 		Long detailTravelId = detailTravelIdSet.get(0);
 		clear();
 
 
 		//when
-		DetailTravelDto detailTravelDto = detailTravelService.getById(getLoginMemberId(), detailTravelId);
+		DetailTravelDto detailTravelDto = detailTravelService.getById(authService.getLoginMemberId(), detailTravelId);
 
 		//then
 		assertThat(detailTravelDto.detailTravelId()).isEqualTo(detailTravelId);
@@ -171,14 +165,14 @@ class DetailTravelServiceImplTest {
 		//given
 		MainTravelSaveDto mainTravelSaveDto = publicUnCompleteMainTravelSaveDto();
 		DetailTravelSaveDto detailTravelSaveDto = mainTravelSaveDto.detailTravelSaveDtoList().get(0);
-		Long mainTravelId = mainTravelService.saveMainTravel(getLoginMemberId(),mainTravelSaveDto);
+		Long mainTravelId = mainTravelService.saveMainTravel(authService.getLoginMemberId(),mainTravelSaveDto);
 		List<Long> detailTravelIdSet = mappingToList(getDetailTravels(mainTravelId), DetailTravel::getId);
 		Long detailTravelId = detailTravelIdSet.get(0);
 		clear();
 
 
 		//when
-		DetailTravelDto detailTravelDto = detailTravelService.getById(getLoginMemberId(), detailTravelId);
+		DetailTravelDto detailTravelDto = detailTravelService.getById(authService.getLoginMemberId(), detailTravelId);
 
 		//then
 		assertThat(detailTravelDto.detailTravelId()).isEqualTo(detailTravelId);
@@ -198,14 +192,14 @@ class DetailTravelServiceImplTest {
 		//given
 		MainTravelSaveDto mainTravelSaveDto = privateUnCompleteMainTravelSaveDto();
 		DetailTravelSaveDto detailTravelSaveDto = mainTravelSaveDto.detailTravelSaveDtoList().get(0);
-		Long mainTravelId = mainTravelService.saveMainTravel(getLoginMemberId(),mainTravelSaveDto);
+		Long mainTravelId = mainTravelService.saveMainTravel(authService.getLoginMemberId(),mainTravelSaveDto);
 		List<Long> detailTravelIdSet = mappingToList(getDetailTravels(mainTravelId), DetailTravel::getId);
 		Long detailTravelId = detailTravelIdSet.get(0);
 		clear();
 
 
 		//when
-		DetailTravelDto detailTravelDto = detailTravelService.getById(getLoginMemberId(), detailTravelId);
+		DetailTravelDto detailTravelDto = detailTravelService.getById(authService.getLoginMemberId(), detailTravelId);
 
 		//then
 		assertThat(detailTravelDto.detailTravelId()).isEqualTo(detailTravelId);
@@ -224,14 +218,14 @@ class DetailTravelServiceImplTest {
 	public void successGetDetailTravelWherePublicAndCompleteAndRequestByOther() throws Exception {
 		MainTravelSaveDto mainTravelSaveDto = publicCompleteMainTravelSaveDto();
 		DetailTravelSaveDto detailTravelSaveDto = mainTravelSaveDto.detailTravelSaveDtoList().get(0);
-		Long mainTravelId = mainTravelService.saveMainTravel(getLoginMemberId(),mainTravelSaveDto);
+		Long mainTravelId = mainTravelService.saveMainTravel(authService.getLoginMemberId(),mainTravelSaveDto);
 		List<Long> detailTravelIdSet = mappingToList(getDetailTravels(mainTravelId), DetailTravel::getId);
 		Long detailTravelId = detailTravelIdSet.get(0);
 		clear();
 
 
 		//when
-		DetailTravelDto detailTravelDto = detailTravelService.getById(getLoginMemberId(), detailTravelId);
+		DetailTravelDto detailTravelDto = detailTravelService.getById(authService.getLoginMemberId(), detailTravelId);
 
 		//then
 		assertThat(detailTravelDto.detailTravelId()).isEqualTo(detailTravelId);
@@ -253,7 +247,7 @@ class DetailTravelServiceImplTest {
 		//given
 		MainTravelSaveDto mainTravelSaveDto = privateCompleteMainTravelSaveDto();
 		DetailTravelSaveDto detailTravelSaveDto = mainTravelSaveDto.detailTravelSaveDtoList().get(0);
-		Long mainTravelId = mainTravelService.saveMainTravel(getLoginMemberId(),mainTravelSaveDto);
+		Long mainTravelId = mainTravelService.saveMainTravel(authService.getLoginMemberId(),mainTravelSaveDto);
 		List<Long> detailTravelIdSet = mappingToList(getDetailTravels(mainTravelId), DetailTravel::getId);
 		Long detailTravelId = detailTravelIdSet.get(0);
 		clear();
@@ -272,7 +266,7 @@ class DetailTravelServiceImplTest {
 		//given
 		MainTravelSaveDto mainTravelSaveDto = publicUnCompleteMainTravelSaveDto();
 		DetailTravelSaveDto detailTravelSaveDto = mainTravelSaveDto.detailTravelSaveDtoList().get(0);
-		Long mainTravelId = mainTravelService.saveMainTravel(getLoginMemberId(),mainTravelSaveDto);
+		Long mainTravelId = mainTravelService.saveMainTravel(authService.getLoginMemberId(),mainTravelSaveDto);
 		List<Long> detailTravelIdSet = mappingToList(getDetailTravels(mainTravelId), DetailTravel::getId);
 		Long detailTravelId = detailTravelIdSet.get(0);
 		clear();
@@ -291,7 +285,7 @@ class DetailTravelServiceImplTest {
 		//given
 		MainTravelSaveDto mainTravelSaveDto = privateUnCompleteMainTravelSaveDto();
 		DetailTravelSaveDto detailTravelSaveDto = mainTravelSaveDto.detailTravelSaveDtoList().get(0);
-		Long mainTravelId = mainTravelService.saveMainTravel(getLoginMemberId(),mainTravelSaveDto);
+		Long mainTravelId = mainTravelService.saveMainTravel(authService.getLoginMemberId(),mainTravelSaveDto);
 		List<Long> detailTravelIdSet = mappingToList(getDetailTravels(mainTravelId), DetailTravel::getId);
 		Long detailTravelId = detailTravelIdSet.get(0);
 		clear();
@@ -310,7 +304,7 @@ class DetailTravelServiceImplTest {
 		Long nullId = 9999999L;
 
 		//when, then
-		assertThat(assertThrows(DetailTravelException.class, () -> detailTravelService.getById(getLoginMemberId(), nullId)).getExceptionType())
+		assertThat(assertThrows(DetailTravelException.class, () -> detailTravelService.getById(authService.getLoginMemberId(), nullId)).getExceptionType())
 			.isEqualTo(NOT_FOUND);
 
 	}
