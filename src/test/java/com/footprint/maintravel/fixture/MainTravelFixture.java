@@ -52,7 +52,7 @@ public class MainTravelFixture {
 	private static final boolean FALSE_COMPLETE = false;
 
 
-	private static final String CREATED_AT_STRING = "2022-06-22T00:00:00";
+	private static final String CREATED_AT_STRING = "2022-06-22T00:00";
 	private static final LocalDateTime CREATED_AT = LocalDateTime.parse(CREATED_AT_STRING, ISO_LOCAL_DATE_TIME);
 
 	private static final int LIKE_NUM = 0;

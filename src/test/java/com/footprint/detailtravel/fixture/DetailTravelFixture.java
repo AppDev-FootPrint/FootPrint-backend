@@ -64,7 +64,7 @@ public class DetailTravelFixture {
 	private static final Address ADDRESS = Address.builder().roadAddress("roadAddress").mapX(1).mapY(2).address("address").build();
 	private static final Address UPDATE_ADDRESS = Address.builder().roadAddress("(update)roadAddress").mapX(21).mapY(22).address("(update)address").build();
 
-	private static final String CREATED_AT_STRING = "2022-06-18T00:00:00";
+	private static final String CREATED_AT_STRING = "2022-06-18T00:00";
 	private static final LocalDateTime CREATED_AT = LocalDateTime.parse(CREATED_AT_STRING, DateTimeFormatter.ISO_LOCAL_DATE_TIME);
 
 
@@ -127,6 +127,7 @@ public class DetailTravelFixture {
 
 
 	public static SimpleDetailTravelDto simpleDetailTravelDto(Long mainTravelId, int detailTravelCount) {
+		System.out.println(CREATED_AT.toString());
 		return new SimpleDetailTravelDto(
 			detailTravelCount + 1L,
 			mainTravelId,

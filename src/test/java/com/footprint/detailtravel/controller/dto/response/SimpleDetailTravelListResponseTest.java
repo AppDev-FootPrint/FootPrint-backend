@@ -28,7 +28,7 @@ class SimpleDetailTravelListResponseTest {
 				"review":"[review] review(0)",
 				"visitedDate":"2022-06-15",
 				"address":{"address":"address","roadAddress":"roadAddress","mapX":1,"mapY":2},
-				"createdAt":"2022-06-18T00:00:00"
+				"createdAt":"2022-06-18T00:00"
 			},
 			{
 				"detailTravelId":2,
@@ -37,7 +37,7 @@ class SimpleDetailTravelListResponseTest {
 				"review":"[review] review(1)",
 				"visitedDate":"2022-06-15",
 				"address":{"address":"address","roadAddress":"roadAddress","mapX":1,"mapY":2},
-				"createdAt":"2022-06-18T00:00:00"
+				"createdAt":"2022-06-18T00:00"
 			}
 		]
 	}

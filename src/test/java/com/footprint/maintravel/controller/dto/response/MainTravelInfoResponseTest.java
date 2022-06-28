@@ -26,7 +26,7 @@ class MainTravelInfoResponseTest {
 		"title":"title",
 		"startDate":"2022-06-15",
 		"endDate":"2022-06-17",
-		"createdAt":"2022-06-22T00:00:00",
+		"createdAt":"2022-06-22T00:00",
 		"isVisible":true,
 		"isCompleted":true,
 		"mainImagePath":"https://ttl-blog.tistory.com/",
@@ -43,7 +43,7 @@ class MainTravelInfoResponseTest {
 					"review":"[review] review (0)",
 					"visitedDate":"2022-06-15",
 					"address":{"address":"address","roadAddress":"roadAddress","mapX":1,"mapY":2},
-					"createdAt":"2022-06-18T00:00:00"
+					"createdAt":"2022-06-18T00:00"
 				},
 				{
 					"detailTravelId":2,
@@ -52,7 +52,7 @@ class MainTravelInfoResponseTest {
 					"review":"[review] review (1)",
 					"visitedDate":"2022-06-15",
 					"address": { "address":"address","roadAddress":"roadAddress","mapX":1,"mapY":2},
-					"createdAt":"2022-06-18T00:00:00"
+					"createdAt":"2022-06-18T00:00"
 				},
 				{
 					"detailTravelId":3,
@@ -61,7 +61,7 @@ class MainTravelInfoResponseTest {
 					"review":"[review] review (2)",
 					"visitedDate":"2022-06-15",
 					"address":{"address":"address","roadAddress":"roadAddress","mapX":1,"mapY":2},
-					"createdAt":"2022-06-18T00:00:00"
+					"createdAt":"2022-06-18T00:00"
 				}
 			]
 		}
