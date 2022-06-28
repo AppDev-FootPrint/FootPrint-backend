@@ -13,6 +13,7 @@ import javax.persistence.Table;
 import com.footprint.member.domain.Member;
 
 import lombok.AccessLevel;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
@@ -33,4 +34,10 @@ public class Follow {
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "followee_id")
 	private Member followee;
+
+	@Builder
+	public Follow(Member follower, Member followee) {
+		this.follower = follower;
+		this.followee = followee;
+	}
 }

@@ -31,6 +31,10 @@ import com.footprint.image.domain.Image;
 import com.footprint.member.domain.Member;
 import com.footprint.scrap.domain.Scrap;
 
+import lombok.AccessLevel;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+
 @Getter
 @Table(name = "main_travel")
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
