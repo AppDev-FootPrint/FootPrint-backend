@@ -31,7 +31,6 @@ import com.footprint.detailtravel.service.dto.info.PriceDto;
 import com.footprint.detailtravel.service.dto.info.SimpleDetailTravelDto;
 import com.footprint.detailtravel.service.dto.info.SimpleDetailTravelListDto;
 import com.footprint.image.domain.Image;
-import com.footprint.maintravel.fixture.MainTravelFixture;
 import com.footprint.price.domain.Price;
 
 /**
@@ -43,7 +42,7 @@ public class DetailTravelFixture {
 	private static final Long SIMPLE_DETAIL_TRAVEL_DTO_ID= 1L;
 	private static final Long SIMPLE_DETAIL_TRAVEL_RESPONSE_ID = 1L;
 
-	private static final Long ID = 1L;
+	public static final Long DETAIL_TRAVEL_ID = 1L;
 	private static final Long MAIN_TRAVEL_ID = 1L;
 
 	private static final String TITLE = "title";
@@ -170,7 +169,7 @@ public class DetailTravelFixture {
 
 	public static DetailTravel detailTravelHasId() {
 		DetailTravel detailTravel = DetailTravel.builder().title(TITLE).review(REVIEW).tip(TIP).visitedDate(VISITED_DATE).address(ADDRESS).build();
-		ReflectionTestUtils.setField(detailTravel, "id", ID);
+		ReflectionTestUtils.setField(detailTravel, "id", DETAIL_TRAVEL_ID);
 		detailTravel.setMainTravel(mainTravelOnlyHasId());
 		detailTravel.setImages(IMAGE_LIST);
 		detailTravel.setPrices(PRICE_LIST);
@@ -180,7 +179,7 @@ public class DetailTravelFixture {
 
 	public static DetailTravelInfoResponse detailTravelInfoResponse() {
 		return new DetailTravelInfoResponse(
-			ID,
+			DETAIL_TRAVEL_ID,
 			MAIN_TRAVEL_ID,
 			TITLE,
 			REVIEW,
@@ -195,7 +194,7 @@ public class DetailTravelFixture {
 
 	public static DetailTravelDto detailTravelDto() {
 		return new DetailTravelDto(
-			ID,
+			DETAIL_TRAVEL_ID,
 			MAIN_TRAVEL_ID,
 			TITLE,
 			REVIEW,
