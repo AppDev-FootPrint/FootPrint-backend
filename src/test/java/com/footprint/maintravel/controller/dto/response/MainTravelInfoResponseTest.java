@@ -16,8 +16,6 @@ import com.footprint.maintravel.service.dto.info.MainTravelInfoDto;
  */
 class MainTravelInfoResponseTest {
 
-	//TODO Price 구현 후 추가하기
-	//TODO 테스트 코드 작성할 때, 이렇게 하는게 맞나..? 그냥 둘다 ObjectMapper 쓰는거에 대해서는 어케 생각하는지
 	private final ObjectMapper objectMapper = new ObjectMapper();
 	private static final String EXPECT = """
 	{ 
