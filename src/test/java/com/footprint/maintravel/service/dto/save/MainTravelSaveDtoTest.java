@@ -1,7 +1,6 @@
 package com.footprint.maintravel.service.dto.save;
 
 import static com.footprint.maintravel.fixture.MainTravelFixture.*;
-import static com.footprint.util.MappingTestUtil.*;
 import static org.assertj.core.api.Assertions.*;
 
 import org.junit.jupiter.api.DisplayName;
@@ -9,6 +8,7 @@ import org.junit.jupiter.api.Test;
 
 import com.footprint.detailtravel.domain.DetailTravel;
 import com.footprint.detailtravel.service.dto.create.DetailTravelSaveDto;
+import com.footprint.image.domain.Image;
 import com.footprint.image.service.dto.ImageSaveDto;
 import com.footprint.maintravel.domain.MainTravel;
 import com.footprint.price.domain.Price;
@@ -62,8 +62,14 @@ class MainTravelSaveDtoTest {
 			}
 
 
-			assertThat(detailTravel.getImages())
-				.isEqualTo(mappingToList(detailTravelSaveDto.imageSaveDtoList(), ImageSaveDto::toEntity));
+			int imageSize = detailTravel.getImages().size();
+			for (int j = 0; j < imageSize; j++) {
+				Image image = detailTravel.getImages().get(j);
+				ImageSaveDto imageSaveDto = detailTravelSaveDto.imageSaveDtoList().get(j);
+				assertThat(image.getPath()).isEqualTo(imageSaveDto.path());
+
+			}
+
 		}
 
 	}

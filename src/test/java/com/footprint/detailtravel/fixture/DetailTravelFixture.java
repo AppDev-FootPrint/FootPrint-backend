@@ -1,5 +1,6 @@
 package com.footprint.detailtravel.fixture;
 
+import static com.footprint.image.fixture.ImageFixture.*;
 import static com.footprint.maintravel.fixture.MainTravelFixture.*;
 import static com.footprint.price.fixture.PriceFixture.*;
 import static java.time.LocalDate.*;
@@ -7,27 +8,20 @@ import static java.time.LocalDate.*;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
-import java.util.ArrayList;
-import java.util.List;
 import java.util.stream.IntStream;
 
 import org.springframework.test.util.ReflectionTestUtils;
 
 import com.footprint.detailtravel.controller.dto.request.CreateDetailTravelRequest;
-import com.footprint.image.controller.dto.CreateImageRequest;
 import com.footprint.detailtravel.controller.dto.response.DetailTravelInfoResponse;
-import com.footprint.image.controller.dto.ImageInfoResponse;
 import com.footprint.detailtravel.controller.dto.response.SimpleDetailTravelListResponse;
 import com.footprint.detailtravel.controller.dto.response.SimpleDetailTravelResponse;
 import com.footprint.detailtravel.domain.Address;
 import com.footprint.detailtravel.domain.DetailTravel;
 import com.footprint.detailtravel.service.dto.create.DetailTravelSaveDto;
-import com.footprint.image.service.dto.ImageSaveDto;
 import com.footprint.detailtravel.service.dto.info.DetailTravelDto;
-import com.footprint.image.service.dto.ImageDto;
 import com.footprint.detailtravel.service.dto.info.SimpleDetailTravelDto;
 import com.footprint.detailtravel.service.dto.info.SimpleDetailTravelListDto;
-import com.footprint.image.domain.Image;
 
 /**
  * Created by ShinD on 2022/06/26.
@@ -63,16 +57,6 @@ public class DetailTravelFixture {
 	private static final LocalDateTime CREATED_AT = LocalDateTime.parse(CREATED_AT_STRING, DateTimeFormatter.ISO_LOCAL_DATE_TIME);
 
 
-	//TODO Price랑 Image 구현 후 Fixture로 분리
-	private static final List<ImageSaveDto> IMAGE_SAVE_DTO_LIST = new ArrayList<>();
-
-	private static final List<ImageDto> IMAGE_DTO_LIST = new ArrayList<>();
-
-	private static final List<ImageInfoResponse> IMAGE_INFO_RESPONSE_LIST = new ArrayList<>();
-
-	private static final List<CreateImageRequest> IMAGE_PATH_LIST = new ArrayList<>();
-
-	private static final List<Image> IMAGE_LIST = new ArrayList<>();
 
 
 
@@ -86,7 +70,7 @@ public class DetailTravelFixture {
 			VISITED_DATE,
 			ADDRESS,
 			priceSaveDtoList(3),
-			IMAGE_SAVE_DTO_LIST
+			imageSaveDtoList(3)
 		);
 	}
 
@@ -98,7 +82,7 @@ public class DetailTravelFixture {
 			UPDATE_VISITED_DATE,
 			UPDATE_ADDRESS,
 			priceSaveDtoList(3),
-			IMAGE_SAVE_DTO_LIST
+			imageSaveDtoList(3)
 		);
 	}
 
@@ -111,7 +95,7 @@ public class DetailTravelFixture {
 			VISITED_DATE_STRING,
 			ADDRESS,
 			createPriceRequestList(3),
-			IMAGE_PATH_LIST
+			createImageRequestList(3)
 		);
 	}
 
@@ -162,7 +146,7 @@ public class DetailTravelFixture {
 		DetailTravel detailTravel = DetailTravel.builder().title(TITLE).review(REVIEW).tip(TIP).visitedDate(VISITED_DATE).address(ADDRESS).build();
 		ReflectionTestUtils.setField(detailTravel, "id", DETAIL_TRAVEL_ID);
 		detailTravel.setMainTravel(mainTravelOnlyHasId());
-		detailTravel.setImages(IMAGE_LIST);
+		detailTravel.setImages(imageList(3));
 		detailTravel.setPrices(priceList(3));
 		return detailTravel;
 	}
@@ -179,7 +163,7 @@ public class DetailTravelFixture {
 			ADDRESS,
 			CREATED_AT_STRING,
 			priceInfoResponseList(3),
-			IMAGE_INFO_RESPONSE_LIST
+			imageInfoResponseList(3)
 		);
 	}
 
@@ -194,7 +178,7 @@ public class DetailTravelFixture {
 			ADDRESS,
 			CREATED_AT,
 			priceDtoList(3),
-			IMAGE_DTO_LIST
+			imageDtoList(3)
 		);
 	}
 

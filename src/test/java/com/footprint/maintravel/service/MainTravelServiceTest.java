@@ -29,6 +29,8 @@ import com.footprint.detailtravel.domain.Address;
 import com.footprint.detailtravel.domain.DetailTravel;
 import com.footprint.detailtravel.service.dto.create.DetailTravelSaveDto;
 import com.footprint.detailtravel.service.dto.info.SimpleDetailTravelDto;
+import com.footprint.image.domain.Image;
+import com.footprint.image.service.dto.ImageSaveDto;
 import com.footprint.maintravel.domain.MainTravel;
 import com.footprint.maintravel.exception.MainTravelException;
 import com.footprint.maintravel.exception.MainTravelExceptionType;
@@ -112,13 +114,22 @@ class MainTravelServiceTest {
 			DetailTravel detailTravel = mainTravel.getDetailTravels().get(i);
 			DetailTravelSaveDto detailTravelSaveDto = mainTravelSaveDto.detailTravelSaveDtoList().get(i);
 			int priceSize = detailTravel.getPrices().size();
+			assertThat(priceSize).isNotEqualTo(0);
 			for (int j = 0; j < priceSize; j++) {
 				Price price = detailTravel.getPrices().get(j);
 				PriceSaveDto priceSaveDto = detailTravelSaveDto.priceSaveDtoList().get(j);
 				assertThat(price.getItem()).isEqualTo(priceSaveDto.item());
 				assertThat(price.getPriceInfo()).isEqualTo(priceSaveDto.priceInfo());
 				assertThat(price.getId()).isNotNull();
+			}
 
+			int imageSize = detailTravel.getImages().size();
+			assertThat(imageSize).isNotEqualTo(0);
+			for (int j = 0; j < imageSize; j++) {
+				Image image = detailTravel.getImages().get(j);
+				ImageSaveDto imageSaveDto = detailTravelSaveDto.imageSaveDtoList().get(j);
+				assertThat(image.getPath()).isEqualTo(imageSaveDto.path());
+				assertThat(image.getId()).isNotNull();
 			}
 		}
 		Set<String> dtoSet = mappingToSet(mainTravelSaveDto.detailTravelSaveDtoList(), DetailTravelSaveDto::title);
@@ -165,18 +176,29 @@ class MainTravelServiceTest {
 		assertThat(entitySet).containsAll(updateDtoSet);
 		assertThat(entitySet).doesNotContainAnyElementsOf(saveDtoSet);
 
+
+
 		int size = mainTravelUpdateDto.detailTravelSaveDtoList().size();
 		for (int i = 0; i < size; i++) {
 			DetailTravel detailTravel = mainTravel.getDetailTravels().get(i);
 			DetailTravelSaveDto detailTravelSaveDto = mainTravelUpdateDto.detailTravelSaveDtoList().get(i);
 			int priceSize = detailTravel.getPrices().size();
+			assertThat(priceSize).isNotEqualTo(0);
 			for (int j = 0; j < priceSize; j++) {
 				Price price = detailTravel.getPrices().get(j);
 				PriceSaveDto priceSaveDto = detailTravelSaveDto.priceSaveDtoList().get(j);
 				assertThat(price.getItem()).isEqualTo(priceSaveDto.item());
 				assertThat(price.getPriceInfo()).isEqualTo(priceSaveDto.priceInfo());
 				assertThat(price.getId()).isNotNull();
+			}
 
+			int imageSize = detailTravel.getImages().size();
+			assertThat(imageSize).isNotEqualTo(0);
+			for (int j = 0; j < imageSize; j++) {
+				Image image = detailTravel.getImages().get(j);
+				ImageSaveDto imageSaveDto = detailTravelSaveDto.imageSaveDtoList().get(j);
+				assertThat(image.getPath()).isEqualTo(imageSaveDto.path());
+				assertThat(image.getId()).isNotNull();
 			}
 		}
 	}
@@ -227,13 +249,22 @@ class MainTravelServiceTest {
 			DetailTravel detailTravel = mainTravel.getDetailTravels().get(i);
 			DetailTravelSaveDto detailTravelSaveDto = mainTravelSaveDto.detailTravelSaveDtoList().get(i);
 			int priceSize = detailTravel.getPrices().size();
+			assertThat(priceSize).isNotEqualTo(0);
 			for (int j = 0; j < priceSize; j++) {
 				Price price = detailTravel.getPrices().get(j);
 				PriceSaveDto priceSaveDto = detailTravelSaveDto.priceSaveDtoList().get(j);
 				assertThat(price.getItem()).isEqualTo(priceSaveDto.item());
 				assertThat(price.getPriceInfo()).isEqualTo(priceSaveDto.priceInfo());
 				assertThat(price.getId()).isNotNull();
+			}
 
+			int imageSize = detailTravel.getImages().size();
+			assertThat(imageSize).isNotEqualTo(0);
+			for (int j = 0; j < imageSize; j++) {
+				Image image = detailTravel.getImages().get(j);
+				ImageSaveDto imageSaveDto = detailTravelSaveDto.imageSaveDtoList().get(j);
+				assertThat(image.getPath()).isEqualTo(imageSaveDto.path());
+				assertThat(image.getId()).isNotNull();
 			}
 		}
 
@@ -247,12 +278,7 @@ class MainTravelServiceTest {
 		//given
 		MainTravelSaveDto mainTravelSaveDto = mainTravelSaveDto();
 		Long mainTravelId = mainTravelService.saveMainTravel(authService.getLoginMemberId(), mainTravelSaveDto);
-		List<Long> detailTravelIdList =
-			em.createQuery(
-					"select dt from DetailTravel dt where dt.mainTravel.id = :id",
-					DetailTravel.class)
-				.setParameter("id", mainTravelId)
-				.getResultList().stream().map(DetailTravel::getId).toList();
+		List<Long> detailTravelIdList = getDetailTravelByMainTravelId(mainTravelId).stream().map(DetailTravel::getId).toList();
 		clear();
 
 
@@ -266,21 +292,13 @@ class MainTravelServiceTest {
 		assertThat(detailTravelIdList.size()).isNotEqualTo(0);
 		for (int i = 0; i < detailTravelIdList.size(); i++) {
 			Long detailTravelId = detailTravelIdList.get(i);
-			List<Price> priceList =
-				em.createQuery(
-						"select p from Price p where p.detailTravel.id = :id",
-						Price.class)
-					.setParameter("id", detailTravelId)
-					.getResultList();
+			List<Price> priceList = getPriceListByDetailTravelId(detailTravelId);
+			List<Image> imageList = getImageListByDetailTravelId(detailTravelId);
 			assertThat(priceList).isEmpty();
+			assertThat(imageList).isEmpty();
 		}
 
-		List<DetailTravel> detailTravelList =
-			em.createQuery(
-				"select dt from DetailTravel dt where dt.mainTravel.id = :id",
-				DetailTravel.class)
-				.setParameter("id", mainTravelId)
-				.getResultList();
+		List<DetailTravel> detailTravelList = getDetailTravelByMainTravelId(mainTravelId);
 		assertThat(detailTravelList).isEmpty();
 
 
@@ -289,7 +307,29 @@ class MainTravelServiceTest {
 
 	}
 
+	private List<Image> getImageListByDetailTravelId(Long detailTravelId) {
+		return em.createQuery(
+				"select i from Image i where i.detailTravel.id = :id",
+				Image.class)
+			.setParameter("id", detailTravelId)
+			.getResultList();
+	}
 
+	private List<DetailTravel> getDetailTravelByMainTravelId(Long mainTravelId) {
+		return em.createQuery(
+				"select dt from DetailTravel dt where dt.mainTravel.id = :id",
+				DetailTravel.class)
+			.setParameter("id", mainTravelId)
+			.getResultList();
+	}
+
+	private List<Price> getPriceListByDetailTravelId(Long detailTravelId) {
+		return em.createQuery(
+				"select p from Price p where p.detailTravel.id = :id",
+				Price.class)
+			.setParameter("id", detailTravelId)
+			.getResultList();
+	}
 
 	@Test
 	@DisplayName("MainTravel과 DetailTravel 삭제 (실패 : 원인 - 권한없음)")
@@ -298,11 +338,7 @@ class MainTravelServiceTest {
 		MainTravelSaveDto mainTravelSaveDto = mainTravelSaveDto();
 		Long mainTravelId = mainTravelService.saveMainTravel(authService.getLoginMemberId(), mainTravelSaveDto);
 		List<Long> detailTravelIdList =
-			em.createQuery(
-					"select dt from DetailTravel dt where dt.mainTravel.id = :id",
-					DetailTravel.class)
-				.setParameter("id", mainTravelId)
-				.getResultList().stream().map(DetailTravel::getId).toList();
+			getDetailTravelByMainTravelId(mainTravelId).stream().map(DetailTravel::getId).toList();
 		clear();
 
 
@@ -319,13 +355,10 @@ class MainTravelServiceTest {
 		assertThat(detailTravelIdList.size()).isNotEqualTo(0);
 		for (int i = 0; i < detailTravelIdList.size(); i++) {
 			Long detailTravelId = detailTravelIdList.get(i);
-			List<Price> priceList =
-				em.createQuery(
-						"select p from Price p where p.detailTravel.id = :id",
-						Price.class)
-					.setParameter("id", detailTravelId)
-					.getResultList();
+			List<Price> priceList = getPriceListByDetailTravelId(detailTravelId);
+			List<Image> imageList = getImageListByDetailTravelId(detailTravelId);
 			assertThat(priceList).isNotEmpty();
+			assertThat(imageList).isNotEmpty();
 		}
 		MainTravel mainTravel = mainTravelRepository.findById(mainTravelId)
 			.orElseThrow(() -> new MainTravelException(NOT_FOUND));
