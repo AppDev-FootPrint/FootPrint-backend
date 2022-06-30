@@ -10,8 +10,10 @@ import org.junit.jupiter.api.Test;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.footprint.detailtravel.service.dto.info.DetailTravelDto;
-import com.footprint.detailtravel.service.dto.info.ImageDto;
-import com.footprint.detailtravel.service.dto.info.PriceDto;
+import com.footprint.image.service.dto.ImageDto;
+import com.footprint.image.controller.dto.ImageInfoResponse;
+import com.footprint.price.controller.dto.PriceInfoResponse;
+import com.footprint.price.service.dto.PriceDto;
 
 /**
  * Created by ShinD on 2022/06/26.
@@ -29,8 +31,16 @@ class DetailTravelInfoResponseTest {
 		"visitedDate":"2022-06-15",
 		"address":{"address":"address","roadAddress":"roadAddress","mapX":1,"mapY":2},
 		"createdAt":"2022-06-18T00:00",
-		"priceInfoResponseList":[],
-		"imageInfoResponseList":[]
+		"priceInfoResponseList":[
+		 		{"item" : "item1", "priceInfo":10000},
+		 		{"item" : "item2", "priceInfo":20000},
+		 		{"item" : "item3", "priceInfo":30000}
+		],
+		"imageInfoResponseList":[
+			{"path":"https://ttl-blog.tistory.com/1"},
+			{"path":"https://ttl-blog.tistory.com/2"},
+			{"path":"https://ttl-blog.tistory.com/3"}
+		]
 		}
 		""";
 
