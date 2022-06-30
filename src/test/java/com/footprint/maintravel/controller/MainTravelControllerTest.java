@@ -22,6 +22,7 @@ import org.springframework.test.web.servlet.MvcResult;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.footprint.auth.jwt.JwtService;
+import com.footprint.auth.service.AuthService;
 import com.footprint.maintravel.service.MainTravelService;
 import com.footprint.member.repository.MemberRepository;
 
