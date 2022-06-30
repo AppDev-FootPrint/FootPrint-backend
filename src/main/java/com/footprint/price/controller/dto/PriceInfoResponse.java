@@ -1,6 +1,6 @@
-package com.footprint.detailtravel.controller.dto.response;
+package com.footprint.price.controller.dto;
 
-import com.footprint.detailtravel.service.dto.info.PriceDto;
+import com.footprint.price.service.dto.PriceDto;
 
 /**
  * Created by ShinD on 2022/06/27.

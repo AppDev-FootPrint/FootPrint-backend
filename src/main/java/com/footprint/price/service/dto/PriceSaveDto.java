@@ -1,4 +1,4 @@
-package com.footprint.detailtravel.service.dto.create;
+package com.footprint.price.service.dto;
 
 import com.footprint.price.domain.Price;
 
