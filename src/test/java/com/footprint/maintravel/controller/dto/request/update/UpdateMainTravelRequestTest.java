@@ -13,11 +13,11 @@ import org.junit.jupiter.api.Test;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.footprint.detailtravel.controller.dto.request.CreateDetailTravelRequest;
-import com.footprint.detailtravel.controller.dto.request.CreateImageRequest;
-import com.footprint.detailtravel.controller.dto.request.CreatePriceRequest;
 import com.footprint.detailtravel.domain.Address;
 import com.footprint.detailtravel.service.dto.create.DetailTravelSaveDto;
+import com.footprint.image.controller.dto.CreateImageRequest;
 import com.footprint.maintravel.service.dto.update.MainTravelUpdateDto;
+import com.footprint.price.controller.dto.CreatePriceRequest;
 
 /**
  * Created by ShinD on 2022/06/26.

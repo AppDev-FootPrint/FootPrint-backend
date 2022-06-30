@@ -10,7 +10,6 @@ import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.BDDMockito.*;
 
 import java.time.LocalDateTime;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
 
@@ -23,11 +22,6 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
-import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import org.springframework.security.core.context.SecurityContext;
-import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.core.userdetails.User;
-import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.footprint.auth.service.AuthService;
@@ -44,6 +38,8 @@ import com.footprint.maintravel.service.dto.save.MainTravelSaveDto;
 import com.footprint.maintravel.service.dto.update.MainTravelUpdateDto;
 import com.footprint.member.domain.Member;
 import com.footprint.member.repository.MemberRepository;
+import com.footprint.price.domain.Price;
+import com.footprint.price.service.dto.PriceSaveDto;
 
 /**
  * Created by ShinD on 2022/06/26.
@@ -105,12 +101,26 @@ class MainTravelServiceTest {
 		MainTravel mainTravel = mainTravelRepository.findById(mainTravelId)
 		 	.orElseThrow(() -> new MainTravelException(NOT_FOUND));
 
-		 assertThat(mainTravel.getTitle()).isEqualTo(mainTravelSaveDto.title());
-		 assertThat(mainTravel.getWriter().getId()).isEqualTo(authService.getLoginMemberId());
-		 assertThat(mainTravel.getImagePath()).isEqualTo(mainTravelSaveDto.mainImagePath());
-		 assertThat(mainTravel.getDetailTravels().size()).isEqualTo(mainTravelSaveDto.detailTravelSaveDtoList().size());
+		assertThat(mainTravel.getTitle()).isEqualTo(mainTravelSaveDto.title());
+		assertThat(mainTravel.getWriter().getId()).isEqualTo(authService.getLoginMemberId());
+		assertThat(mainTravel.getImagePath()).isEqualTo(mainTravelSaveDto.mainImagePath());
+		assertThat(mainTravel.getDetailTravels().size()).isEqualTo(mainTravelSaveDto.detailTravelSaveDtoList().size());
+		assertThat(mainTravel.getDetailTravels().size()).isNotEqualTo(0);
 
+		int size = mainTravelSaveDto.detailTravelSaveDtoList().size();
+		for (int i = 0; i < size; i++) {
+			DetailTravel detailTravel = mainTravel.getDetailTravels().get(i);
+			DetailTravelSaveDto detailTravelSaveDto = mainTravelSaveDto.detailTravelSaveDtoList().get(i);
+			int priceSize = detailTravel.getPrices().size();
+			for (int j = 0; j < priceSize; j++) {
+				Price price = detailTravel.getPrices().get(j);
+				PriceSaveDto priceSaveDto = detailTravelSaveDto.priceSaveDtoList().get(j);
+				assertThat(price.getItem()).isEqualTo(priceSaveDto.item());
+				assertThat(price.getPriceInfo()).isEqualTo(priceSaveDto.priceInfo());
+				assertThat(price.getId()).isNotNull();
 
+			}
+		}
 		Set<String> dtoSet = mappingToSet(mainTravelSaveDto.detailTravelSaveDtoList(), DetailTravelSaveDto::title);
 		Set<String> entitySet = mappingToSet(mainTravel.getDetailTravels(), DetailTravel::getTitle);
 
@@ -154,6 +164,21 @@ class MainTravelServiceTest {
 
 		assertThat(entitySet).containsAll(updateDtoSet);
 		assertThat(entitySet).doesNotContainAnyElementsOf(saveDtoSet);
+
+		int size = mainTravelUpdateDto.detailTravelSaveDtoList().size();
+		for (int i = 0; i < size; i++) {
+			DetailTravel detailTravel = mainTravel.getDetailTravels().get(i);
+			DetailTravelSaveDto detailTravelSaveDto = mainTravelUpdateDto.detailTravelSaveDtoList().get(i);
+			int priceSize = detailTravel.getPrices().size();
+			for (int j = 0; j < priceSize; j++) {
+				Price price = detailTravel.getPrices().get(j);
+				PriceSaveDto priceSaveDto = detailTravelSaveDto.priceSaveDtoList().get(j);
+				assertThat(price.getItem()).isEqualTo(priceSaveDto.item());
+				assertThat(price.getPriceInfo()).isEqualTo(priceSaveDto.priceInfo());
+				assertThat(price.getId()).isNotNull();
+
+			}
+		}
 	}
 
 
@@ -195,6 +220,23 @@ class MainTravelServiceTest {
 
 		assertThat(entitySet).doesNotContainAnyElementsOf(updateDtoSet);
 		assertThat(entitySet).containsAll(saveDtoSet);
+
+
+		int size = mainTravelSaveDto.detailTravelSaveDtoList().size();
+		for (int i = 0; i < size; i++) {
+			DetailTravel detailTravel = mainTravel.getDetailTravels().get(i);
+			DetailTravelSaveDto detailTravelSaveDto = mainTravelSaveDto.detailTravelSaveDtoList().get(i);
+			int priceSize = detailTravel.getPrices().size();
+			for (int j = 0; j < priceSize; j++) {
+				Price price = detailTravel.getPrices().get(j);
+				PriceSaveDto priceSaveDto = detailTravelSaveDto.priceSaveDtoList().get(j);
+				assertThat(price.getItem()).isEqualTo(priceSaveDto.item());
+				assertThat(price.getPriceInfo()).isEqualTo(priceSaveDto.priceInfo());
+				assertThat(price.getId()).isNotNull();
+
+			}
+		}
+
 	}
 
 
@@ -205,6 +247,12 @@ class MainTravelServiceTest {
 		//given
 		MainTravelSaveDto mainTravelSaveDto = mainTravelSaveDto();
 		Long mainTravelId = mainTravelService.saveMainTravel(authService.getLoginMemberId(), mainTravelSaveDto);
+		List<Long> detailTravelIdList =
+			em.createQuery(
+					"select dt from DetailTravel dt where dt.mainTravel.id = :id",
+					DetailTravel.class)
+				.setParameter("id", mainTravelId)
+				.getResultList().stream().map(DetailTravel::getId).toList();
 		clear();
 
 
@@ -215,14 +263,27 @@ class MainTravelServiceTest {
 
 
 		//then
+		assertThat(detailTravelIdList.size()).isNotEqualTo(0);
+		for (int i = 0; i < detailTravelIdList.size(); i++) {
+			Long detailTravelId = detailTravelIdList.get(i);
+			List<Price> priceList =
+				em.createQuery(
+						"select p from Price p where p.detailTravel.id = :id",
+						Price.class)
+					.setParameter("id", detailTravelId)
+					.getResultList();
+			assertThat(priceList).isEmpty();
+		}
+
 		List<DetailTravel> detailTravelList =
 			em.createQuery(
 				"select dt from DetailTravel dt where dt.mainTravel.id = :id",
 				DetailTravel.class)
 				.setParameter("id", mainTravelId)
 				.getResultList();
-
 		assertThat(detailTravelList).isEmpty();
+
+
 		assertThatThrownBy(() -> mainTravelRepository.findById(mainTravelId).orElseThrow(() -> new MainTravelException(NOT_FOUND)))
 			.isInstanceOf(MainTravelException.class);
 
@@ -236,6 +297,12 @@ class MainTravelServiceTest {
 		//given
 		MainTravelSaveDto mainTravelSaveDto = mainTravelSaveDto();
 		Long mainTravelId = mainTravelService.saveMainTravel(authService.getLoginMemberId(), mainTravelSaveDto);
+		List<Long> detailTravelIdList =
+			em.createQuery(
+					"select dt from DetailTravel dt where dt.mainTravel.id = :id",
+					DetailTravel.class)
+				.setParameter("id", mainTravelId)
+				.getResultList().stream().map(DetailTravel::getId).toList();
 		clear();
 
 
@@ -249,6 +316,17 @@ class MainTravelServiceTest {
 
 
 		//then
+		assertThat(detailTravelIdList.size()).isNotEqualTo(0);
+		for (int i = 0; i < detailTravelIdList.size(); i++) {
+			Long detailTravelId = detailTravelIdList.get(i);
+			List<Price> priceList =
+				em.createQuery(
+						"select p from Price p where p.detailTravel.id = :id",
+						Price.class)
+					.setParameter("id", detailTravelId)
+					.getResultList();
+			assertThat(priceList).isNotEmpty();
+		}
 		MainTravel mainTravel = mainTravelRepository.findById(mainTravelId)
 			.orElseThrow(() -> new MainTravelException(NOT_FOUND));
 
@@ -272,7 +350,6 @@ class MainTravelServiceTest {
 
 
 
-	//TODO Price, Image 구현 후 조회 추가하기
 	@Test
 	@DisplayName("Main Travel 조회 (성공) [public 게시물, 완성, 주인의 조회 요쳥]")
 	public void successGetMainTravelWherePublicAndCompleteAndRequestByOwner() throws Exception {
@@ -327,7 +404,6 @@ class MainTravelServiceTest {
 		Set<Long> mainTravelIdSet = mappingToSet(mainTravelInfo.simpleDetailTravelListDto().detailTravelDtoList(),SimpleDetailTravelDto::mainTravelId);
 		assertThat(mainTravelIdSet.size()).isEqualTo(1);
 		assertThat(mainTravelIdSet).containsOnly(mainTravelId);
-
 	}
 
 

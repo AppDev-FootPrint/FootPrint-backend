@@ -4,7 +4,6 @@ import java.time.LocalDate;
 import java.util.List;
 
 import com.footprint.detailtravel.service.dto.create.DetailTravelSaveDto;
-import com.footprint.detailtravel.service.dto.create.ImageSaveDto;
 
 public record MainTravelUpdateDto(
 	Long id,

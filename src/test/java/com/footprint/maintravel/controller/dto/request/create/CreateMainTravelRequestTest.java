@@ -13,11 +13,12 @@ import org.junit.jupiter.api.Test;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.footprint.detailtravel.controller.dto.request.CreateDetailTravelRequest;
-import com.footprint.detailtravel.controller.dto.request.CreateImageRequest;
-import com.footprint.detailtravel.controller.dto.request.CreatePriceRequest;
+import com.footprint.image.controller.dto.CreateImageRequest;
+import com.footprint.price.controller.dto.CreatePriceRequest;
 import com.footprint.detailtravel.domain.Address;
 import com.footprint.detailtravel.service.dto.create.DetailTravelSaveDto;
 import com.footprint.maintravel.service.dto.save.MainTravelSaveDto;
+import com.footprint.price.service.dto.PriceSaveDto;
 
 /**
  * Created by ShinD on 2022/06/26.
@@ -40,7 +41,11 @@ class CreateMainTravelRequestTest {
 			  	"visitedDate" : "2022-03-15",
 			  	"address" : {  "address" : "address1",  "roadAddress" : "roadAddress1",   "mapX" : "123",  "mapY" : "345"},
 		 		
-		 		"createPriceRequestList" : [],
+		 		"createPriceRequestList" : [
+		 				{"item" : "item1", "priceInfo":10000},
+		 				{"item" : "item2", "priceInfo":20000},
+		 				{"item" : "item3", "priceInfo":30000}
+		 		],
 			  	"createImageRequestList" : [
 						{"path" : "https://ttl-blog.tistory.com/277?category=906283"},
 						{"path" : "https://ttl-blog.tistory.com/277?category=906284"},
@@ -96,6 +101,14 @@ class CreateMainTravelRequestTest {
 		assertThat(paths).contains("https://ttl-blog.tistory.com/277?category=906283");
 		assertThat(paths).contains("https://ttl-blog.tistory.com/277?category=906284");
 		assertThat(paths).contains("https://ttl-blog.tistory.com/277?category=906285");
+
+		List<PriceSaveDto> priceSaveDtos = mappingToList(
+			createDetailTravelRequest1.createPriceRequestList(),
+			CreatePriceRequest::toServiceDto);
+		for (int i = 0; i < priceSaveDtos.size(); i++) {
+			assertThat(priceSaveDtos.get(i).priceInfo()).isEqualTo(10000 * (i+1));
+			assertThat(priceSaveDtos.get(i).item()).isEqualTo("item%d".formatted((i+1)));
+		}
 
 
 

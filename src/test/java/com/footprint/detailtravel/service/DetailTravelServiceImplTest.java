@@ -9,7 +9,6 @@ import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.BDDMockito.*;
 
 import java.time.LocalDateTime;
-import java.util.ArrayList;
 import java.util.List;
 
 import javax.persistence.EntityManager;
@@ -20,11 +19,6 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
-import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import org.springframework.security.core.context.SecurityContext;
-import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.core.userdetails.User;
-import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.footprint.auth.service.AuthService;
@@ -32,7 +26,9 @@ import com.footprint.detailtravel.domain.DetailTravel;
 import com.footprint.detailtravel.exception.DetailTravelException;
 import com.footprint.detailtravel.repository.DetailTravelRepository;
 import com.footprint.detailtravel.service.dto.create.DetailTravelSaveDto;
+import com.footprint.image.service.dto.ImageSaveDto;
 import com.footprint.detailtravel.service.dto.info.DetailTravelDto;
+import com.footprint.image.service.dto.ImageDto;
 import com.footprint.maintravel.exception.MainTravelException;
 import com.footprint.maintravel.exception.MainTravelExceptionType;
 import com.footprint.maintravel.repository.MainTravelRepository;
@@ -40,6 +36,8 @@ import com.footprint.maintravel.service.MainTravelService;
 import com.footprint.maintravel.service.dto.save.MainTravelSaveDto;
 import com.footprint.member.domain.Member;
 import com.footprint.member.repository.MemberRepository;
+import com.footprint.price.service.dto.PriceDto;
+import com.footprint.price.service.dto.PriceSaveDto;
 
 /**
  * Created by ShinD on 2022/06/26.
@@ -118,8 +116,24 @@ class DetailTravelServiceImplTest {
 		assertThat(detailTravelDto.visitedDate()).isEqualTo(detailTravelSaveDto.visitedDate());
 		assertThat(detailTravelDto.address()).isEqualTo(detailTravelSaveDto.address());
 		assertThat(detailTravelDto.createdAt()).isBefore(LocalDateTime.now().plusSeconds(2));
-		assertThat(detailTravelDto.priceDtoList().size()).isEqualTo(detailTravelSaveDto.priceSaveDtoList().size());
+		int priceSize = detailTravelDto.priceDtoList().size();
+		assertThat(priceSize).isEqualTo(detailTravelSaveDto.priceSaveDtoList().size());
+		for (int i = 0; i < priceSize; i++) {
+			PriceDto priceDto = detailTravelDto.priceDtoList().get(i);
+			PriceSaveDto priceSaveDto = detailTravelSaveDto.priceSaveDtoList().get(i);
+			assertThat(priceDto.priceInfo()).isEqualTo(priceSaveDto.priceInfo());
+			assertThat(priceDto.item()).isEqualTo(priceSaveDto.item());
+		}
+
+
 		assertThat(detailTravelDto.imageDtoList().size()).isEqualTo(detailTravelSaveDto.imageSaveDtoList().size());
+		int imageSize = detailTravelDto.imageDtoList().size();
+		assertThat(imageSize).isEqualTo(detailTravelSaveDto.imageSaveDtoList().size());
+		for (int i = 0; i < imageSize; i++) {
+			ImageDto imageDto = detailTravelDto.imageDtoList().get(i);
+			ImageSaveDto imageSaveDto = detailTravelSaveDto.imageSaveDtoList().get(i);
+			assertThat(imageDto.path()).isEqualTo(imageSaveDto.path());
+		}
 
 
 	}
@@ -155,7 +169,26 @@ class DetailTravelServiceImplTest {
 		assertThat(detailTravelDto.address()).isEqualTo(detailTravelSaveDto.address());
 		assertThat(detailTravelDto.createdAt()).isBefore(LocalDateTime.now().plusSeconds(2));
 		assertThat(detailTravelDto.priceDtoList().size()).isEqualTo(detailTravelSaveDto.priceSaveDtoList().size());
+		int priceSize = detailTravelDto.priceDtoList().size();
+		assertThat(priceSize).isEqualTo(detailTravelSaveDto.priceSaveDtoList().size());
+		for (int i = 0; i < priceSize; i++) {
+			PriceDto priceDto = detailTravelDto.priceDtoList().get(i);
+			PriceSaveDto priceSaveDto = detailTravelSaveDto.priceSaveDtoList().get(i);
+			assertThat(priceDto.priceInfo()).isEqualTo(priceSaveDto.priceInfo());
+			assertThat(priceDto.item()).isEqualTo(priceSaveDto.item());
+		}
+
+
 		assertThat(detailTravelDto.imageDtoList().size()).isEqualTo(detailTravelSaveDto.imageSaveDtoList().size());
+		int imageSize = detailTravelDto.imageDtoList().size();
+		assertThat(imageSize).isEqualTo(detailTravelSaveDto.imageSaveDtoList().size());
+		for (int i = 0; i < imageSize; i++) {
+			ImageDto imageDto = detailTravelDto.imageDtoList().get(i);
+			ImageSaveDto imageSaveDto = detailTravelSaveDto.imageSaveDtoList().get(i);
+			assertThat(imageDto.path()).isEqualTo(imageSaveDto.path());
+		}
+
+
 	}
 
 	@Test
@@ -183,7 +216,24 @@ class DetailTravelServiceImplTest {
 		assertThat(detailTravelDto.address()).isEqualTo(detailTravelSaveDto.address());
 		assertThat(detailTravelDto.createdAt()).isBefore(LocalDateTime.now().plusSeconds(2));
 		assertThat(detailTravelDto.priceDtoList().size()).isEqualTo(detailTravelSaveDto.priceSaveDtoList().size());
+		int priceSize = detailTravelDto.priceDtoList().size();
+		assertThat(priceSize).isEqualTo(detailTravelSaveDto.priceSaveDtoList().size());
+		for (int i = 0; i < priceSize; i++) {
+			PriceDto priceDto = detailTravelDto.priceDtoList().get(i);
+			PriceSaveDto priceSaveDto = detailTravelSaveDto.priceSaveDtoList().get(i);
+			assertThat(priceDto.priceInfo()).isEqualTo(priceSaveDto.priceInfo());
+			assertThat(priceDto.item()).isEqualTo(priceSaveDto.item());
+		}
+
+
 		assertThat(detailTravelDto.imageDtoList().size()).isEqualTo(detailTravelSaveDto.imageSaveDtoList().size());
+		int imageSize = detailTravelDto.imageDtoList().size();
+		assertThat(imageSize).isEqualTo(detailTravelSaveDto.imageSaveDtoList().size());
+		for (int i = 0; i < imageSize; i++) {
+			ImageDto imageDto = detailTravelDto.imageDtoList().get(i);
+			ImageSaveDto imageSaveDto = detailTravelSaveDto.imageSaveDtoList().get(i);
+			assertThat(imageDto.path()).isEqualTo(imageSaveDto.path());
+		}
 	}
 	@Test
 	@DisplayName("Main Travel 조회 (성공) [private 게시물, 미완성, 주인의 조회 요쳥]")
@@ -210,7 +260,24 @@ class DetailTravelServiceImplTest {
 		assertThat(detailTravelDto.address()).isEqualTo(detailTravelSaveDto.address());
 		assertThat(detailTravelDto.createdAt()).isBefore(LocalDateTime.now().plusSeconds(2));
 		assertThat(detailTravelDto.priceDtoList().size()).isEqualTo(detailTravelSaveDto.priceSaveDtoList().size());
+		int priceSize = detailTravelDto.priceDtoList().size();
+		assertThat(priceSize).isEqualTo(detailTravelSaveDto.priceSaveDtoList().size());
+		for (int i = 0; i < priceSize; i++) {
+			PriceDto priceDto = detailTravelDto.priceDtoList().get(i);
+			PriceSaveDto priceSaveDto = detailTravelSaveDto.priceSaveDtoList().get(i);
+			assertThat(priceDto.priceInfo()).isEqualTo(priceSaveDto.priceInfo());
+			assertThat(priceDto.item()).isEqualTo(priceSaveDto.item());
+		}
+
+
 		assertThat(detailTravelDto.imageDtoList().size()).isEqualTo(detailTravelSaveDto.imageSaveDtoList().size());
+		int imageSize = detailTravelDto.imageDtoList().size();
+		assertThat(imageSize).isEqualTo(detailTravelSaveDto.imageSaveDtoList().size());
+		for (int i = 0; i < imageSize; i++) {
+			ImageDto imageDto = detailTravelDto.imageDtoList().get(i);
+			ImageSaveDto imageSaveDto = detailTravelSaveDto.imageSaveDtoList().get(i);
+			assertThat(imageDto.path()).isEqualTo(imageSaveDto.path());
+		}
 	}
 
 	@Test
@@ -236,7 +303,24 @@ class DetailTravelServiceImplTest {
 		assertThat(detailTravelDto.address()).isEqualTo(detailTravelSaveDto.address());
 		assertThat(detailTravelDto.createdAt()).isBefore(LocalDateTime.now().plusSeconds(2));
 		assertThat(detailTravelDto.priceDtoList().size()).isEqualTo(detailTravelSaveDto.priceSaveDtoList().size());
+		int priceSize = detailTravelDto.priceDtoList().size();
+		assertThat(priceSize).isEqualTo(detailTravelSaveDto.priceSaveDtoList().size());
+		for (int i = 0; i < priceSize; i++) {
+			PriceDto priceDto = detailTravelDto.priceDtoList().get(i);
+			PriceSaveDto priceSaveDto = detailTravelSaveDto.priceSaveDtoList().get(i);
+			assertThat(priceDto.priceInfo()).isEqualTo(priceSaveDto.priceInfo());
+			assertThat(priceDto.item()).isEqualTo(priceSaveDto.item());
+		}
+
+
 		assertThat(detailTravelDto.imageDtoList().size()).isEqualTo(detailTravelSaveDto.imageSaveDtoList().size());
+		int imageSize = detailTravelDto.imageDtoList().size();
+		assertThat(imageSize).isEqualTo(detailTravelSaveDto.imageSaveDtoList().size());
+		for (int i = 0; i < imageSize; i++) {
+			ImageDto imageDto = detailTravelDto.imageDtoList().get(i);
+			ImageSaveDto imageSaveDto = detailTravelSaveDto.imageSaveDtoList().get(i);
+			assertThat(imageDto.path()).isEqualTo(imageSaveDto.path());
+		}
 	}
 
 
