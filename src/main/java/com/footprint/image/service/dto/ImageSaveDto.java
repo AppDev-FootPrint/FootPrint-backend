@@ -1,4 +1,4 @@
-package com.footprint.detailtravel.service.dto.create;
+package com.footprint.image.service.dto;
 
 import com.footprint.image.domain.Image;
 

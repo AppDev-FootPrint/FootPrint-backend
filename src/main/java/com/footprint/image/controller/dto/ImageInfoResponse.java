@@ -1,6 +1,6 @@
-package com.footprint.detailtravel.controller.dto.response;
+package com.footprint.image.controller.dto;
 
-import com.footprint.detailtravel.service.dto.info.ImageDto;
+import com.footprint.image.service.dto.ImageDto;
 
 /**
  * Created by ShinD on 2022/06/27.
