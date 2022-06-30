@@ -10,15 +10,18 @@ import org.junit.jupiter.api.Test;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.footprint.detailtravel.service.dto.info.DetailTravelDto;
+
 import com.footprint.image.service.dto.ImageDto;
 import com.footprint.image.controller.dto.ImageInfoResponse;
 import com.footprint.price.controller.dto.PriceInfoResponse;
 import com.footprint.price.service.dto.PriceDto;
 
+
 /**
  * Created by ShinD on 2022/06/26.
  */
 class DetailTravelInfoResponseTest {
+
 	private final ObjectMapper objectMapper = new ObjectMapper();
 	private static final String EXPECT = """
 	{
@@ -30,6 +33,7 @@ class DetailTravelInfoResponseTest {
 		"visitedDate":"2022-06-15",
 		"address":{"address":"address","roadAddress":"roadAddress","mapX":1,"mapY":2},
 		"createdAt":"2022-06-18T00:00",
+
 		"priceInfoResponseList":[
 		 		{"item" : "item1", "priceInfo":10000},
 		 		{"item" : "item2", "priceInfo":20000},
@@ -40,6 +44,7 @@ class DetailTravelInfoResponseTest {
 			{"path":"https://ttl-blog.tistory.com/2"},
 			{"path":"https://ttl-blog.tistory.com/3"}
 		]
+
 		}
 		""";
 

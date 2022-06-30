@@ -13,6 +13,7 @@ import com.footprint.detailtravel.service.dto.create.DetailTravelSaveDto;
 import com.footprint.detailtravel.service.dto.info.SimpleDetailTravelListDto;
 import com.footprint.image.domain.Image;
 import com.footprint.image.repository.ImageRepository;
+
 import com.footprint.maintravel.domain.MainTravel;
 import com.footprint.maintravel.exception.MainTravelException;
 import com.footprint.maintravel.exception.MainTravelExceptionType;
@@ -40,6 +41,7 @@ public class MainTravelServiceImpl implements MainTravelService {
 	private final MemberRepository memberRepository;
 	private final PriceRepository priceRepository;
 	private final ImageRepository imageRepository;
+
 
 
 	@Override
@@ -111,6 +113,7 @@ public class MainTravelServiceImpl implements MainTravelService {
 	}
 
 
+
 	private void deleteAllDeatailTravelIn(MainTravel mainTravel) {
 		List<DetailTravel> detailTravelList = mainTravel.getDetailTravels();
 		//반드시 price를 삭제한 이후 detail을 삭제해야 함
@@ -118,6 +121,7 @@ public class MainTravelServiceImpl implements MainTravelService {
 		imageRepository.deleteAllByIdInBatch(detailTravelList.stream().flatMap(dt -> dt.getImages().stream().map(Image::getId)).toList());
 		detailTravelRepository.deleteAllByIdInBatch(detailTravelList.stream().map(DetailTravel::getId).toList());
 	}
+
 
 
 
@@ -132,7 +136,9 @@ public class MainTravelServiceImpl implements MainTravelService {
 
 		checkAuthority(memberId, mainTravel.getWriter().getId());
 
+
 		deleteAllDeatailTravelIn(mainTravel);
+
 
 		mainTravelRepository.delete(mainTravel);
 	}

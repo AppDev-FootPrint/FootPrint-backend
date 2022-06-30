@@ -14,7 +14,6 @@ import com.footprint.detailtravel.service.dto.info.SimpleDetailTravelDto;
  * Created by ShinD on 2022/06/26.
  */
 class SimpleDetailTravelResponseTest {
-
 	private final ObjectMapper objectMapper = new ObjectMapper();
 	private static final String EXPECT = """
 	{

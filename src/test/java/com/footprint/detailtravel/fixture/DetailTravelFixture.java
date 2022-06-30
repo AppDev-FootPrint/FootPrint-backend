@@ -1,27 +1,34 @@
 package com.footprint.detailtravel.fixture;
 
+
 import static com.footprint.image.fixture.ImageFixture.*;
 import static com.footprint.maintravel.fixture.MainTravelFixture.*;
 import static com.footprint.price.fixture.PriceFixture.*;
+
 import static java.time.LocalDate.*;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
+
 import java.util.stream.IntStream;
 
 import org.springframework.test.util.ReflectionTestUtils;
 
 import com.footprint.detailtravel.controller.dto.request.CreateDetailTravelRequest;
+
 import com.footprint.detailtravel.controller.dto.response.DetailTravelInfoResponse;
+
 import com.footprint.detailtravel.controller.dto.response.SimpleDetailTravelListResponse;
 import com.footprint.detailtravel.controller.dto.response.SimpleDetailTravelResponse;
 import com.footprint.detailtravel.domain.Address;
 import com.footprint.detailtravel.domain.DetailTravel;
 import com.footprint.detailtravel.service.dto.create.DetailTravelSaveDto;
+
 import com.footprint.detailtravel.service.dto.info.DetailTravelDto;
 import com.footprint.detailtravel.service.dto.info.SimpleDetailTravelDto;
 import com.footprint.detailtravel.service.dto.info.SimpleDetailTravelListDto;
+
 
 /**
  * Created by ShinD on 2022/06/26.

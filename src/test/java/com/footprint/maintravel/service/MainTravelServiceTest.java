@@ -103,6 +103,7 @@ class MainTravelServiceTest {
 		MainTravel mainTravel = mainTravelRepository.findById(mainTravelId)
 		 	.orElseThrow(() -> new MainTravelException(NOT_FOUND));
 
+
 		assertThat(mainTravel.getTitle()).isEqualTo(mainTravelSaveDto.title());
 		assertThat(mainTravel.getWriter().getId()).isEqualTo(authService.getLoginMemberId());
 		assertThat(mainTravel.getImagePath()).isEqualTo(mainTravelSaveDto.mainImagePath());
@@ -132,6 +133,7 @@ class MainTravelServiceTest {
 				assertThat(image.getId()).isNotNull();
 			}
 		}
+
 		Set<String> dtoSet = mappingToSet(mainTravelSaveDto.detailTravelSaveDtoList(), DetailTravelSaveDto::title);
 		Set<String> entitySet = mappingToSet(mainTravel.getDetailTravels(), DetailTravel::getTitle);
 
@@ -177,7 +179,6 @@ class MainTravelServiceTest {
 		assertThat(entitySet).doesNotContainAnyElementsOf(saveDtoSet);
 
 
-
 		int size = mainTravelUpdateDto.detailTravelSaveDtoList().size();
 		for (int i = 0; i < size; i++) {
 			DetailTravel detailTravel = mainTravel.getDetailTravels().get(i);
@@ -201,6 +202,7 @@ class MainTravelServiceTest {
 				assertThat(image.getId()).isNotNull();
 			}
 		}
+
 	}
 
 
@@ -437,6 +439,7 @@ class MainTravelServiceTest {
 		Set<Long> mainTravelIdSet = mappingToSet(mainTravelInfo.simpleDetailTravelListDto().detailTravelDtoList(),SimpleDetailTravelDto::mainTravelId);
 		assertThat(mainTravelIdSet.size()).isEqualTo(1);
 		assertThat(mainTravelIdSet).containsOnly(mainTravelId);
+
 	}
 
 
@@ -449,10 +452,12 @@ class MainTravelServiceTest {
 		//given
 		MainTravelSaveDto mainTravelSaveDto = privateCompleteMainTravelSaveDto();
 		Long mainTravelId = mainTravelService.saveMainTravel(authService.getLoginMemberId(),mainTravelSaveDto);
+
 		clear();
 
 
 		//when
+
 		MainTravelInfoDto mainTravelInfo = mainTravelService.getMainTravel(authService.getLoginMemberId(), mainTravelId);
 
 
@@ -495,19 +500,25 @@ class MainTravelServiceTest {
 		Set<Long> mainTravelIdSet = mappingToSet(mainTravelInfo.simpleDetailTravelListDto().detailTravelDtoList(),SimpleDetailTravelDto::mainTravelId);
 		assertThat(mainTravelIdSet.size()).isEqualTo(1);
 		assertThat(mainTravelIdSet).containsOnly(mainTravelId);
+
 	}
 
+
+
 	@Test
+
 	@DisplayName("Main Travel 조회 (성공) [public 게시물, 미완성, 주인의 조회 요쳥]")
 	public void successGetMainTravelWherePublicAndUnCompleteAndRequestByOwner() throws Exception {
 
 		//given
 		MainTravelSaveDto mainTravelSaveDto = publicUnCompleteMainTravelSaveDto();
 		Long mainTravelId = mainTravelService.saveMainTravel(authService.getLoginMemberId(),mainTravelSaveDto);
+
 		clear();
 
 
 		//when
+
 		MainTravelInfoDto mainTravelInfo = mainTravelService.getMainTravel(authService.getLoginMemberId(), mainTravelId);
 
 
@@ -536,7 +547,9 @@ class MainTravelServiceTest {
 
 
 
+
 		Set<String> dtoSet = mappingToSet(mainTravelSaveDto.detailTravelSaveDtoList(), DetailTravelSaveDto::title);
+
 
 		Set<String> entitySet = mappingToSet(mainTravelInfo.simpleDetailTravelListDto().detailTravelDtoList(),SimpleDetailTravelDto::title);
 
@@ -662,6 +675,7 @@ class MainTravelServiceTest {
 		assertThat(mainTravelIdSet.size()).isEqualTo(1);
 		assertThat(mainTravelIdSet).containsOnly(mainTravelId);
 	}
+
 
 
 	@Test

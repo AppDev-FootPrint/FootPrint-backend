@@ -46,6 +46,7 @@ class CreateMainTravelRequestTest {
 		 				{"item" : "item2", "priceInfo":20000},
 		 				{"item" : "item3", "priceInfo":30000}
 		 		],
+
 			  	"createImageRequestList" : [
 						{"path" : "https://ttl-blog.tistory.com/277?category=906283"},
 						{"path" : "https://ttl-blog.tistory.com/277?category=906284"},
@@ -102,6 +103,7 @@ class CreateMainTravelRequestTest {
 		assertThat(paths).contains("https://ttl-blog.tistory.com/277?category=906284");
 		assertThat(paths).contains("https://ttl-blog.tistory.com/277?category=906285");
 
+
 		List<PriceSaveDto> priceSaveDtos = mappingToList(
 			createDetailTravelRequest1.createPriceRequestList(),
 			CreatePriceRequest::toServiceDto);
@@ -110,8 +112,6 @@ class CreateMainTravelRequestTest {
 			assertThat(priceSaveDtos.get(i).item()).isEqualTo("item%d".formatted((i+1)));
 		}
 
-
-
 		assertThat(createDetailTravelRequest2.title()).isEqualTo("detailTitle 2");
 		assertThat(createDetailTravelRequest2.review()).isEqualTo("detailReview 2");
 		assertThat(createDetailTravelRequest2.tip()).isEqualTo("detailTip 2");
@@ -119,9 +119,8 @@ class CreateMainTravelRequestTest {
 		assertThat(createDetailTravelRequest2.address()).isEqualTo(Address.builder().address("address2").roadAddress("roadAddress2").mapX(22223).mapY(222345).build());
 		assertThat(createDetailTravelRequest2.createPriceRequestList()).isEmpty();
 		assertThat(createDetailTravelRequest2.createImageRequestList()).isEmpty();
-
-
 	}
+
 
 	@Test
 	@DisplayName("CreateMainTravelRequest -> MainTravelSaveDto 변환 테스트")

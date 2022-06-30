@@ -3,6 +3,7 @@ package com.footprint.detailtravel.service.dto.info;
 import static com.footprint.detailtravel.fixture.DetailTravelFixture.*;
 import static org.assertj.core.api.Assertions.*;
 
+
 import java.util.List;
 
 import org.junit.jupiter.api.DisplayName;
