@@ -14,10 +14,12 @@ import java.util.stream.IntStream;
 import org.springframework.test.util.ReflectionTestUtils;
 
 import com.footprint.detailtravel.fixture.DetailTravelFixture;
+import com.footprint.maintravel.controller.dto.MainTravelListResponse;
 import com.footprint.maintravel.controller.dto.request.create.CreateMainTravelRequest;
 import com.footprint.maintravel.controller.dto.request.update.UpdateMainTravelRequest;
 import com.footprint.maintravel.controller.dto.response.MainTravelInfoResponse;
 import com.footprint.maintravel.domain.MainTravel;
+import com.footprint.maintravel.service.dto.MainTravelListDto;
 import com.footprint.maintravel.service.dto.info.MainTravelInfoDto;
 import com.footprint.maintravel.service.dto.save.MainTravelSaveDto;
 import com.footprint.maintravel.service.dto.update.MainTravelUpdateDto;
@@ -230,5 +232,13 @@ public class MainTravelFixture {
 			LIKE_NUM,
 			simpleDetailTravelListDto(MAIN_TRAVEL_ID, 3)
 		);
+	}
+
+	public static MainTravelListDto mainTravelListDto() {
+		return new MainTravelListDto(MAIN_TRAVEL_ID, TITLE, IMAGE_PATH, LIKE_NUM);
+	}
+
+	public static MainTravelListResponse mainTravelListResponse() {
+		return new MainTravelListResponse(MAIN_TRAVEL_ID, TITLE, IMAGE_PATH, LIKE_NUM);
 	}
 }
