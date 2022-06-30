@@ -44,7 +44,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
 			.and()
 			.authorizeRequests()
-			.antMatchers("/login", "/signUp").permitAll()//TODO 따로 빼서 관리하는 것이 나을지, 아니면 이대로 사용할지
+			.antMatchers("/login", "/signUp").permitAll()
 			.anyRequest().authenticated();
 
 		http.addFilterAfter(restfulLoginFilter(), LogoutFilter.class);

@@ -26,13 +26,12 @@ import lombok.RequiredArgsConstructor;
  */
 @RequiredArgsConstructor
 public class JwtAuthenticationFilter extends OncePerRequestFilter {//TODO Filter 를 상속받으면 두번 작동함
-
 	private final JwtService jwtService;
 	private final MemberRepository memberRepository;
 
 	@Override
-	protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
-
+	protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response,
+		FilterChain filterChain) throws ServletException, IOException {
 		/*
 			요청 정보로부터 인증을 시도함. 인증 시 SecurityContextHolder 에 인증정보 저장
 		 */
@@ -43,10 +42,10 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {//TODO Filter
 
 	private void executeAuthentication(HttpServletRequest request) {
 		jwtService.extractToken(request)
-			      .filter(jwtService::isValid)
-			      .map(jwtService::extractMemberId)
-			      .flatMap(memberRepository::findById)
-			      .ifPresent(this::saveSecurityContextHolder);
+			.filter(jwtService::isValid)
+			.map(jwtService::extractMemberId)
+			.flatMap(memberRepository::findById)
+			.ifPresent(this::saveSecurityContextHolder);
 	}
 
 	private void saveSecurityContextHolder(Member member) {

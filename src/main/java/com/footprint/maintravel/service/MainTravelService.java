@@ -1,16 +1,16 @@
 package com.footprint.maintravel.service;
 
-import com.footprint.maintravel.service.dto.MainTravelDto;
-import com.footprint.maintravel.service.dto.MainTravelSaveDto;
-import com.footprint.maintravel.service.dto.MainTravelUpdateDto;
+import com.footprint.maintravel.service.dto.info.MainTravelInfoDto;
+import com.footprint.maintravel.service.dto.save.MainTravelSaveDto;
+import com.footprint.maintravel.service.dto.update.MainTravelUpdateDto;
 
 public interface MainTravelService {
 
-	Long saveMainTravel(MainTravelSaveDto saveDto);
+	Long saveMainTravel(Long memberId, MainTravelSaveDto saveDto);
 
-	Long updateMainTravel(MainTravelUpdateDto updateDto);
+	Long updateMainTravel(Long memberId, MainTravelUpdateDto updateDto);
 
-	MainTravelDto getMainTravel(Long travelId);
+	MainTravelInfoDto getMainTravel(Long memberId, Long travelId);
 
-	void deleteMainTravel(Long mainTravelId);
+	void deleteMainTravel(Long memberId, Long mainTravelId);
 }

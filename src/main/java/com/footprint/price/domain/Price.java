@@ -10,7 +10,7 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
-import com.footprint.detailedtravel.domain.DetailTravel;
+import com.footprint.detailtravel.domain.DetailTravel;
 
 import lombok.AccessLevel;
 import lombok.Getter;
@@ -22,7 +22,7 @@ import lombok.NoArgsConstructor;
 @Entity
 public class Price {
 
-	@Id @GeneratedValue(strategy = GenerationType.IDENTITY)
+	@Id @GeneratedValue(strategy = GenerationType.IDENTITY)//TODO 삽입 시 성능 최적화를 위해서는 GenerationType이 IDENTITY이면 안됨
 	@Column(name = "price_id")
 	private Long id;
 
@@ -36,4 +36,12 @@ public class Price {
 	@JoinColumn(name = "detail_travel_id")
 	private DetailTravel detailTravel;
 
+	public void setDetailTravel(DetailTravel detailTravel) {
+		this.detailTravel = detailTravel;
+	}
+
+	public Price(String item, int priceInfo) {
+		this.item = item;
+		this.priceInfo = priceInfo;
+	}
 }
