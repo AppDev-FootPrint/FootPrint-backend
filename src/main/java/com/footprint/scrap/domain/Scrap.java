@@ -16,6 +16,7 @@ import com.footprint.maintravel.domain.MainTravel;
 import com.footprint.member.domain.Member;
 
 import lombok.AccessLevel;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
@@ -37,4 +38,15 @@ public class Scrap extends BaseTimeEntity {
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "main_travel_id")
 	private MainTravel mainTravel;
+
+	@Builder
+	public Scrap(Member member, MainTravel mainTravel) {
+		this.member = member;
+		setMainTravel(mainTravel);
+	}
+
+	private void setMainTravel(MainTravel mainTravel) {
+		mainTravel.getScraps().add(this);
+		this.mainTravel = mainTravel;
+	}
 }
