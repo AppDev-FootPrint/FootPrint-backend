@@ -5,6 +5,10 @@ import java.util.List;
 import com.footprint.detailtravel.domain.Address;
 import com.footprint.detailtravel.service.dto.info.DetailTravelDto;
 
+import com.footprint.image.controller.dto.ImageInfoResponse;
+import com.footprint.price.controller.dto.PriceInfoResponse;
+
+
 /**
  * Created by ShinD on 2022/06/25.
  */

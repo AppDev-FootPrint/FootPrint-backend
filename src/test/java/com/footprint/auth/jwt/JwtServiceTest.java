@@ -150,7 +150,7 @@ class JwtServiceTest {
 
 	@Test
 	@DisplayName("request -> 토큰 -> memberId 추출 - 성공")
-	public void successRequestToExtractMemberId() throws Exception { //TODO 메서드 이름 못짓겠어요
+	public void successRequestToExtractMemberId() throws Exception {
 		//given
 		Long memberId = 1L;
 		JwtToken accessToken = jwtService.createAccessToken(memberId);

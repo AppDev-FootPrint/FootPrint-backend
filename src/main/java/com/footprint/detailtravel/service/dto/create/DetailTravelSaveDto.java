@@ -5,7 +5,9 @@ import java.util.List;
 
 import com.footprint.detailtravel.domain.Address;
 import com.footprint.detailtravel.domain.DetailTravel;
-import com.footprint.image.domain.Image;
+
+import com.footprint.image.service.dto.ImageSaveDto;
+import com.footprint.price.service.dto.PriceSaveDto;
 
 public record DetailTravelSaveDto(String title,
 								  String review,

@@ -2,7 +2,7 @@ package com.footprint.detailtravel.service.dto.info;
 
 import static com.footprint.detailtravel.fixture.DetailTravelFixture.*;
 import static org.assertj.core.api.Assertions.*;
-import static org.junit.jupiter.api.Assertions.*;
+
 
 import java.util.List;
 
@@ -10,11 +10,8 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
 import com.footprint.detailtravel.domain.DetailTravel;
-import com.footprint.detailtravel.service.dto.create.DetailTravelSaveDto;
-import com.footprint.detailtravel.service.dto.create.ImageSaveDto;
-import com.footprint.detailtravel.service.dto.create.PriceSaveDto;
-import com.footprint.image.domain.Image;
-import com.footprint.price.domain.Price;
+import com.footprint.image.service.dto.ImageDto;
+import com.footprint.price.service.dto.PriceDto;
 
 /**
  * Created by ShinD on 2022/06/26.

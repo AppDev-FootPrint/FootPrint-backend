@@ -11,6 +11,9 @@ import com.footprint.detailtravel.domain.DetailTravel;
 import com.footprint.detailtravel.repository.DetailTravelRepository;
 import com.footprint.detailtravel.service.dto.create.DetailTravelSaveDto;
 import com.footprint.detailtravel.service.dto.info.SimpleDetailTravelListDto;
+import com.footprint.image.domain.Image;
+import com.footprint.image.repository.ImageRepository;
+
 import com.footprint.maintravel.domain.MainTravel;
 import com.footprint.maintravel.exception.MainTravelException;
 import com.footprint.maintravel.exception.MainTravelExceptionType;
@@ -22,6 +25,8 @@ import com.footprint.member.domain.Member;
 import com.footprint.member.exception.MemberException;
 import com.footprint.member.exception.MemberExceptionType;
 import com.footprint.member.repository.MemberRepository;
+import com.footprint.price.domain.Price;
+import com.footprint.price.repository.PriceRepository;
 
 import lombok.RequiredArgsConstructor;
 
@@ -30,9 +35,13 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public class MainTravelServiceImpl implements MainTravelService {
 
+
 	private final MainTravelRepository mainTravelRepository;
 	private final DetailTravelRepository detailTravelRepository;
 	private final MemberRepository memberRepository;
+	private final PriceRepository priceRepository;
+	private final ImageRepository imageRepository;
+
 
 
 	@Override
@@ -90,8 +99,7 @@ public class MainTravelServiceImpl implements MainTravelService {
 
 		checkAuthority(memberId, mainTravel.getWriter().getId());
 
-
-		detailTravelRepository.deleteAllByIdInBatch(mainTravel.getDetailTravels().stream().map(DetailTravel::getId).toList());
+		deleteAllDeatailTravelIn(mainTravel);
 
 		mainTravel.update(updateDto.title(),
 						  updateDto.startDate(),
@@ -105,6 +113,19 @@ public class MainTravelServiceImpl implements MainTravelService {
 	}
 
 
+
+	private void deleteAllDeatailTravelIn(MainTravel mainTravel) {
+		List<DetailTravel> detailTravelList = mainTravel.getDetailTravels();
+		//반드시 price를 삭제한 이후 detail을 삭제해야 함
+		priceRepository.deleteAllByIdInBatch(detailTravelList.stream().flatMap(dt -> dt.getPrices().stream().map(Price::getId)).toList());
+		imageRepository.deleteAllByIdInBatch(detailTravelList.stream().flatMap(dt -> dt.getImages().stream().map(Image::getId)).toList());
+		detailTravelRepository.deleteAllByIdInBatch(detailTravelList.stream().map(DetailTravel::getId).toList());
+	}
+
+
+
+
+
 	/**
 	 * Main Travel 을 삭제하면 자연스레 Detail Travel에 대한 정보도 삭제, 즉 모두 삭제
 	 */
@@ -115,7 +136,9 @@ public class MainTravelServiceImpl implements MainTravelService {
 
 		checkAuthority(memberId, mainTravel.getWriter().getId());
 
-		detailTravelRepository.deleteAllByIdInBatch(mainTravel.getDetailTravels().stream().map(DetailTravel::getId).toList());
+
+		deleteAllDeatailTravelIn(mainTravel);
+
 
 		mainTravelRepository.delete(mainTravel);
 	}

@@ -10,8 +10,10 @@ import com.footprint.detailtravel.exception.DetailTravelException;
 import com.footprint.detailtravel.exception.DetailTravelExceptionType;
 import com.footprint.detailtravel.repository.DetailTravelRepository;
 import com.footprint.detailtravel.service.dto.info.DetailTravelDto;
-import com.footprint.detailtravel.service.dto.info.ImageDto;
-import com.footprint.detailtravel.service.dto.info.PriceDto;
+
+import com.footprint.image.service.dto.ImageDto;
+import com.footprint.price.service.dto.PriceDto;
+
 import com.footprint.maintravel.domain.MainTravel;
 import com.footprint.maintravel.repository.MainTravelRepository;
 import com.footprint.member.repository.MemberRepository;
@@ -45,7 +47,6 @@ public class DetailTravelServiceImpl implements DetailTravelService{
 		//== 미완성이거나 private 게시물인 경우에는 작성자가 아니면 조회 불가 ==//
 		if( !mainTravel.isVisible() || !mainTravel.isCompleted() ) {
 			checkAuthority(memberId, mainTravel.getWriter().getId());
-			//TODO 권한 없을때 NULL을 반환할 지, 권한이 없다는 예외 메세지를 출력할 지 고민
 		}
 
 

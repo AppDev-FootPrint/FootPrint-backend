@@ -1,7 +1,6 @@
 package com.footprint.maintravel.service.dto.save;
 
 import static com.footprint.maintravel.fixture.MainTravelFixture.*;
-import static com.footprint.util.MappingTestUtil.*;
 import static org.assertj.core.api.Assertions.*;
 
 import org.junit.jupiter.api.DisplayName;
@@ -9,9 +8,11 @@ import org.junit.jupiter.api.Test;
 
 import com.footprint.detailtravel.domain.DetailTravel;
 import com.footprint.detailtravel.service.dto.create.DetailTravelSaveDto;
-import com.footprint.detailtravel.service.dto.create.ImageSaveDto;
-import com.footprint.detailtravel.service.dto.create.PriceSaveDto;
+import com.footprint.image.domain.Image;
+import com.footprint.image.service.dto.ImageSaveDto;
 import com.footprint.maintravel.domain.MainTravel;
+import com.footprint.price.domain.Price;
+import com.footprint.price.service.dto.PriceSaveDto;
 
 /**
  * Created by ShinD on 2022/06/26.
@@ -49,10 +50,27 @@ class MainTravelSaveDtoTest {
 			assertThat(detailTravel.getTip()).isEqualTo(detailTravelSaveDto.tip());
 			assertThat(detailTravel.getVisitedDate()).isEqualTo(detailTravelSaveDto.visitedDate());
 			assertThat(detailTravel.getAddress()).isEqualTo(detailTravelSaveDto.address());
-			assertThat(detailTravel.getPrices()).containsAll(detailTravelSaveDto.priceSaveDtoList().stream().map(PriceSaveDto::toEntity).toList());
 
-			assertThat(detailTravel.getImages())
-				.isEqualTo(mappingToList(detailTravelSaveDto.imageSaveDtoList(), ImageSaveDto::toEntity));
+			int priceSize = detailTravel.getPrices().size();
+			for (int j = 0; j < priceSize; j++) {
+				Price price = detailTravel.getPrices().get(j);
+				PriceSaveDto priceSaveDto = detailTravelSaveDto.priceSaveDtoList().get(j);
+				assertThat(price.getPriceInfo()).isEqualTo(priceSaveDto.priceInfo());
+				assertThat(price.getItem()).isEqualTo(priceSaveDto.item());
+				assertThat(price.getDetailTravel()).isEqualTo(detailTravel);
+				assertThat(price.getId()).isNull();
+			}
+
+
+			int imageSize = detailTravel.getImages().size();
+			for (int j = 0; j < imageSize; j++) {
+				Image image = detailTravel.getImages().get(j);
+				ImageSaveDto imageSaveDto = detailTravelSaveDto.imageSaveDtoList().get(j);
+				assertThat(image.getPath()).isEqualTo(imageSaveDto.path());
+
+			}
+
+
 		}
 
 	}

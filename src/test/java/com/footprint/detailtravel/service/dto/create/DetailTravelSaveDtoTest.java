@@ -10,7 +10,10 @@ import org.junit.jupiter.api.Test;
 
 import com.footprint.detailtravel.domain.DetailTravel;
 import com.footprint.image.domain.Image;
+import com.footprint.image.service.dto.ImageSaveDto;
 import com.footprint.price.domain.Price;
+import com.footprint.price.service.dto.PriceSaveDto;
+
 
 /**
  * Created by ShinD on 2022/06/26.
