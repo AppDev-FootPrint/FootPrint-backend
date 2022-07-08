@@ -42,6 +42,10 @@ class ScrapControllerTest {
 	private MockMvc mockMvc;
 	private final ObjectMapper objectMapper = new ObjectMapper();
 
+	private final String SCRAP_SAVE_URL = "/api/members/{memberId}/scraps";
+	private final String SCRAP_GET_URL = "/api/members/{memberId}/scraps";
+	private final String SCRAP_DELETE_URL = "/api/scraps/{scrapId}";
+
 	@BeforeEach
 	private void setUp(WebApplicationContext webApplicationContext) {
 		mockMvc = MockMvcBuilders.webAppContextSetup(webApplicationContext).build();
@@ -55,7 +59,7 @@ class ScrapControllerTest {
 
 		//when
 		MvcResult mvcResult = mockMvc.perform(
-				post("/api/members/{memberId}/scraps", MEMBER_ID)
+				post(SCRAP_SAVE_URL, MEMBER_ID)
 					.param("travelId", String.valueOf(MAIN_TRAVEL_ID))
 					.contentType(MediaType.APPLICATION_JSON).accept(MediaType.APPLICATION_JSON))
 			.andExpect(status().isCreated())
@@ -69,7 +73,7 @@ class ScrapControllerTest {
 	@DisplayName("Scrap 삭제 성공 테스트")
 	void deleteScrapSuccessTest() throws Exception {
 		MvcResult mvcResult = mockMvc.perform(
-				delete("/api/scraps/{scrapId}", SCRAP_ID)
+				delete(SCRAP_DELETE_URL, SCRAP_ID)
 					.contentType(MediaType.APPLICATION_JSON).accept(MediaType.APPLICATION_JSON))
 			.andExpect(status().isOk())
 			.andReturn();
@@ -84,7 +88,7 @@ class ScrapControllerTest {
 
 		//when
 		MvcResult mvcResult = mockMvc.perform(
-				get("/api/members/{memberId}/scraps", MEMBER_ID)
+				get(SCRAP_GET_URL, MEMBER_ID)
 					.contentType(MediaType.APPLICATION_JSON).accept(MediaType.APPLICATION_JSON))
 			.andExpect(status().isOk())
 			.andReturn();
