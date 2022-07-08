@@ -17,7 +17,6 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.junit.jupiter.MockitoExtension;
 
-import com.footprint.maintravel.domain.MainTravel;
 import com.footprint.maintravel.exception.MainTravelException;
 import com.footprint.maintravel.repository.MainTravelRepository;
 import com.footprint.member.repository.MemberRepository;
@@ -91,7 +90,7 @@ class ScrapServiceTest {
 	@DisplayName("해당 유저의 Scrap 목록 가져오기 테스트")
 	void getScrapsTest() {
 		//given
-		given(scrapRepository.findAllByMemberId(MEMBER_ID)).willReturn(List.of(getScrap()));
+		given(scrapRepository.findAllWithMainTravelByMemberId(MEMBER_ID)).willReturn(List.of(getScrap()));
 
 		//when
 		List<ScrapDto> scraps = scrapService.getScraps(MEMBER_ID);

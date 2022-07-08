@@ -11,5 +11,5 @@ public interface ScrapRepository extends JpaRepository<Scrap, Long> {
 	boolean existsScrapByMemberIdAndMainTravelId(Long memberId, Long mainTravelId);
 
 	@EntityGraph(attributePaths = {"mainTravel"})
-	List<Scrap> findAllByMemberId(Long memberId);
+	List<Scrap> findAllWithMainTravelByMemberId(Long memberId);
 }

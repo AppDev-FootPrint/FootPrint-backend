@@ -1,7 +1,6 @@
 package com.footprint.scrap.service;
 
 import java.util.List;
-import java.util.Optional;
 
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -57,7 +56,7 @@ public class ScrapServiceImpl implements ScrapService {
 	@Override
 	@Transactional(readOnly = true)
 	public List<ScrapDto> getScraps(Long memberId) {
-		List<Scrap> scraps = scrapRepository.findAllByMemberId(memberId);
+		List<Scrap> scraps = scrapRepository.findAllWithMainTravelByMemberId(memberId);
 		return scraps.stream().map(ScrapDto::from).toList();
 	}
 }
