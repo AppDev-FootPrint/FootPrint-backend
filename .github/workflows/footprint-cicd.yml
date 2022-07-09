@@ -9,7 +9,7 @@ name: FootPrint CI/CD
 
 on:
   push:
-    branches: [ "develop" ]
+    branches: [ "develop", "feature/deploy" ]
   pull_request:
     branches: [ "develop" ]
 
