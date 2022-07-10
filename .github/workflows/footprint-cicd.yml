@@ -27,21 +27,24 @@ jobs:
         with:
           java-version: '17'
           distribution: 'temurin'
+
       - name: Build with Gradle
         uses: gradle/gradle-build-action@67421db6bd0bf253fb4bd25b31ebb98943c375e1
         with:
           arguments: build
 
       - run: |
-          echo "gradle build"
-          echo pwd
+          echo "jar 파일 빌드 이후 파일 경로"
+          echo "pwd"
+
       - uses: actions/upload-artifact@v3
         with:
           name: Package
           path: build/libs
       - run: |
-          echo "package build libs"
-          echo pwd
+          echo "뭔가 함"
+          echo "pwd"
+
       - name: Set up QEMU
         uses: docker/setup-qemu-action@v2
       - name: Set up Docker Buildx
@@ -53,9 +56,17 @@ jobs:
         with:
           username: ${{ secrets.DOCKER_USERNAME }}
           password: ${{ secrets.DOCKER_TOKEN }}
+
+      - run: |
+          echo "build 이전"
+          echo "pwd"
+
       - name: Build and push
         uses: docker/build-push-action@v3
         with:
           context: .
           push: true
           tags: huipulco/footprint:latest
+      - run: |
+          echo "build 이후"
+          echo "pwd"
