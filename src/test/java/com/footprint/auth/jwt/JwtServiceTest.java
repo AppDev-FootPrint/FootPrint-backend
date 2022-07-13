@@ -47,7 +47,7 @@ class JwtServiceTest {
 	private HttpServletRequest setRequest(JwtToken accessToken) {
 		MockHttpServletRequest httpServletRequest = new MockHttpServletRequest();
 
-		httpServletRequest.addHeader(BEARER_HEADER, accessToken.content());
+		httpServletRequest.addHeader(HEADER, accessToken.content());
 
 		return httpServletRequest;
 	}
@@ -122,7 +122,7 @@ class JwtServiceTest {
 
 
 		//then
-		String headerAccessToken = mockHttpServletResponse.getHeader(BEARER_HEADER);
+		String headerAccessToken = mockHttpServletResponse.getHeader(HEADER);
 
 
 
