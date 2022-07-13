@@ -18,6 +18,7 @@ import com.footprint.maintravel.domain.MainTravel;
 import com.footprint.member.domain.Member;
 
 import lombok.AccessLevel;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
@@ -48,4 +49,28 @@ public class Comment extends BaseTimeEntity {
 	//TODO 일급 컬렉션으로 수
 	@OneToMany(mappedBy = "parent", orphanRemoval = true)
 	List<Comment> children = new ArrayList<>();
+
+	@Builder
+	public Comment(String content, Member writer, MainTravel mainTravel, Comment parent) {
+		this.content = content;
+		this.writer = writer;
+		setMainTravel(mainTravel);
+		if (parent != null) {
+			setParent(parent);
+		}
+	}
+
+	private void setMainTravel(MainTravel mainTravel) {
+		this.mainTravel = mainTravel;
+		mainTravel.getComments().add(this);
+	}
+
+	private void setParent(Comment parent) {
+		this.parent = parent;
+		parent.getChildren().add(this);
+	}
+
+	public void updateComment(String content) {
+		this.content = content;
+	}
 }
