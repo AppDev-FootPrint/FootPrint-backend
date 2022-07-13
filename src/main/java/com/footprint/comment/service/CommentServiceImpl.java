@@ -36,8 +36,6 @@ public class CommentServiceImpl implements CommentService {
 	@Override
 	@Transactional(readOnly = true)
 	public List<CommentDto> getComments(Long travelId) {
-		// List<Comment> comments = commentRepository.findAllByMainTravelIdAndParentId(travelId, null);
-		// return comments.stream().map(CommentDto::from).toList();
 		List<Comment> comments = commentRepository.findAllWithWriterAndParentByMainTravelId(travelId);
 		Map<Long, CommentDto> result = new HashMap<>();
 		for (Comment comment : comments) {

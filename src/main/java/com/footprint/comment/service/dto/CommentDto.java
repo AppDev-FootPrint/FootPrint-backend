@@ -10,7 +10,6 @@ public record CommentDto(Long id, String content, Member writer, List<CommentDto
 
 	public static CommentDto from(Comment comment) {
 		return new CommentDto(comment.getId(), comment.getContent(), comment.getWriter(),
-			// comment.getChildren().stream().map(CommentDto::from).toList());
 			new ArrayList<>());
 	}
 }
