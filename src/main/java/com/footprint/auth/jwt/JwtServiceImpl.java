@@ -25,9 +25,9 @@ import com.auth0.jwt.algorithms.Algorithm;
  */
 
 @Component
-public class JwtServiceImpl implements JwtService{
+public class JwtServiceImpl implements JwtService {
 
-	public static final String BEARER_HEADER = "Bearer";
+	public static final String HEADER = "Authorization";
 
 	@Value("${jwt.secret}")
 	private String secretKey;
@@ -35,26 +35,20 @@ public class JwtServiceImpl implements JwtService{
 	@Value("${jwt.expirationDay}")
 	private long accessTokenValidity;//AccessToken 의 유효기간
 
-
 	private Algorithm algorithm;
 
-
-
-
-
 	@PostConstruct
-	private void setAlgorithm(){
+	private void setAlgorithm() {
 		algorithm = HMAC512(secretKey);
 	}
-
 
 	@Override
 	public JwtToken createAccessToken(Long id) {
 		return JwtToken.from(JWT.create()
-								.withSubject(ACCESS_TOKEN_SUBJECT) //토큰의 제목
-								.withClaim(MEMBER_ID_CLAIM, id)    //토큰의 클레임(정보들)
-								.withExpiresAt(new Date(currentTimeMillis() + MILLISECONDS.convert(accessTokenValidity, TimeUnit.DAYS)))
-								.sign(algorithm));
+			.withSubject(ACCESS_TOKEN_SUBJECT) //토큰의 제목
+			.withClaim(MEMBER_ID_CLAIM, id)    //토큰의 클레임(정보들)
+			.withExpiresAt(new Date(currentTimeMillis() + MILLISECONDS.convert(accessTokenValidity, TimeUnit.DAYS)))
+			.sign(algorithm));
 	}
 
 	/**
@@ -70,7 +64,7 @@ public class JwtServiceImpl implements JwtService{
 	 */
 	@Override
 	public void sendToken(HttpServletResponse response, JwtToken token) {
-		response.setHeader(BEARER_HEADER, token.content());
+		response.setHeader(HEADER, token.content());
 	}
 
 	/**
@@ -78,7 +72,10 @@ public class JwtServiceImpl implements JwtService{
 	 */
 	@Override
 	public Optional<JwtToken> extractToken(HttpServletRequest request) {
-		return ofNullable(JwtToken.from(request.getHeader(BEARER_HEADER)));
+		if (request.getHeader(HEADER) == null) {
+			return Optional.empty();
+		}
+		return ofNullable(JwtToken.from(request.getHeader(HEADER).replace("Bearer ", "").trim()));
 	}
 
 	/**

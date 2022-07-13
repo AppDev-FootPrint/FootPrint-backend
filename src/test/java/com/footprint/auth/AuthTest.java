@@ -89,8 +89,8 @@ public class AuthTest {
 										.andReturn();
 
 	    //then
-		Assertions.assertThat(result.getResponse().getHeader(JwtServiceImpl.BEARER_HEADER)).isNotNull();
-		Assertions.assertThat(result.getResponse().getHeader(JwtServiceImpl.BEARER_HEADER).split("\\.")).hasSize(3);
+		Assertions.assertThat(result.getResponse().getHeader(JwtServiceImpl.HEADER)).isNotNull();
+		Assertions.assertThat(result.getResponse().getHeader(JwtServiceImpl.HEADER).split("\\.")).hasSize(3);
 	}
 
 
@@ -111,7 +111,7 @@ public class AuthTest {
 									.andReturn();
 
 		//then
-		Assertions.assertThat(result.getResponse().getHeader(JwtServiceImpl.BEARER_HEADER)).isNull();
+		Assertions.assertThat(result.getResponse().getHeader(JwtServiceImpl.HEADER)).isNull();
 	}
 
 	@Test
@@ -131,7 +131,7 @@ public class AuthTest {
 									.andReturn();
 
 		//then
-		Assertions.assertThat(result.getResponse().getHeader(JwtServiceImpl.BEARER_HEADER)).isNull();
+		Assertions.assertThat(result.getResponse().getHeader(JwtServiceImpl.HEADER)).isNull();
 	}
 
 
@@ -148,7 +148,7 @@ public class AuthTest {
 		//when, then
 		mockMvc.perform(
 				get("/any")
-					.header(JwtServiceImpl.BEARER_HEADER, accessToken.content())
+					.header(JwtServiceImpl.HEADER, accessToken.content())
 			)
 			.andExpect(status().isNotFound());
 	}
@@ -165,7 +165,7 @@ public class AuthTest {
 
 		mockMvc.perform(
 				get("/any")
-					.header(JwtServiceImpl.BEARER_HEADER, INVALID_TOKEN)
+					.header(JwtServiceImpl.HEADER, INVALID_TOKEN)
 			)
 			.andExpect(status().isForbidden());
 	}

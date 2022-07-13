@@ -1,4 +1,19 @@
 spring:
-  profiles:
-    include: local, jwt
-    active: local, jwt
+  datasource:
+    url: ${DB_URL}
+    username: ${DB_USER}
+    password: ${DB_PASSWORD}
+    driver-class-name: ${DB_DRIVER}
+
+  jpa:
+    hibernate:
+      ddl-auto: update
+    properties:
+      hibernate:
+        format_sql: true
+    show-sql: true
+    database-platform: org.hibernate.dialect.MySQL57Dialect
+
+jwt:
+  secret: ${JWT_SECRET}
+  expirationDay: ${JWT_EXPIRATION}
