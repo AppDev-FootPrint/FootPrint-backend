@@ -69,7 +69,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
 	@Bean
 	public AuthenticationSuccessHandler restfulAuthenticationSuccessHandler() {
-		return new RestfulAuthenticationSuccessHandler(jwtService);
+		return new RestfulAuthenticationSuccessHandler(jwtService, memberRepository);
 	}
 
 	@Bean
