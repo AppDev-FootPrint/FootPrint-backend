@@ -9,15 +9,17 @@ import com.footprint.member.service.dto.MemberInfoDto;
  * Created by ShinD on 2022/07/17.
  */
 public record MainTravelSimpleInfoResponse(
-	MemberInfoResponse writerInfoResponse,
+	Long id,
+	MemberInfoResponse writerInfo,
 	String title,
-	String imagePath,
+	String mainImagePath,
 	int commentCount,
 	String createdAt
 ) {
 
 	public static MainTravelSimpleInfoResponse from(MainTravelSimpleInfoDto mainTravelSimpleInfoDto) {
 		return new MainTravelSimpleInfoResponse(
+			mainTravelSimpleInfoDto.id(),
 			MemberInfoResponse.from(mainTravelSimpleInfoDto.writerInfoDto()),
 			mainTravelSimpleInfoDto.title(),
 			mainTravelSimpleInfoDto.imagePath(),

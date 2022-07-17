@@ -7,6 +7,7 @@ import com.footprint.member.service.dto.MemberInfoDto;
  * Created by ShinD on 2022/07/17.
  */
 public record MainTravelSimpleInfoDto(
+	Long id,
 	MemberInfoDto writerInfoDto,
 	String title,
 	String imagePath,
@@ -16,6 +17,7 @@ public record MainTravelSimpleInfoDto(
 
 	public static MainTravelSimpleInfoDto from(MainTravel mainTravel) {
 		return new MainTravelSimpleInfoDto(
+			mainTravel.getId(),
 			MemberInfoDto.from(mainTravel.getWriter()),
 			mainTravel.getTitle(),
 			mainTravel.getImagePath(),
