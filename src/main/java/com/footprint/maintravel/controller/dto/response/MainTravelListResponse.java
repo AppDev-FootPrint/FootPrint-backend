@@ -8,7 +8,7 @@ import com.footprint.maintravel.service.dto.MainTravelListDto;
 public record MainTravelListResponse(
 	Long id,
 	String title,
-	String imagePath,
+	String mainImagePath,
 	Integer likeNum
 ) {
 	public static MainTravelListResponse from(MainTravelListDto mainTravelListDto) {
