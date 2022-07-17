@@ -16,9 +16,11 @@ import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 import com.footprint.auth.service.AuthService;
 import com.footprint.maintravel.controller.dto.request.create.CreateMainTravelRequest;
 import com.footprint.maintravel.controller.dto.request.update.UpdateMainTravelRequest;
+import com.footprint.maintravel.controller.dto.response.MainTravelInfoListResponse;
 import com.footprint.maintravel.controller.dto.response.MainTravelInfoResponse;
 import com.footprint.maintravel.service.MainTravelService;
 import com.footprint.maintravel.service.dto.info.MainTravelInfoDto;
+import com.footprint.maintravel.service.dto.info.MainTravelInfoListDto;
 
 import lombok.RequiredArgsConstructor;
 
@@ -71,6 +73,12 @@ public class MainTravelController {
 	public ResponseEntity<MainTravelInfoResponse> getMainTravel(@PathVariable Long id) {
 		MainTravelInfoDto mainTravelDto = mainTravelService.getMainTravel(authService.getLoginMemberId(), id);
 		return ResponseEntity.ok(MainTravelInfoResponse.from(mainTravelDto));
+	}
+
+	@GetMapping("/main-travels")
+	public ResponseEntity<MainTravelInfoListResponse> getMainTravelList() {
+		MainTravelInfoListDto mainTravelList = mainTravelService.getMainTravelList(authService.getLoginMemberId());
+		return ResponseEntity.ok(MainTravelInfoListResponse.from(mainTravelList));
 	}
 
 }

@@ -2,7 +2,9 @@ package com.footprint.maintravel.service;
 
 import static com.footprint.maintravel.exception.MainTravelExceptionType.*;
 
+import java.util.Comparator;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -19,6 +21,7 @@ import com.footprint.maintravel.exception.MainTravelException;
 import com.footprint.maintravel.exception.MainTravelExceptionType;
 import com.footprint.maintravel.repository.MainTravelRepository;
 import com.footprint.maintravel.service.dto.info.MainTravelInfoDto;
+import com.footprint.maintravel.service.dto.info.MainTravelInfoListDto;
 import com.footprint.maintravel.service.dto.save.MainTravelSaveDto;
 import com.footprint.maintravel.service.dto.update.MainTravelUpdateDto;
 import com.footprint.member.domain.Member;
@@ -63,9 +66,29 @@ public class MainTravelServiceImpl implements MainTravelService {
 		return MainTravelInfoDto.from(mainTravel, SimpleDetailTravelListDto.from(mainTravel.getDetailTravels()));
 	}
 
+	@Override
+	public MainTravelInfoListDto getMainTravelList(Long memberId) {
+		Member member = memberRepository.findById(memberId)
+			.orElseThrow(() -> new MemberException(MemberExceptionType.NOT_FOUND));
 
+		List<MainTravel> all = mainTravelRepository.findAll();
+		List<MainTravel> mine = mainTravelRepository.findAllByWriter(member);
 
+		all.removeAll(mine);//내거 지우고
 
+		List<MainTravel> mainTravels = all.stream()//내게 지워진 전체 list 중 전체공개될 수 있는 게시물들만 걸러냄
+			.filter(MainTravel::isVisible)
+			.filter(MainTravel::isCompleted)
+			.collect(Collectors.toList());
+
+		List<MainTravel> myCompleteList = mine.stream().filter(MainTravel::isCompleted).collect(Collectors.toList());//내거에서 완성된것만
+
+		mainTravels.addAll(myCompleteList);
+
+		mainTravels.sort((o1,  o2) ->o2.getCreatedAt().compareTo(o1.getCreatedAt()));//최근에 생성된 것부터 차례대로
+
+		return MainTravelInfoListDto.from(mainTravels);
+	}
 
 	/**
 	 * Main Travel 을 저장하면 자연스레 Detail Travel에 대한 정보도 들어옴, 따라서 모두 저장
@@ -99,7 +122,7 @@ public class MainTravelServiceImpl implements MainTravelService {
 
 		checkAuthority(memberId, mainTravel.getWriter().getId());
 
-		deleteAllDeatailTravelIn(mainTravel);
+		deleteAllDetailTravelIn(mainTravel);
 
 		mainTravel.update(updateDto.title(),
 						  updateDto.startDate(),
@@ -114,7 +137,7 @@ public class MainTravelServiceImpl implements MainTravelService {
 
 
 
-	private void deleteAllDeatailTravelIn(MainTravel mainTravel) {
+	private void deleteAllDetailTravelIn(MainTravel mainTravel) {
 		List<DetailTravel> detailTravelList = mainTravel.getDetailTravels();
 		//반드시 price를 삭제한 이후 detail을 삭제해야 함
 		priceRepository.deleteAllByIdInBatch(detailTravelList.stream().flatMap(dt -> dt.getPrices().stream().map(Price::getId)).toList());
@@ -137,7 +160,7 @@ public class MainTravelServiceImpl implements MainTravelService {
 		checkAuthority(memberId, mainTravel.getWriter().getId());
 
 
-		deleteAllDeatailTravelIn(mainTravel);
+		deleteAllDetailTravelIn(mainTravel);
 
 
 		mainTravelRepository.delete(mainTravel);

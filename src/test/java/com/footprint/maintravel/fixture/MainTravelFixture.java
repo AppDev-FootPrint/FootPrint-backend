@@ -14,7 +14,7 @@ import java.util.stream.IntStream;
 import org.springframework.test.util.ReflectionTestUtils;
 
 import com.footprint.detailtravel.fixture.DetailTravelFixture;
-import com.footprint.maintravel.controller.dto.MainTravelListResponse;
+import com.footprint.maintravel.controller.dto.response.MainTravelListResponse;
 import com.footprint.maintravel.controller.dto.request.create.CreateMainTravelRequest;
 import com.footprint.maintravel.controller.dto.request.update.UpdateMainTravelRequest;
 import com.footprint.maintravel.controller.dto.response.MainTravelInfoResponse;
